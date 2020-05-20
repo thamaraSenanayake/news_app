@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1030636465106",
+    "firebase_url": "https://newsapp-f32b1.firebaseio.com",
+    "project_id": "newsapp-f32b1",
+    "storage_bucket": "newsapp-f32b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030636465106:android:c565b54f73341b0464b60b",
+        "android_client_info": {
+          "package_name": "com.thnenewsco.news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030636465106-o5p2rjgbg2kflq71mc219ndlc25k6ej2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdiXW35LiWE572kc6--61PUhzKS66u7Yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030636465106-o5p2rjgbg2kflq71mc219ndlc25k6ej2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
