@@ -21,6 +21,9 @@ class AppData{
   static const Color DARKGRAY = Color(0xff6B6B6B);
   static const Color GRAY = Color(0xffA0A0A0);
   static const Color WHITE = Color(0xffF9F9F9);
+
+  static LanguageList language = LanguageList.Sinhala;
+  static int isDark = 0;
 }
 
 

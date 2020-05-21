@@ -4,11 +4,14 @@ import 'package:news_app/Splash/splashListner.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
+import 'package:news_app/language/language.dart';
+import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
 
 class Splash extends StatefulWidget {
   final SplashStateListner splashStateListner;
-  Splash({Key key,@required this.splashStateListner}) : super(key: key);
+  final LanguageStateListner languageStateListner;
+  Splash({Key key,@required this.splashStateListner, this.languageStateListner}) : super(key: key);
 
   @override
   _SplashState createState() => _SplashState();
@@ -21,7 +24,6 @@ class _SplashState extends State<Splash> {
   double _logoPostion = 0.0;
   double _loadingPostion = 0.0;
   double _languagePageHeight = 0.0;
-  List<int> _colorList = [0,0,0];
 
   bool _loadingData = false;
   bool _waitTimeComplete = false;
@@ -219,190 +221,7 @@ class _SplashState extends State<Splash> {
                   duration: Duration(milliseconds: 500),
                   color: Colors.grey[200].withOpacity(0.7),
                   child: SingleChildScrollView(
-                    child: Container(
-                      height: _height,
-                      width:_width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-
-                          //sinhala
-                          GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                _colorList = [1,0,0];
-                              });
-                            },
-                            child: Container(
-                              child:Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Sinhala",
-                                      style: TextStyle(
-                                        color: _colorList[0] == 1? AppData.WHITE:AppData.BLACK,
-                                        fontFamily: "Lato",
-                                        fontSize: 20
-                                      ),
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(right:15.0),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.check,
-                                        color: AppData.WHITE,
-                                        size:25
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              width:_width-80,
-                              height: 60,
-                              decoration: BoxDecoration(
-                               color: _colorList[0] != 1? AppData.WHITE:AppData.BLACK,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 2.0,
-                                    spreadRadius: 2.0, 
-                                    offset: Offset(
-                                      1.0,
-                                      2.0,
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(3)
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(
-                            height:20
-                          ),
-
-                          //tamil
-                          GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                _colorList = [0,1,0];
-                              });
-                            },
-                            child: Container(
-                              child:Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Tamil",
-                                      style: TextStyle(
-                                        color: _colorList[1] == 1? AppData.WHITE:AppData.BLACK,
-                                        fontFamily: "Lato",
-                                        fontSize: 20
-                                      ),
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(right:15.0),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.check,
-                                        color: AppData.WHITE,
-                                        size:25
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              width:_width-80,
-                              height: 60,
-                              decoration: BoxDecoration(
-                               color: _colorList[1] != 1? AppData.WHITE:AppData.BLACK,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 2.0,
-                                    spreadRadius: 2.0, 
-                                    offset: Offset(
-                                      1.0,
-                                      2.0,
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(3)
-                              ),
-                            ),
-                          ),
-                          
-                          SizedBox(
-                            height:20
-                          ),
-                          
-                          //English
-                          GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                _colorList = [0,0,1];
-                              });
-                            },
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds:200),
-                              child:Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "English",
-                                      style: TextStyle(
-                                        color: _colorList[2] == 1? AppData.WHITE:AppData.BLACK,
-                                        fontFamily: "Lato",
-                                        fontSize: 20
-                                      ),
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(right:15.0),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.check,
-                                        color: AppData.WHITE,
-                                        size:25
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              width:_width-80,
-                              height: 60,
-                              decoration: BoxDecoration(
-                               color: _colorList[2] != 1? AppData.WHITE:AppData.BLACK,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 2.0,
-                                    spreadRadius: 2.0, 
-                                    offset: Offset(
-                                      1.0,
-                                      2.0,
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(3)
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    child: Language(languageStateListner: widget.languageStateListner)
                   ),
                 ),
               ],
