@@ -60,9 +60,10 @@ class _TopNewsState extends State<TopNews> {
                         Text(
                           widget.news.titleEnglish,
                           style:TextStyle(
-                            color: AppData.WHITE,
+                            color: Colors.white,
                             fontSize: 20,
                             fontFamily: "lato",
+                            fontWeight: FontWeight.w600
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

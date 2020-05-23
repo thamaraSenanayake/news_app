@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/homePageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
 import 'package:news_app/module/normalNews.dart';
 import 'package:news_app/module/topNews.dart';
 
 class NewsPage extends StatefulWidget {
-  NewsPage({Key key}) : super(key: key);
+  final HomePageListner homePageActivity;
+  NewsPage({Key key, this.homePageActivity}) : super(key: key);
 
   @override
   _NewsPageState createState() => _NewsPageState();
@@ -33,7 +35,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
   ScrollController _controller;
 
   String mainTitle = "All News";
+  Color mainTitleColor = AppData.ALLCOLOR;
   String nextTitle = "Local";
+  Color nextTitleColor = AppData.LOCALCOLOR;
   int currentNewsTab = 0;
 
   double _newsTabPostion = 0.0;
@@ -50,28 +54,28 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
     News topNewsLoacal = News(
       titleEnglish: "top news Title local 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:"https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg",
       type: NewsType.Local
     );
 
     News news = News(
       titleEnglish: "Title local 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:"https://ichef.bbci.co.uk/news/1024/branded_news/33D6/production/_108207231_f63d6143-fff6-48af-a4a2-071b0de87628.gif",
       type: NewsType.Local
     );
 
     News news1 = News(
       titleEnglish: "Title local 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:"https://img.youtube.com/vi/IC4BpAJzXTI/0.jpg",
       type: NewsType.Local
     );
 
     News news2 = News(
       titleEnglish: "Title forign 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:"https://drop.ndtv.com/albums/NEWS/Newspaper_Headl_637076707145778984/637076707168904594.jpeg",
       type: NewsType.Forign
     );
 
@@ -163,36 +167,40 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
       setState(() {
         mainTitle = "All News";
         nextTitle= "Local";
+        mainTitleColor = AppData.ALLCOLOR;
+        nextTitleColor = AppData.LOCALCOLOR;
       });
     }
     else if(pageNum == 1){
       setState(() {
         mainTitle = "Local News";
         nextTitle= "Forign";
+        mainTitleColor = AppData.LOCALCOLOR;
+        nextTitleColor = AppData.FORIGNCOLOR;
       });
     }
     else if(pageNum == 2){
       setState(() {
         mainTitle = "Forign News";
         nextTitle= "Sport";
+        mainTitleColor = AppData.FORIGNCOLOR;
+        nextTitleColor = AppData.SPORTCOLOR;
       });
     }
     else if(pageNum == 3){
       setState(() {
         mainTitle = "Sport News";
         nextTitle= "Weather";
+        mainTitleColor = AppData.SPORTCOLOR;
+        nextTitleColor = AppData.WEATHERCOLOR;
       });
     }
-    else if(pageNum == 1){
+    else if(pageNum == 4){
       setState(() {
         mainTitle = "Weather News";
         nextTitle= "";
-      });
-    }
-    else if(pageNum == 1){
-      setState(() {
-        mainTitle = "";
-        nextTitle= "";
+        mainTitleColor = AppData.WEATHERCOLOR;
+        nextTitleColor = AppData.WEATHERCOLOR;
       });
     }
   }
@@ -201,25 +209,30 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
   _scrollListener() {
     //news scroll to next tab
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-      _next();
+      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*4) {
+        _next();
+      }
     }
     //news scroll to previous step
     else if (_controller.position.userScrollDirection == ScrollDirection.forward) {
-      _back();
+      if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
+        _back();
+      }
     }
   }
 
   _next(){
-    if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*4) {
-      _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 250), curve: Curves.linear);
+      _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion += _width;
       _setTitle(++currentNewsTab);
-    }
+    
   }
 
   _back(){
-    if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
-      _controller.animateTo(_newsTabPostion - _width,duration: Duration(milliseconds: 250), curve: Curves.linear);
+      _controller.animateTo(_newsTabPostion - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion -= _width;
       _setTitle(--currentNewsTab);
+    if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
     }
   }
 
@@ -237,7 +250,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -246,7 +259,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.LOCALCOLOR,
           )
         );
       }
@@ -255,7 +268,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.FORIGNCOLOR,
           )
         );
       }
@@ -265,7 +278,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.SPORTCOLOR,
           )
         );
       }
@@ -275,7 +288,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.WEATHERCOLOR,
           )
         );
       }
@@ -289,6 +302,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
       topNewsWidgetSports = topNewsWidgetSportsTemp;
       topNewsWidgetWeather = topNewsWidgetWeatherTemp;
     });
+
   }
 
   _normalNewsLoad(){
@@ -303,7 +317,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
         NormalNews(
           news: item,
           newsClickListner: this,
-          secondColor: Colors.orange,
+          secondColor: AppData.ALLCOLOR,
         )
       );
       if(item.type == NewsType.Local){
@@ -311,7 +325,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.LOCALCOLOR,
           )
         );
       }      
@@ -320,7 +334,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.FORIGNCOLOR,
           )
         );
       }
@@ -329,7 +343,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.SPORTCOLOR,
           )
         );
       }
@@ -338,7 +352,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: Colors.orange,
+            secondColor: AppData.WEATHERCOLOR,
           )
         );
       }
@@ -381,64 +395,81 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left:8.0),
+                  padding: EdgeInsets.only(left:8.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 50,
-                      width:50,
-                      child:Icon(
-                        Icons.menu,
-                        color: AppData.BLACK,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppData.WHITE,
-                        borderRadius: BorderRadius.circular(3),
+                    child: GestureDetector(
+                      onTap: (){
+                        widget.homePageActivity.homePageActivityClick(HomePageActivity.MenuOpen);
+                      },
+                      child: Card(
+                        child: Container(
+                          height: 50,
+                          width:50,
+                          
+                          child:Icon(
+                            Icons.menu,
+                            color: AppData.BLACK,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppData.WHITE,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
 
-                Padding(
+                nextTitle !=""? Padding(
                   padding: const EdgeInsets.only(right:8.0,top:20.0),
                   child: Align(
                     alignment: Alignment.topRight,
-                    child:Container(
-                      width:80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            nextTitle,
-                            style:TextStyle(
+                    child:GestureDetector(
+                      onTap: (){
+                        _next();
+                      },
+                      child: Container(
+                        width:105,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              nextTitle,
+                              style:TextStyle(
+                                color: mainTitleColor,
+                                fontSize: 18,
+                                fontFamily: "lato",
+                              )
+                            ),
+                            SizedBox(
+                              width:10
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
                               color: Colors.blue,
-                              fontSize: 18,
-                              fontFamily: "lato",
                             )
-                          ),
-                          SizedBox(
-                            width:5
-                          ),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.blue,
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   )
-                ),
+                ):Container(),
 
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    mainTitle,
-                    style:TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontFamily: "lato",
+                Padding(
+                  padding: const EdgeInsets.only(bottom:15.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      mainTitle,
+                      style:TextStyle(
+                        color: mainTitleColor,
+                        fontSize: 28,
+                        fontFamily: "lato",
+                        fontWeight: FontWeight.w600
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 )
 
@@ -446,7 +477,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
               ],
             ),
             decoration: BoxDecoration(
-              color: AppData.BLACK,
+              // color: AppData.BLACK,
               boxShadow: [
                 // BoxShadow(
                 //   color: Colors.grey,
@@ -467,6 +498,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
             height: _height-100,
             child: ListView(
               scrollDirection: Axis.horizontal,
+              controller: _controller,
               children: <Widget>[
                 
                 //all news 
@@ -481,6 +513,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       children: <Widget>[
                         Column(
                           children: topNewsWidgetAll,
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Column(
                           children: normalNewsWidgetAll
@@ -504,6 +539,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                         Column(
                           children: topNewsWidgetLocal
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Column(
                           children: normalNewsWidgetLocal
                         )
@@ -524,6 +562,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       children: <Widget>[
                         Column(
                           children: topNewsWidgetForign
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Column(
                           children: normalNewsWidgetForign
@@ -546,6 +587,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                         Column(
                           children: topNewsWidgetSports
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Column(
                           children: normalNewsWidgetSports
                         )
@@ -566,6 +610,9 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       children: <Widget>[
                         Column(
                           children: topNewsWidgetWeather
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Column(
                           children: normalNewsWidgetWeather
