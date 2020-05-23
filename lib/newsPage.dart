@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/model/news.dart';
+import 'package:news_app/module/newsListner.dart';
+import 'package:news_app/module/normalNews.dart';
+import 'package:news_app/module/topNews.dart';
 
 class NewsPage extends StatefulWidget {
   NewsPage({Key key}) : super(key: key);
@@ -8,9 +13,345 @@ class NewsPage extends StatefulWidget {
   _NewsPageState createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage> {
+class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
   double _height = 0.0;
   double _width = 0.0;
+  List<News> topNewsList =[];
+  List<Widget> topNewsWidgetAll = [];
+  List<Widget> topNewsWidgetLocal = [];
+  List<Widget> topNewsWidgetForign = [];
+  List<Widget> topNewsWidgetSports = [];
+  List<Widget> topNewsWidgetWeather = [];
+
+  List<News> normalNews =[];
+  List<Widget> normalNewsWidgetAll =[];
+  List<Widget> normalNewsWidgetLocal = [];
+  List<Widget> normalNewsWidgetForign = [];
+  List<Widget> normalNewsWidgetSports = [];
+  List<Widget> normalNewsWidgetWeather = [];
+
+  ScrollController _controller;
+
+  String mainTitle = "All News";
+  String nextTitle = "Local";
+  int currentNewsTab = 0;
+
+  double _newsTabPostion = 0.0;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+
+
+    News topNewsLoacal = News(
+      titleEnglish: "top news Title local 1",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Local
+    );
+
+    News news = News(
+      titleEnglish: "Title local 1",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Local
+    );
+
+    News news1 = News(
+      titleEnglish: "Title local 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Local
+    );
+
+    News news2 = News(
+      titleEnglish: "Title forign 1",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Forign
+    );
+
+    News news3 = News(
+      titleEnglish: "Title forign 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Forign
+    );
+
+    News newstopForign = News(
+      titleEnglish: "Title forign 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Forign
+    );
+
+    News news4 = News(
+      titleEnglish: "Title sports 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type:NewsType.Sport
+    );
+
+    News news5 = News(
+      titleEnglish: "Title sports 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type:NewsType.Sport
+    );
+
+    News topSports = News(
+      titleEnglish: "Title sports 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type:NewsType.Sport
+    );
+
+     News news6 = News(
+      titleEnglish: "Title Whether 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Whether
+    );
+
+    News news7 = News(
+      titleEnglish: "Title Whether 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Whether
+    );
+
+    News topWhether = News(
+      titleEnglish: "Title Whether 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      type: NewsType.Whether
+    );
+
+    News topNews = News(
+      titleEnglish: "top news Title 2",
+      contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      imgUrl:"https://ichef.bbci.co.uk/news/490/cpsprodpb/14C2E/production/_112383058_mediaitem112383057.jpg",
+      type:NewsType.AllTop
+    );
+
+    print("init news");
+    normalNews.add(news);
+    normalNews.add(news1);
+    normalNews.add(news2);
+    normalNews.add(news3);
+    normalNews.add(news4);
+    normalNews.add(news5);
+    normalNews.add(news6);
+    normalNews.add(news7);
+    
+    topNewsList.add(topNewsLoacal);
+    topNewsList.add(topNews);
+    topNewsList.add(newstopForign);
+    topNewsList.add(topSports);
+    topNewsList.add(topWhether);
+    _topNewsLoad();
+    _normalNewsLoad();
+
+  }
+
+  _setTitle(int pageNum){
+    if(pageNum == 0){
+      setState(() {
+        mainTitle = "All News";
+        nextTitle= "Local";
+      });
+    }
+    else if(pageNum == 1){
+      setState(() {
+        mainTitle = "Local News";
+        nextTitle= "Forign";
+      });
+    }
+    else if(pageNum == 2){
+      setState(() {
+        mainTitle = "Forign News";
+        nextTitle= "Sport";
+      });
+    }
+    else if(pageNum == 3){
+      setState(() {
+        mainTitle = "Sport News";
+        nextTitle= "Weather";
+      });
+    }
+    else if(pageNum == 1){
+      setState(() {
+        mainTitle = "Weather News";
+        nextTitle= "";
+      });
+    }
+    else if(pageNum == 1){
+      setState(() {
+        mainTitle = "";
+        nextTitle= "";
+      });
+    }
+  }
+
+  //news scroll listner
+  _scrollListener() {
+    //news scroll to next tab
+    if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
+      _next();
+    }
+    //news scroll to previous step
+    else if (_controller.position.userScrollDirection == ScrollDirection.forward) {
+      _back();
+    }
+  }
+
+  _next(){
+    if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*4) {
+      _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 250), curve: Curves.linear);
+      _setTitle(++currentNewsTab);
+    }
+  }
+
+  _back(){
+    if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
+      _controller.animateTo(_newsTabPostion - _width,duration: Duration(milliseconds: 250), curve: Curves.linear);
+      _setTitle(--currentNewsTab);
+    }
+  }
+
+  _topNewsLoad(){
+    List<Widget> topNewsWidgetTemp =[];
+    List<Widget> topNewsWidgetLocalTemp = [];
+    List<Widget> topNewsWidgetForignTemp = [];
+    List<Widget> topNewsWidgetSportsTemp = [];
+    List<Widget> topNewsWidgetWeatherTemp = [];
+
+    for (var item in topNewsList) {
+
+      if(item.type == NewsType.AllTop){
+        topNewsWidgetTemp.add(
+          TopNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+      else if(item.type == NewsType.Local){
+        topNewsWidgetLocalTemp.add(
+          TopNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+      else if(item.type == NewsType.Forign){
+        topNewsWidgetForignTemp.add(
+          TopNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+
+      else if(item.type == NewsType.Sport){
+        topNewsWidgetSportsTemp.add(
+          TopNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+
+      else if(item.type == NewsType.Whether){
+        topNewsWidgetWeatherTemp.add(
+          TopNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+      
+    }
+
+    setState(() {
+      topNewsWidgetAll = topNewsWidgetTemp;
+      topNewsWidgetLocal = topNewsWidgetLocalTemp;
+      topNewsWidgetForign = topNewsWidgetForignTemp;
+      topNewsWidgetSports = topNewsWidgetSportsTemp;
+      topNewsWidgetWeather = topNewsWidgetWeatherTemp;
+    });
+  }
+
+  _normalNewsLoad(){
+    List<Widget> normalNewsWidgetAllTemp = [];
+    List<Widget> normalNewsWidgetLocalTemp = [];
+    List<Widget> normalNewsWidgetForignTemp = [];
+    List<Widget> normalNewsWidgetSportsTemp = [];
+    List<Widget> normalNewsWidgetWeatherTemp = [];
+
+    for (var item in normalNews) {
+      normalNewsWidgetAllTemp.add(
+        NormalNews(
+          news: item,
+          newsClickListner: this,
+          secondColor: Colors.orange,
+        )
+      );
+      if(item.type == NewsType.Local){
+        normalNewsWidgetLocalTemp.add(
+          NormalNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }      
+      else if(item.type == NewsType.Forign){
+        normalNewsWidgetForignTemp.add(
+          NormalNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+      else if(item.type == NewsType.Sport){
+        normalNewsWidgetSportsTemp.add(
+          NormalNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+      else if(item.type == NewsType.Whether){
+        normalNewsWidgetWeatherTemp.add(
+          NormalNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: Colors.orange,
+          )
+        );
+      }
+    }
+
+    setState(() {
+      normalNewsWidgetAll = normalNewsWidgetAllTemp;
+      normalNewsWidgetLocal = normalNewsWidgetLocalTemp;
+      normalNewsWidgetForign = normalNewsWidgetForignTemp;
+      normalNewsWidgetSports = normalNewsWidgetSportsTemp;
+      normalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +409,7 @@ class _NewsPageState extends State<NewsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "Local",
+                            nextTitle,
                             style:TextStyle(
                               color: Colors.blue,
                               fontSize: 18,
@@ -91,7 +432,7 @@ class _NewsPageState extends State<NewsPage> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "All News",
+                    mainTitle,
                     style:TextStyle(
                       color: Colors.white,
                       fontSize: 28,
@@ -133,86 +474,111 @@ class _NewsPageState extends State<NewsPage> {
                   width: _width,
                   height: _height-100,
 
-                  child: Column(
-                    children: <Widget>[
-
-                      //Top news
-                      Container(
-                        height:250,
-                        width: _width,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              height:250,
-                              width: _width,
-                              padding: EdgeInsets.all(3),
-                              child: Image.network(
-                                "https://ichef.bbci.co.uk/news/490/cpsprodpb/14C2E/production/_112383058_mediaitem112383057.jpg",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: EdgeInsets.only(left:3,right:3),
-                                child: Container(
-                                  height:50,
-                                  width: _width-6,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [AppData.BLACK.withOpacity(0.8), Color.fromRGBO(255, 255, 255, 0.0)]
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal:10.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "News title News title News title News title",
-                                          style:TextStyle(
-                                            color: AppData.WHITE,
-                                            fontSize: 20,
-                                            fontFamily: "lato",
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-
-                                        Container(
-                                          width: _width-6,
-                                          child: Text(
-                                            "1 S ago",
-                                            style:TextStyle(
-                                              color: Colors.orange,
-                                              fontSize: 12,
-                                              fontFamily: "lato",
-                                            ),
-                                            textAlign: TextAlign.right,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-
-
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-
-                          ],
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop:true,
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                          children: topNewsWidgetAll,
                         ),
-                      )
-                    ],
-                  ),
-                )
+                        Column(
+                          children: normalNewsWidgetAll
+                        )
+                      ]
+                    ),
+                  )
+                ),
+                
+
+                //local
+                Container(
+                  width: _width,
+                  height: _height-100,
+
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop:true,
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                          children: topNewsWidgetLocal
+                        ),
+                        Column(
+                          children: normalNewsWidgetLocal
+                        )
+                      ]
+                    ),
+                  )
+                ),
+
+                //forign
+                Container(
+                  width: _width,
+                  height: _height-100,
+
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop:true,
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                          children: topNewsWidgetForign
+                        ),
+                        Column(
+                          children: normalNewsWidgetForign
+                        )
+                      ]
+                    ),
+                  )
+                ),
+
+                //sports
+                Container(
+                  width: _width,
+                  height: _height-100,
+
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop:true,
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                          children: topNewsWidgetSports
+                        ),
+                        Column(
+                          children: normalNewsWidgetSports
+                        )
+                      ]
+                    ),
+                  )
+                ),
+
+                //weather
+                Container(
+                  width: _width,
+                  height: _height-100,
+
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop:true,
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                          children: topNewsWidgetWeather
+                        ),
+                        Column(
+                          children: normalNewsWidgetWeather
+                        )
+                      ]
+                    ),
+                  )
+                ),
+                      
+
+                      
+
+
               ],
             ),
           )
@@ -220,5 +586,11 @@ class _NewsPageState extends State<NewsPage> {
         ],
       ),
     );
+  }
+
+  @override
+  clickedNews(News news) {
+    // TODO: implement clickedNews
+    return null;
   }
 }

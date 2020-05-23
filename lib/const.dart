@@ -10,7 +10,8 @@ enum NewsType{
   Local,
   Forign,
   Sport,
-  Whether
+  Whether,
+  AllTop
 }
 
 class AppData{
