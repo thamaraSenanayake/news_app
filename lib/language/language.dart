@@ -69,9 +69,10 @@ class _LanguageState extends State<Language> {
                           child: Text(
                             "Sinhala",
                             style: TextStyle(
-                              color: _colorList[0] == 1? AppData.WHITE:AppData.BLACK,
+                              color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.BLACK,
                               fontFamily: "Lato",
-                              fontSize: 20
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
                             ),
                           ),
                         ),
@@ -82,7 +83,7 @@ class _LanguageState extends State<Language> {
                             alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.check,
-                              color: AppData.WHITE,
+                              color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.WHITE,
                               size:25
                             ),
                           ),
@@ -129,9 +130,10 @@ class _LanguageState extends State<Language> {
                           child: Text(
                             "Tamil",
                             style: TextStyle(
-                              color: _colorList[1] == 1? AppData.WHITE:AppData.BLACK,
+                              color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.BLACK,
                               fontFamily: "Lato",
-                              fontSize: 20
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
                             ),
                           ),
                         ),
@@ -142,7 +144,7 @@ class _LanguageState extends State<Language> {
                             alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.check,
-                              color: AppData.WHITE,
+                              color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.WHITE,
                               size:25
                             ),
                           ),
@@ -190,9 +192,10 @@ class _LanguageState extends State<Language> {
                           child: Text(
                             "English",
                             style: TextStyle(
-                              color: _colorList[2] == 1? AppData.WHITE:AppData.BLACK,
+                              color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.BLACK,
                               fontFamily: "Lato",
-                              fontSize: 20
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
                             ),
                           ),
                         ),
@@ -203,7 +206,7 @@ class _LanguageState extends State<Language> {
                             alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.check,
-                              color: AppData.WHITE,
+                              color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.WHITE,
                               size:25
                             ),
                           ),
@@ -251,9 +254,10 @@ class _LanguageState extends State<Language> {
                     child: Text(
                       "Countinue",
                       style: TextStyle(
-                        color: AppData.WHITE,
+                        color: AppData.ALLCOLOR,
                         fontFamily: "Lato",
-                        fontSize: 20
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600
                       ),
                     ),
                   ),

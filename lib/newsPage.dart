@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
@@ -447,7 +448,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                             ),
                             Icon(
                               Icons.arrow_forward,
-                              color: Colors.blue,
+                              color: AppData.BLACK,
                             )
                           ],
                         ),
@@ -457,7 +458,7 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                 ):Container(),
 
                 Padding(
-                  padding: const EdgeInsets.only(bottom:15.0),
+                  padding: EdgeInsets.only(bottom:15.0),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Text(
@@ -472,7 +473,6 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
                     ),
                   ),
                 )
-
 
               ],
             ),
@@ -637,7 +637,12 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
 
   @override
   clickedNews(News news) {
-    // TODO: implement clickedNews
-    return null;
+    // print()
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullPageNews(news: news,)
+      ),
+    );
   }
 }

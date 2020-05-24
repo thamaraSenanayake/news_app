@@ -79,7 +79,7 @@ class _SplashState extends State<Splash> {
       type:NewsType.Local,
       timeStamp:date
     );
-    await database.addNews(news);
+    //await database.addNews(news);
 
     news = News(
       id:id+2,
@@ -98,7 +98,7 @@ class _SplashState extends State<Splash> {
       timeStamp:date
     );
 
-    await database.addNews(news);
+    //await database.addNews(news);
 
     newsList = await database.readNews(id);
 
@@ -204,7 +204,7 @@ class _SplashState extends State<Splash> {
                               height: 50,
                               width: 50,
                               child: SpinKitFadingCube(
-                                color: AppData.BLACK,
+                                color: AppData.ALLCOLOR,
                                 size: 50.0,
                               ),
                             ),
