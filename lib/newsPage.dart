@@ -8,15 +8,17 @@ import 'package:news_app/module/newsListner.dart';
 import 'package:news_app/module/normalNews.dart';
 import 'package:news_app/module/topNews.dart';
 
+import 'database/sqlLitedatabase.dart';
+
 class NewsPage extends StatefulWidget {
   final HomePageListner homePageActivity;
   NewsPage({Key key, this.homePageActivity}) : super(key: key);
 
   @override
-  _NewsPageState createState() => _NewsPageState();
+  NewsPageState createState() => NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
+class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   double _height = 0.0;
   double _width = 0.0;
   List<News> topNewsList =[];
@@ -47,99 +49,97 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
   @override
   void initState() {
     super.initState();
-
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-
 
     News topNewsLoacal = News(
       titleEnglish: "top news Title local 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg",
+      imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
       type: NewsType.Local
     );
 
     News news = News(
       titleEnglish: "Title local 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://ichef.bbci.co.uk/news/1024/branded_news/33D6/production/_108207231_f63d6143-fff6-48af-a4a2-071b0de87628.gif",
+      imgUrl:["https://ichef.bbci.co.uk/news/1024/branded_news/33D6/production/_108207231_f63d6143-fff6-48af-a4a2-071b0de87628.gif"],
       type: NewsType.Local
     );
 
     News news1 = News(
       titleEnglish: "Title local 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://img.youtube.com/vi/IC4BpAJzXTI/0.jpg",
+      imgUrl:["https://img.youtube.com/vi/IC4BpAJzXTI/0.jpg"],
       type: NewsType.Local
     );
 
     News news2 = News(
       titleEnglish: "Title forign 1",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://drop.ndtv.com/albums/NEWS/Newspaper_Headl_637076707145778984/637076707168904594.jpeg",
+      imgUrl:["https://drop.ndtv.com/albums/NEWS/Newspaper_Headl_637076707145778984/637076707168904594.jpeg"],
       type: NewsType.Forign
     );
 
     News news3 = News(
       titleEnglish: "Title forign 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type: NewsType.Forign
     );
 
     News newstopForign = News(
       titleEnglish: "Title forign 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type: NewsType.Forign
     );
 
     News news4 = News(
       titleEnglish: "Title sports 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type:NewsType.Sport
     );
 
     News news5 = News(
       titleEnglish: "Title sports 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type:NewsType.Sport
     );
 
     News topSports = News(
       titleEnglish: "Title sports 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type:NewsType.Sport
     );
 
      News news6 = News(
       titleEnglish: "Title Whether 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type: NewsType.Whether
     );
 
     News news7 = News(
       titleEnglish: "Title Whether 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type: NewsType.Whether
     );
 
     News topWhether = News(
       titleEnglish: "Title Whether 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg",
+      imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
       type: NewsType.Whether
     );
 
     News topNews = News(
       titleEnglish: "top news Title 2",
       contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-      imgUrl:"https://ichef.bbci.co.uk/news/490/cpsprodpb/14C2E/production/_112383058_mediaitem112383057.jpg",
+      imgUrl:["https://ichef.bbci.co.uk/news/490/cpsprodpb/14C2E/production/_112383058_mediaitem112383057.jpg"],
       type:NewsType.AllTop
     );
 
@@ -160,7 +160,12 @@ class _NewsPageState extends State<NewsPage>  implements NewsClickListner{
     topNewsList.add(topWhether);
     _topNewsLoad();
     _normalNewsLoad();
+  }
 
+  loadNews(){
+    // normalNews = await DBProvider.db.viewNews(LanguageList.English);
+    // _topNewsLoad();
+    // _normalNewsLoad();
   }
 
   _setTitle(int pageNum){

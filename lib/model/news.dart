@@ -2,7 +2,7 @@ import 'package:news_app/const.dart';
 
 class News{
   final int id;
-  final String imgUrl;
+  final List<String> imgUrl;
   final String titleSinhala;
   final String titleTamil;
   final String titleEnglish;

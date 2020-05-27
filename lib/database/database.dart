@@ -8,6 +8,8 @@ class Database{
 
   //collection refreence 
   final CollectionReference newsCollection = Firestore.instance.collection('news');
+  final CollectionReference hotNewsCollection = Firestore.instance.collection('hotNews');
+  final CollectionReference systemData = Firestore.instance.collection('systemData');
 
 
   Future addNews(News news) async{
@@ -27,6 +29,36 @@ class Database{
       "type":news.type.toString(),
       "timeStamp":news.timeStamp,
     });
+  }
+
+  Future addHotNews(News news, NewsType type) async{
+    await hotNewsCollection.document(type.toString()).setData({
+      "id":news.id,
+      "imgUrl":news.imgUrl,
+      "titleSinhala":news.titleSinhala,
+      "titleTamil":news.titleTamil,
+      "titleEnglish":news.titleEnglish,
+      "contentSinhala":news.contentSinhala,
+      "contentTamil":news.contentTamil,
+      "contentEnglish":news.contentEnglish,
+      "date":news.date,
+      "author":news.author,
+      "bigNews":news.bigNews,
+      "isRead":news.isRead,
+      "type":news.type.toString(),
+      "timeStamp":news.timeStamp,
+    });
+  }
+
+  Future<int> getNewsCount() async{
+    int newsCount = 0;
+
+    await systemData.document('news').get().then((document){
+      newsCount = document['newsCount'];
+    });
+
+    return newsCount;
+
   }
 
   Future<List<News>> readNews(int lastId) async{

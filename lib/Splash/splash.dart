@@ -29,6 +29,7 @@ class _SplashState extends State<Splash> {
   bool _waitTimeComplete = false;
   bool _firstLoading = true;
 
+
   @override
   void initState() {
     super.initState();
@@ -59,46 +60,71 @@ class _SplashState extends State<Splash> {
   _loadData() async{
     List<News> newsList = [];
     Database database = Database();
+
+    int firebaseNewsCount =await database.getNewsCount();
     int id = await DBProvider.db.getLastNewsId();
 
-    var date = new DateTime.now().millisecondsSinceEpoch;
+    var timeStamp = new DateTime.now().millisecondsSinceEpoch;
+    var currentData = new DateTime.now().millisecondsSinceEpoch;
     
     News news = News(
-      id:id+1,
-      imgUrl:"url",
-      titleEnglish:"title English",
-      titleSinhala:"title Sinhala",
-      titleTamil:"title Tamil",
-      contentEnglish:"English Lorem ipsum dolor sit amet",
-      contentSinhala:"Sinhala Lorem ipsum dolor sit amet",
-      contentTamil:"Tamil Lorem ipsum dolor sit amet",
-      date:"date",
+      id:++firebaseNewsCount,
+      titleEnglish:"local news 1 English",
+      titleSinhala:"local news 1 Sinhala",
+      titleTamil:"local news 1 Tamil",
+      imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
+      contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      date:currentData.toString(),
       author:"author",
       bigNews:0,
       isRead:0,
       type:NewsType.Local,
-      timeStamp:date
+      timeStamp:timeStamp
     );
-    //await database.addNews(news);
+
+    await database.addNews(news);
 
     news = News(
-      id:id+2,
-      imgUrl:"url1",
-      titleEnglish:"title 1 English",
-      titleSinhala:"title 1 Sinhala",
-      titleTamil:"title 1 Tamil",
-      contentEnglish:"English Lorem ipsum dolor sit amet",
-      contentSinhala:"Sinhala Lorem ipsum dolor sit amet",
-      contentTamil:"Tamil Lorem ipsum dolor sit amet",
-      date:"date1",
-      author:"author1",
-      bigNews:1,
+      id:++firebaseNewsCount,
+      titleEnglish:"local news 2 English",
+      titleSinhala:"local news 2 Sinhala",
+      titleTamil:"local news 2 Tamil",
+      imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
+      contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      date:currentData.toString(),
+      author:"author",
+      bigNews:0,
       isRead:0,
-      type:NewsType.Forign,
-      timeStamp:date
+      type:NewsType.Local,
+      timeStamp:timeStamp
     );
 
-    //await database.addNews(news);
+    await database.addNews(news);
+
+    news = News(
+      id:++firebaseNewsCount,
+      titleEnglish:"hot news all English",
+      titleSinhala:"hot news all Sinhala",
+      titleTamil:"hot news all Tamil",
+      imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
+      contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+      date:currentData.toString(),
+      author:"author",
+      bigNews:0,
+      isRead:0,
+      type:NewsType.AllTop,
+      timeStamp:timeStamp
+    );
+
+    await database.addNews(news);
+    await database.addHotNews(news,NewsType.AllTop);
+    
 
     newsList = await database.readNews(id);
 

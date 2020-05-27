@@ -59,7 +59,7 @@ class _NormalNewsState extends State<NormalNews> {
                     bottomLeft:Radius.circular(3),
                   ),
                   image:DecorationImage(
-                    image: NetworkImage(widget.news.imgUrl),
+                    image: NetworkImage(widget.news.imgUrl[0]),
                     fit: BoxFit.cover
                   ),
                   color: Colors.blue, 

@@ -36,7 +36,7 @@ class _TopNewsState extends State<TopNews> {
                 width: _width,
                 padding: EdgeInsets.all(3),
                 child: Image.network(
-                  widget.news.imgUrl,
+                  widget.news.imgUrl[0],
                   fit: BoxFit.cover,
                 ),
               ),

@@ -118,7 +118,7 @@ class DBProvider {
       sql += "(" +
           item.id.toString() +
           ",'" +
-          item.imgUrl +
+          item.imgUrl[0] +
           "','" +
           item.titleSinhala +
           "','" +

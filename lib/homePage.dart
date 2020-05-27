@@ -22,12 +22,99 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   ScrollController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isDark = false;
+  final GlobalKey<NewsPageState> _newsPageState = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _controller = ScrollController();
   }
+
+  
+
+
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
+      _height = MediaQuery.of(context).size.height;
+      _width = MediaQuery.of(context).size.width;
+    });
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer:Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: AppData.BLACK,
+        ),
+        child: Drawer(
+          child: ListView(
+            children: _appDrawerContent(),
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
+          ),
+        ),
+        child:ListView(
+          scrollDirection: Axis.horizontal,
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _controller,
+          children: <Widget>[
+            Container(
+              height: _height,
+              width: _width,
+              child: Column(
+                children: <Widget>[
+                  Splash(splashStateListner: this,languageStateListner: this,),
+                ],
+              )
+            ),
+
+            Container(
+              height: _height,
+              width: _width,
+              // color: Colors.blue,
+              child: NewsPage(
+                homePageActivity: this,
+                key: _newsPageState,
+              ),
+            ),
+
+          ],
+        )
+       ),
+    );
+  }
+
+  @override
+  loadingState(bool load) {
+    //load news
+    //_newsPageState
+    print("load news done");
+    print(load);
+    _newsPageState.currentState.loadNews();
+
+  }
+
+  @override
+  languageState(LanguageList language) {
+    AppData.language = language;
+    DBProvider.db.addSystemData(AppData.language,AppData.isDark);
+    print(language);
+    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
+  @override
+  homePageActivityClick(HomePageActivity homePageActivity) {
+    if(homePageActivity == HomePageActivity.MenuOpen){
+      _scaffoldKey.currentState.openDrawer();
+    }
+  }
+
 
   //app drawer
   List<Widget> _appDrawerContent() {
@@ -278,81 +365,4 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     ];
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    setState(() {
-      _height = MediaQuery.of(context).size.height;
-      _width = MediaQuery.of(context).size.width;
-    });
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer:Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: AppData.BLACK,
-        ),
-        child: Drawer(
-          child: ListView(
-            children: _appDrawerContent(),
-          ),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
-          ),
-        ),
-        child:ListView(
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _controller,
-          children: <Widget>[
-            Container(
-              height: _height,
-              width: _width,
-              child: Column(
-                children: <Widget>[
-                  Splash(splashStateListner: this,languageStateListner: this,),
-                ],
-              )
-            ),
-
-            Container(
-              height: _height,
-              width: _width,
-              // color: Colors.blue,
-              child: NewsPage(
-                homePageActivity: this,
-              ),
-            ),
-
-          ],
-        )
-       ),
-    );
-  }
-
-  @override
-  loadingState(bool load) {
-    print(load);
-
-  }
-
-  @override
-  languageState(LanguageList language) {
-    AppData.language = language;
-    DBProvider.db.addSystemData(AppData.language,AppData.isDark);
-    print(language);
-    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
-  }
-
-  @override
-  homePageActivityClick(HomePageActivity homePageActivity) {
-    if(homePageActivity == HomePageActivity.MenuOpen){
-      _scaffoldKey.currentState.openDrawer();
-    }
-  }
 }
