@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/res/dataTypeConvert.dart';
 
 class Database{
   
   
-
   //collection refreence 
   final CollectionReference newsCollection = Firestore.instance.collection('news');
   final CollectionReference hotNewsCollection = Firestore.instance.collection('hotNews');
@@ -68,39 +68,63 @@ class Database{
     QuerySnapshot querySnapshot = await newsCollection.where('id',isGreaterThan:lastId).getDocuments();
     for (var item in querySnapshot.documents) {
       
-      NewsType newsType;
-          
-          if(item["type"] == NewsType.Local.toString()){
-            newsType = NewsType.Local; 
-          }
-          else if(item["type"] == NewsType.Forign.toString()){
-            newsType = NewsType.Forign; 
-          }
-          else if(item["type"] == NewsType.Sport.toString()){
-            newsType = NewsType.Sport; 
-          }
-          else if(item["type"] == NewsType.Whether.toString()){
-            newsType = NewsType.Whether; 
-          }
-          print(item["titleSinhala"]);
 
-          news = News(
-            id:item["id"],
-            imgUrl:item["imgUrl"],
-            titleSinhala:item["titleSinhala"],
-            titleTamil:item["titleTamil"],
-            titleEnglish:item["titleEnglish"],
-            contentSinhala:item["contentSinhala"],
-            contentTamil:item["contentTamil"],
-            contentEnglish:item["contentEnglish"],
-            date:item["date"],
-            author:item["author"],
-            bigNews:item["bigNews"],
-            isRead:item["isRead"],
-            type:newsType,
-            timeStamp:item["timeStamp"],
-          );
-          newsList.add(news);
+      List imageList = item["imgUrl"];
+      List<String> imageListString = imageList.cast<String>().toList();
+          
+
+      news = News(
+        id:item["id"],
+        imgUrl:imageListString,
+        titleSinhala:item["titleSinhala"],
+        titleTamil:item["titleTamil"],
+        titleEnglish:item["titleEnglish"],
+        contentSinhala:item["contentSinhala"],
+        contentTamil:item["contentTamil"],
+        contentEnglish:item["contentEnglish"],
+        date:item["date"],
+        author:item["author"],
+        bigNews:item["bigNews"],
+        isRead:item["isRead"],
+        type:newsTypeCovert(item["type"]),
+        timeStamp:item["timeStamp"],
+      );
+      newsList.add(news);
+    }
+
+    print(newsList.length);
+
+    return newsList;
+  }
+
+  Future<List<News>> readHotNews() async{
+    List<News> newsList = [];
+    News news;
+    List imageList = [];
+    List<String> imageListString = [];
+    
+    QuerySnapshot querySnapshot = await hotNewsCollection.getDocuments();
+    for (var item in querySnapshot.documents) {
+      List imageList = item["imgUrl"];
+      List<String> imageListString = imageList.cast<String>().toList();
+    
+      news = News(
+        id:item["id"],
+        imgUrl:imageListString,
+        titleSinhala:item["titleSinhala"],
+        titleTamil:item["titleTamil"],
+        titleEnglish:item["titleEnglish"],
+        contentSinhala:item["contentSinhala"],
+        contentTamil:item["contentTamil"],
+        contentEnglish:item["contentEnglish"],
+        date:item["date"],
+        author:item["author"],
+        bigNews:item["bigNews"],
+        isRead:item["isRead"],
+        type:newsTypeCovert(item["type"]),
+        timeStamp:item["timeStamp"],
+      );
+      newsList.add(news);
     }
 
     print(newsList.length);

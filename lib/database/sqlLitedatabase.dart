@@ -36,7 +36,7 @@ class DBProvider {
   initDB() async {
     print("create DB");
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "news3.db");
+    String path = join(documentsDirectory.path, "news4.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE News ("
@@ -85,7 +85,7 @@ class DBProvider {
           "contentTamil TEXT NOT NULL,"
           "date TEXT NOT NULL,"
           "author TEXT NOT NULL,"
-          "isRead INTEGER NOT NULL,"
+          "isRead INTEGER NOT NULL"
           ")");
         
       await db.execute("CREATE TABLE SystemInfo ("
@@ -202,7 +202,7 @@ class DBProvider {
     final db = await database;
     var res = 'done';
     String sql =
-        "INSERT INTO HotNews (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp)VALUES ";
+        "REPLACE INTO HotNews (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp)VALUES ";
 
     for (var item in newsList) {
 
@@ -355,13 +355,19 @@ class DBProvider {
     final db = await database;
     List<News> newsList = [];
     News news;
+    String imageList = "";
+    
     
     try {
       var res = await db.query("News");
       for (var item in res) {
+        //remove brackets
+        imageList = item["imgUrl"].toString().replaceAll("[", "");
+        imageList = imageList.replaceAll("]", "");
+
         news = News(
           id:item["id"],
-          imgUrl:item["imgUrl"],
+          imgUrl:imageList.split(","),
           titleSinhala:item["titleSinhala"],
           titleTamil:item["titleTamil"],
           titleEnglish:item["titleEnglish"],
@@ -372,7 +378,7 @@ class DBProvider {
           author:item["author"],
           bigNews:item["bigNews"],
           isRead:item["isRead"],
-          type:item["type"],
+          type:newsTypeCovert(item["type"]),
           timeStamp:item["timeStamp"],
         );
         newsList.add(news);
@@ -416,17 +422,23 @@ class DBProvider {
     return newsList;
   }
 
-  Future<List<News>> viewHotNews(String date) async{
+  Future<List<News>> viewHotNews() async{
     final db = await database;
     List<News> newsList = [];
     News news;
+    String imageList = "";
     
     try {
-      var res = await db.query("News");
+      var res = await db.query("HotNews");
       for (var item in res) {
+
+        //remove brackets
+        imageList = item["imgUrl"].toString().replaceAll("[", "");
+        imageList = imageList.replaceAll("]", "");
+        
         news = News(
           id:item["id"],
-          imgUrl:item["imgUrl"],
+          imgUrl:imageList.split(","),
           titleSinhala:item["titleSinhala"],
           titleTamil:item["titleTamil"],
           titleEnglish:item["titleEnglish"],
@@ -437,7 +449,7 @@ class DBProvider {
           author:item["author"],
           bigNews:item["bigNews"],
           isRead:item["isRead"],
-          type:item["type"],
+          type:newsTypeCovert(item["type"]),
           timeStamp:item["timeStamp"],
         );
         newsList.add(news);

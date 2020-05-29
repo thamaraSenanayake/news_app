@@ -96,6 +96,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     //_newsPageState
     print("load news done");
     print(load);
+
+    //callling news page
     _newsPageState.currentState.loadNews();
 
   }
