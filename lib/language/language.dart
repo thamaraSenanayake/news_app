@@ -14,7 +14,7 @@ class Language extends StatefulWidget {
 class _LanguageState extends State<Language> {
   double _height = 0.0;
   double _width = 0.0;
-  List<int> _colorList = [0,0,0];
+  List<int> _colorList = [1,0,0];
   LanguageList selectedLanguage;
   
 

@@ -20,6 +20,7 @@ enum HomePageActivity{
 
 class AppData{
   static const String LOGODARK = 'assets/images/darkLogo.jpg';
+  static const String LOGO = 'assets/images/logo.png';
   static const String LOGOLIGHT = 'assets/images/lightLogo.jpg';
   static const String BACKGROUND = 'assets/images/background.jpg';
   static const Color BLACK = Color(0xff393939);

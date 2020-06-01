@@ -7,6 +7,7 @@ import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/res/curvePainter.dart';
 
 class Splash extends StatefulWidget {
   final SplashStateListner splashStateListner;
@@ -47,14 +48,14 @@ class _SplashState extends State<Splash> {
   }
 
   _exitFormPage(){
-    if(_loadingData && _waitTimeComplete){
-      widget.splashStateListner.loadingState(true);
-      print("set height");
-      setState(() {
-        _screenHeight = 0.0;
-        _languagePageHeight = _height;
-      });
-    }
+    // if(_loadingData && _waitTimeComplete){
+    //   widget.splashStateListner.loadingState(true);
+    //   print("set height");
+    //   setState(() {
+    //     _screenHeight = 0.0;
+    //     _languagePageHeight = _height;
+    //   });
+    // }
   }
 
   _loadData() async{
@@ -62,8 +63,12 @@ class _SplashState extends State<Splash> {
     List<News> hotNewsList = [];
     Database database = Database();
 
+    //get firebase last added news only use when add news
     int firebaseNewsCount =await database.getNewsCount();
+
+    //get sql lite last added news only use when retrive news
     int id = await DBProvider.db.getLastNewsId();
+    
     print("last firsbase id "+firebaseNewsCount.toString());
     print("last sql ite id "+id.toString());
 
@@ -88,264 +93,6 @@ class _SplashState extends State<Splash> {
     // );
 
     // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"local news 2 English",
-    //   titleSinhala:"local news 2 Sinhala",
-    //   titleTamil:"local news 2 Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Local,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news all English",
-    //   titleSinhala:"hot news all Sinhala",
-    //   titleTamil:"hot news all Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.AllTop,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-    // await database.addHotNews(news,NewsType.AllTop);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news local English",
-    //   titleSinhala:"hot news local Sinhala",
-    //   titleTamil:"hot news local Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Local,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-    // await database.addHotNews(news,NewsType.Local);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news forign English",
-    //   titleSinhala:"hot news forign Sinhala",
-    //   titleTamil:"hot news forign Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Forign,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-    // await database.addHotNews(news,NewsType.Forign);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news sports English",
-    //   titleSinhala:"hot news sports Sinhala",
-    //   titleTamil:"hot news sports Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Sport,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-    // await database.addHotNews(news,NewsType.Sport);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news weather English",
-    //   titleSinhala:"hot news weather Sinhala",
-    //   titleTamil:"hot news weather Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Whether,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-    // await database.addHotNews(news,NewsType.Whether);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"1 news forign English",
-    //   titleSinhala:"1 news forign Sinhala",
-    //   titleTamil:"1 news forign Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Forign,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"2 news forign English",
-    //   titleSinhala:"2 news forign Sinhala",
-    //   titleTamil:"2 news forign Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Forign,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"1 news sports English",
-    //   titleSinhala:"1 news sports Sinhala",
-    //   titleTamil:"1 news sports Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Sport,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"2 news sports English",
-    //   titleSinhala:"2 news sports Sinhala",
-    //   titleTamil:"2 news sports Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Sport,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"1 news weather English",
-    //   titleSinhala:"1 news weather Sinhala",
-    //   titleTamil:"1 news weather Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Whether,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"2 news weather English",
-    //   titleSinhala:"2 news weather Sinhala",
-    //   titleTamil:"2 news weather Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.Whether,
-    //   timeStamp:timeStamp
-    // );
-
-    // await database.addNews(news);
-
-
-
-
-
-
-
-
-
-    // news = News(
-    //   id:++firebaseNewsCount,
-    //   titleEnglish:"hot news all English",
-    //   titleSinhala:"hot news all Sinhala",
-    //   titleTamil:"hot news all Tamil",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   contentEnglish: "English Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentSinhala:"Sinhala Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   contentTamil:"Tamil Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   date:currentData.toString(),
-    //   author:"author",
-    //   bigNews:0,
-    //   isRead:0,
-    //   type:NewsType.AllTop,
-    //   timeStamp:timeStamp
-    // );
     
     //get normal news
     newsList = await database.readNews(id);
@@ -368,7 +115,7 @@ class _SplashState extends State<Splash> {
 
   _setPosition(){
     setState(() {
-      _logoPostion = 100;
+      _logoPostion = 125;
       _loadingPostion = 150;
     });
   }
@@ -390,17 +137,15 @@ class _SplashState extends State<Splash> {
       child: Stack(
         children: <Widget>[
 
-          //backgroundImage
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              // color: Colors.green,
-              height: 130,
-              width: _width,
-              child: Image.asset(AppData.BACKGROUND),
+          //canves
+          Container(
+            height: _height,
+            width:_width,
+            child: CustomPaint(
+              painter:CurvePainter() ,
             ),
           ),
-
+          
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -420,17 +165,26 @@ class _SplashState extends State<Splash> {
                           child: Align(
                             alignment: Alignment.center,
                             child: Container(
-                              height: 150,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                // color: Colors.red,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image:AssetImage(
-                                    AppData.LOGODARK,
+                              height: 160,
+                              width: 160,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Image.asset(
+                                    AppData.LOGO
                                   ),
-                                  fit:BoxFit.fill
                                 ),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(0xff161617),
+                                shape: BoxShape.circle,
+                                // image: DecorationImage(
+                                //   image:AssetImage(
+                                //     AppData.LOGO,
+              
+                                //   ),
+                                // ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey,

@@ -171,9 +171,7 @@ class DBProvider {
           item.author +
           "'," +
           item.bigNews.toString() +
-          "," +
-          item.isRead.toString() +
-          ",'" +
+          ",0,'" +
           item.type.toString() +
           "'," +
           item.timeStamp.toString() +
@@ -229,7 +227,7 @@ class DBProvider {
           "'," +
           item.bigNews.toString() +
           "," +
-          item.isRead.toString() +
+          0.toString() +
           ",'" +
           item.type.toString() +
           "'," +
@@ -283,7 +281,7 @@ class DBProvider {
           "','" +
           item.author +
           "'," +
-          item.isRead.toString() +
+          0.toString() +
           ")";
       if (newsList.indexOf(item) != newsList.length - 1) {
         sql += ",";
@@ -359,7 +357,7 @@ class DBProvider {
     
     
     try {
-      var res = await db.query("News");
+      var res = await db.query("News",orderBy:'id DESC' );
       for (var item in res) {
         //remove brackets
         imageList = item["imgUrl"].toString().replaceAll("[", "");
@@ -397,7 +395,7 @@ class DBProvider {
     News news;
     
     try {
-      var res = await db.query("Articale");
+      var res = await db.query("Articale",orderBy: "id DESC");
       for (var item in res) {
         news = News(
           id:item["id"],
@@ -471,7 +469,7 @@ class DBProvider {
     var res = 'done';
 
     try {
-      await db.execute("UPDATE `News` SET `idRead`=1 WHERE `id` = "+id);
+      await db.execute("UPDATE `News` SET `isRead`=1 WHERE `id` = "+id);
     } catch (e) {
       print(e);
       return e.toString();
@@ -486,7 +484,7 @@ class DBProvider {
     var res = 'done';
 
     try {
-      await db.execute("UPDATE `Articale` SET `idRead`=1 WHERE `id` = "+id);
+      await db.execute("UPDATE `Articale` SET `isRead`=1 WHERE `id` = "+id);
     } catch (e) {
       print(e);
       return e.toString();

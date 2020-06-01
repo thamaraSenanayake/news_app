@@ -61,6 +61,38 @@ class Database{
 
   }
 
+  Future<int> getArticaleCount() async{
+    int articaleCount = 0;
+
+    await systemData.document('news').get().then((document){
+      articaleCount = document['articaleCount'];
+    });
+
+    return articaleCount;
+
+  }
+
+  Future<String> updateNewsCount(int newId) async{
+    
+
+    await systemData.document('news').updateData({
+      'newsCount':newId
+    });
+
+    return 'done';
+
+  }
+
+  Future<String> updateArticaleCount(int newId) async{
+
+    await systemData.document('news').updateData({
+      'articaleCount':newId
+    });
+
+    return "done";
+
+  }
+
   Future<List<News>> readNews(int lastId) async{
     List<News> newsList = [];
     News news;

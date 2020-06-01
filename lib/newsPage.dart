@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/database/database.dart';
 import 'package:news_app/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/model/news.dart';
@@ -35,6 +37,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   List<Widget> normalNewsWidgetSports = [];
   List<Widget> normalNewsWidgetWeather = [];
 
+  List<News> newNormalNews =[];
+  List<Widget> newNormalNewsWidgetAll =[];
+  List<Widget> newNormalNewsWidgetLocal = [];
+  List<Widget> newNormalNewsWidgetForign = [];
+  List<Widget> newNormalNewsWidgetSports = [];
+  List<Widget> newNormalNewsWidgetWeather = [];
+
+  bool _isloaded = false;
+
   ScrollController _controller;
 
   String mainTitle = "All News";
@@ -42,8 +53,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   String nextTitle = "Local";
   Color nextTitleColor = AppData.LOCALCOLOR;
   int currentNewsTab = 0;
+  bool _showToster = false;
+  String _tosterMsg = "New News";
 
   double _newsTabPostion = 0.0;
+  Database database = Database();
 
 
   @override
@@ -51,122 +65,16 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     super.initState();
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    _getLiveUpdate();
 
-    // News topNewsLoacal = News(
-    //   titleEnglish: "top news Title local 1",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg"],
-    //   type: NewsType.Local
-    // );
-
-    // News news = News(
-    //   titleEnglish: "Title local 1",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://ichef.bbci.co.uk/news/1024/branded_news/33D6/production/_108207231_f63d6143-fff6-48af-a4a2-071b0de87628.gif"],
-    //   type: NewsType.Local
-    // );
-
-    // News news1 = News(
-    //   titleEnglish: "Title local 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://img.youtube.com/vi/IC4BpAJzXTI/0.jpg"],
-    //   type: NewsType.Local
-    // );
-
-    // News news2 = News(
-    //   titleEnglish: "Title forign 1",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://drop.ndtv.com/albums/NEWS/Newspaper_Headl_637076707145778984/637076707168904594.jpeg"],
-    //   type: NewsType.Forign
-    // );
-
-    // News news3 = News(
-    //   titleEnglish: "Title forign 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type: NewsType.Forign
-    // );
-
-    // News newstopForign = News(
-    //   titleEnglish: "Title forign 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type: NewsType.Forign
-    // );
-
-    // News news4 = News(
-    //   titleEnglish: "Title sports 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type:NewsType.Sport
-    // );
-
-    // News news5 = News(
-    //   titleEnglish: "Title sports 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type:NewsType.Sport
-    // );
-
-    // News topSports = News(
-    //   titleEnglish: "Title sports 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type:NewsType.Sport
-    // );
-
-    //  News news6 = News(
-    //   titleEnglish: "Title Whether 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type: NewsType.Whether
-    // );
-
-    // News news7 = News(
-    //   titleEnglish: "Title Whether 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type: NewsType.Whether
-    // );
-
-    // News topWhether = News(
-    //   titleEnglish: "Title Whether 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://iotcdn.oss-ap-southeast-1.aliyuncs.com/news.jpg"],
-    //   type: NewsType.Whether
-    // );
-
-    // News topNews = News(
-    //   titleEnglish: "top news Title 2",
-    //   contentEnglish: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-    //   imgUrl:["https://ichef.bbci.co.uk/news/490/cpsprodpb/14C2E/production/_112383058_mediaitem112383057.jpg"],
-    //   type:NewsType.AllTop
-    // );
-
-    // print("init news");
-    // normalNews.add(news);
-    // normalNews.add(news1);
-    // normalNews.add(news2);
-    // normalNews.add(news3);
-    // normalNews.add(news4);
-    // normalNews.add(news5);
-    // normalNews.add(news6);
-    // normalNews.add(news7);
-    
-    // topNewsList.add(topNewsLoacal);
-    // topNewsList.add(topNews);
-    // topNewsList.add(newstopForign);
-    // topNewsList.add(topSports);
-    // topNewsList.add(topWhether);
-    // _topNewsLoad();
-    // _normalNewsLoad();
   }
 
   loadNews() async{
     normalNews = await DBProvider.db.viewNews("");
     topNewsList = await DBProvider.db.viewHotNews();
     _topNewsLoad();
-    _normalNewsLoad();
+    _normalNewsLoad(normalNews,true);
+    _isloaded = true;
   }
 
   _setTitle(int pageNum){
@@ -312,14 +220,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
 
   }
 
-  _normalNewsLoad(){
+  _normalNewsLoad(List<News> newsList,bool _isFrirstLoad){
     List<Widget> normalNewsWidgetAllTemp = [];
     List<Widget> normalNewsWidgetLocalTemp = [];
     List<Widget> normalNewsWidgetForignTemp = [];
     List<Widget> normalNewsWidgetSportsTemp = [];
     List<Widget> normalNewsWidgetWeatherTemp = [];
 
-    for (var item in normalNews) {
+    for (var item in newsList) {
       normalNewsWidgetAllTemp.add(
         NormalNews(
           news: item,
@@ -365,12 +273,76 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
       }
     }
 
+    if(_isFrirstLoad){
+      print("add old news");
+      setState(() {
+        normalNewsWidgetAll = normalNewsWidgetAllTemp;
+        normalNewsWidgetLocal = normalNewsWidgetLocalTemp;
+        normalNewsWidgetForign = normalNewsWidgetForignTemp;
+        normalNewsWidgetSports = normalNewsWidgetSportsTemp;
+        normalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
+        newNormalNewsWidgetAll =[];
+        newNormalNewsWidgetLocal =[];
+        newNormalNewsWidgetForign =[];
+        newNormalNewsWidgetSports =[];
+        newNormalNewsWidgetWeather =[];
+      });
+    }else{
+      print("add new news");
+      setState(() {
+        newNormalNewsWidgetAll = normalNewsWidgetAllTemp;
+        newNormalNewsWidgetLocal = normalNewsWidgetLocalTemp;
+        newNormalNewsWidgetForign = normalNewsWidgetForignTemp;
+        newNormalNewsWidgetSports = normalNewsWidgetSportsTemp;
+        newNormalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
+      });
+
+    }
+  }
+
+  _getLiveUpdate(){
+    CollectionReference reference = database.systemData;
+    reference.snapshots().listen((querySnapshot) {
+      querySnapshot.documentChanges.forEach((change) {
+        if(_isloaded){
+          _loadNewsNews();
+        }
+        
+      });
+    });
+  }
+
+  _loadNewsNews() async{
+    print("load new news");
+    List<News> newNews =[];
+    //get last added news id 
+
+    int id = await DBProvider.db.getLastNewsId();
+    //get normal news
+    newNews = await database.readNews(id);
+
+    if(newNews.length != 0){
+      await DBProvider.db.addNewsData(newNews);
+      _normalNewsLoad(newNews,false);
+      _addToster();
+    }else{
+      print("no new news");
+    }
+    
+  }
+
+  _addToster() async{
+
+    //display toster
     setState(() {
-      normalNewsWidgetAll = normalNewsWidgetAllTemp;
-      normalNewsWidgetLocal = normalNewsWidgetLocalTemp;
-      normalNewsWidgetForign = normalNewsWidgetForignTemp;
-      normalNewsWidgetSports = normalNewsWidgetSportsTemp;
-      normalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
+      _tosterMsg = "New News";
+      _showToster = true;
+    });
+    await new Future.delayed(const Duration(seconds : 3));
+
+    //after 3 second hide toster
+    setState(() {
+      _showToster = false;
     });
   }
 
@@ -384,257 +356,309 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     return Container(
       height: _height,
       width: _width,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
-        ),
-      ),
-      child: Column(
+      child: Stack(
         children: <Widget>[
-
-          //top bar
           Container(
-            height: 100,
+            height: _height,
             width: _width,
-            child: Stack(
-              // crossAxisAlignment: CrossAxisAlignment.center,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
+              ),
+            ),
+            child: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left:8.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: (){
-                        widget.homePageActivity.homePageActivityClick(HomePageActivity.MenuOpen);
-                      },
-                      child: Card(
-                        child: Container(
-                          height: 50,
-                          width:50,
-                          
-                          child:Icon(
-                            Icons.menu,
-                            color: AppData.BLACK,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppData.WHITE,
-                            borderRadius: BorderRadius.circular(3),
+
+                //top bar
+                Container(
+                  height: 100,
+                  width: _width,
+                  child: Stack(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left:8.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GestureDetector(
+                            onTap: (){
+                              widget.homePageActivity.homePageActivityClick(HomePageActivity.MenuOpen);
+                            },
+                            child: Card(
+                              child: Container(
+                                height: 50,
+                                width:50,
+                                
+                                child:Icon(
+                                  Icons.menu,
+                                  color: AppData.BLACK,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppData.WHITE,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+
+                      nextTitle !=""? Padding(
+                        padding: const EdgeInsets.only(right:8.0,top:20.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child:GestureDetector(
+                            onTap: (){
+                              _next();
+                            },
+                            child: Container(
+                              width:105,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    nextTitle,
+                                    style:TextStyle(
+                                      color: mainTitleColor,
+                                      fontSize: 18,
+                                      fontFamily: "lato",
+                                    )
+                                  ),
+                                  SizedBox(
+                                    width:10
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward,
+                                    color: AppData.BLACK,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ):Container(),
+
+                      Padding(
+                        padding: EdgeInsets.only(bottom:15.0),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            mainTitle,
+                            style:TextStyle(
+                              color: mainTitleColor,
+                              fontSize: 28,
+                              fontFamily: "lato",
+                              fontWeight: FontWeight.w600
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    // color: AppData.BLACK,
+                    boxShadow: [
+                      // BoxShadow(
+                      //   color: Colors.grey,
+                      //   blurRadius: 2.0,
+                      //   spreadRadius: 2.0, 
+                      //   offset: Offset(
+                      //     1.0,
+                      //     2.0,
+                      //   ),
+                      // )
+                    ],
                   ),
                 ),
 
-                nextTitle !=""? Padding(
-                  padding: const EdgeInsets.only(right:8.0,top:20.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child:GestureDetector(
-                      onTap: (){
-                        _next();
-                      },
-                      child: Container(
-                        width:105,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              nextTitle,
-                              style:TextStyle(
-                                color: mainTitleColor,
-                                fontSize: 18,
-                                fontFamily: "lato",
-                              )
-                            ),
-                            SizedBox(
-                              width:10
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: AppData.BLACK,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ):Container(),
+                //news container
+                Container(
+                  width: _width,
+                  height: _height-100,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _controller,
+                    children: <Widget>[
+                      
+                      //all news 
+                      Container(
+                        width: _width,
+                        height: _height-100,
 
-                Padding(
-                  padding: EdgeInsets.only(bottom:15.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      mainTitle,
-                      style:TextStyle(
-                        color: mainTitleColor,
-                        fontSize: 28,
-                        fontFamily: "lato",
-                        fontWeight: FontWeight.w600
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Column(
+                                children: topNewsWidgetAll,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Column(
+                                children: newNormalNewsWidgetAll
+                              ),
+                              Column(
+                                children: normalNewsWidgetAll
+                              )
+                            ]
+                          ),
+                        )
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                      
+
+                      //local
+                      Container(
+                        width: _width,
+                        height: _height-100,
+
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Column(
+                                children: topNewsWidgetLocal
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Column(
+                                children: newNormalNewsWidgetLocal
+                              ),
+                              Column(
+                                children: normalNewsWidgetLocal
+                              )
+                            ]
+                          ),
+                        )
+                      ),
+
+                      //forign
+                      Container(
+                        width: _width,
+                        height: _height-100,
+
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Column(
+                                children: topNewsWidgetForign
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Column(
+                                children: newNormalNewsWidgetForign
+                              ),
+                              Column(
+                                children: normalNewsWidgetForign
+                              )
+                            ]
+                          ),
+                        )
+                      ),
+
+                      //sports
+                      Container(
+                        width: _width,
+                        height: _height-100,
+
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Column(
+                                children: topNewsWidgetSports
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Column(
+                                children: newNormalNewsWidgetSports
+                              ),
+                              Column(
+                                children: normalNewsWidgetSports
+                              )
+                            ]
+                          ),
+                        )
+                      ),
+
+                      //weather
+                      Container(
+                        width: _width,
+                        height: _height-100,
+
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Column(
+                                children: topNewsWidgetWeather
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Column(
+                                children: newNormalNewsWidgetWeather
+                              ),
+                              Column(
+                                children: normalNewsWidgetWeather
+                              )
+                            ]
+                          ),
+                        )
+                      ),
+
+                    ],
                   ),
                 )
 
               ],
             ),
-            decoration: BoxDecoration(
-              // color: AppData.BLACK,
-              boxShadow: [
-                // BoxShadow(
-                //   color: Colors.grey,
-                //   blurRadius: 2.0,
-                //   spreadRadius: 2.0, 
-                //   offset: Offset(
-                //     1.0,
-                //     2.0,
-                //   ),
-                // )
-              ],
-            ),
           ),
 
-          //news container
-          Container(
-            width: _width,
-            height: _height-100,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              controller: _controller,
-              children: <Widget>[
-                
-                //all news 
-                Container(
-                  width: _width,
-                  height: _height-100,
-
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop:true,
-                    child: ListView(
-                      children: <Widget>[
-                        Column(
-                          children: topNewsWidgetAll,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: normalNewsWidgetAll
-                        )
-                      ]
+          //toster
+          _showToster?
+          Positioned(
+            top:105,
+            right:10,
+            child: Container(
+              decoration: BoxDecoration(
+                color:AppData.ALLCOLOR,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              padding: EdgeInsets.symmetric(vertical:5,horizontal: 10),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    _tosterMsg,
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
+                  ),
+                  SizedBox(
+                    width:5
+                  ),
+                  Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                    size:20
                   )
-                ),
-                
-
-                //local
-                Container(
-                  width: _width,
-                  height: _height-100,
-
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop:true,
-                    child: ListView(
-                      children: <Widget>[
-                        Column(
-                          children: topNewsWidgetLocal
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: normalNewsWidgetLocal
-                        )
-                      ]
-                    ),
-                  )
-                ),
-
-                //forign
-                Container(
-                  width: _width,
-                  height: _height-100,
-
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop:true,
-                    child: ListView(
-                      children: <Widget>[
-                        Column(
-                          children: topNewsWidgetForign
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: normalNewsWidgetForign
-                        )
-                      ]
-                    ),
-                  )
-                ),
-
-                //sports
-                Container(
-                  width: _width,
-                  height: _height-100,
-
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop:true,
-                    child: ListView(
-                      children: <Widget>[
-                        Column(
-                          children: topNewsWidgetSports
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: normalNewsWidgetSports
-                        )
-                      ]
-                    ),
-                  )
-                ),
-
-                //weather
-                Container(
-                  width: _width,
-                  height: _height-100,
-
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop:true,
-                    child: ListView(
-                      children: <Widget>[
-                        Column(
-                          children: topNewsWidgetWeather
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: normalNewsWidgetWeather
-                        )
-                      ]
-                    ),
-                  )
-                ),
-                      
-
-                      
-
-
-              ],
-            ),
-          )
+                ],
+              ),
+            )
+          ):Container()
 
         ],
       ),

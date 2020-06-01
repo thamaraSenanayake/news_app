@@ -30,8 +30,6 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     _controller = ScrollController();
   }
 
-  
-
 
   @override
   Widget build(BuildContext context) {
