@@ -174,7 +174,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.LOCALCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -183,7 +183,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.FORIGNCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -193,7 +193,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           TopNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.SPORTCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -240,7 +240,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.LOCALCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }      
@@ -249,7 +249,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.FORIGNCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -258,7 +258,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.SPORTCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -267,7 +267,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
           NormalNews(
             news: item,
             newsClickListner: this,
-            secondColor: AppData.WEATHERCOLOR,
+            secondColor: AppData.ALLCOLOR,
           )
         );
       }
@@ -305,14 +305,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     reference.snapshots().listen((querySnapshot) {
       querySnapshot.documentChanges.forEach((change) {
         if(_isloaded){
-          _loadNewsNews();
+          _loadNewNews();
         }
         
       });
     });
   }
 
-  _loadNewsNews() async{
+  _loadNewNews() async{
     print("load new news");
     List<News> newNews =[];
     //get last added news id 
@@ -351,6 +351,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     setState(() {
       _height = MediaQuery.of(context).size.height;
       _width = MediaQuery.of(context).size.width;
+      print(AppData.language);
     });
 
     return Container(

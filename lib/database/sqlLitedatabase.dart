@@ -99,6 +99,9 @@ class DBProvider {
   addSystemData(LanguageList language, int isDark) async {
     final db = await database;
     var res = 'done';
+    print("addSystemData");
+    print(language);
+    print(isDark);
 
     try {
       await db.execute("DELETE FROM `SystemInfo`");
@@ -123,9 +126,13 @@ class DBProvider {
     try {
       var res = await db.query("SystemInfo");
       for (var item in res) {
+
+        print("SystemInfo");
+        print(item["langId"]);
+        print(item["isDark"]);
         systemInfo = SystemInfo(
-          language: languageConvert(item["language"]) ,
-          isDrak:item["isDrak"],
+          language: languageConvert(item["langId"]) ,
+          isDrak:item["isDark"],
         );
       }
       

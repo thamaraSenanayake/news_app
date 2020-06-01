@@ -4,6 +4,7 @@ import 'package:news_app/Splash/splash.dart';
 import 'package:news_app/Splash/splashListner.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
+import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/newsPage.dart';
 
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isDark = false;
   final GlobalKey<NewsPageState> _newsPageState = GlobalKey();
+  final GlobalKey<LanguageState> _languagePageState = GlobalKey();
 
   @override
   void initState() {
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               width: _width,
               child: Column(
                 children: <Widget>[
-                  Splash(splashStateListner: this,languageStateListner: this,),
+                  Splash(splashStateListner: this,languageStateListner: this,languageKey:_languagePageState),
                 ],
               )
             ),
@@ -103,16 +105,50 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   @override
   languageState(LanguageList language) {
     AppData.language = language;
+    _newsPageState.currentState.loadNews();
+    print("languageState");
+    print(AppData.isDark);
     DBProvider.db.addSystemData(AppData.language,AppData.isDark);
     print(language);
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
+
+
 
   @override
   homePageActivityClick(HomePageActivity homePageActivity) {
     if(homePageActivity == HomePageActivity.MenuOpen){
       _scaffoldKey.currentState.openDrawer();
     }
+  }
+
+  @override
+  moveToNewsPage(int isDark) {
+    setState(() {
+      AppData.isDark = isDark;
+      _isDark = isDark==1?true:false;
+    });
+    _languagePageState.currentState.choseLanguage();
+    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
+  _changetheme(bool value) {
+    
+    if(value){
+      setState(() {
+        AppData.isDark = 1;
+      });
+    }
+    else{
+      setState(() {
+        AppData.isDark = 0;
+      });
+    }
+
+    print(AppData.isDark);
+    DBProvider.db.addSystemData(AppData.language,AppData.isDark);
+    
+    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
 
@@ -134,15 +170,18 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                   child: Container(
                     height: 150,
                     width: 150,
-                    decoration: BoxDecoration(
-                      // color: Colors.red,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image:AssetImage(
-                          AppData.LOGODARK,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Image.asset(
+                          AppData.LOGO
                         ),
-                        fit:BoxFit.fill
                       ),
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xff161617),
                     ),
                   ),
                 ),
@@ -159,7 +198,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
       Container(
         height: _height -170,
         width: _width,
-        color: Colors.white,
+        color: AppData.isDark == 1? AppData.BLACK: Colors.white,
         child: Column(
           children: <Widget>[
 
@@ -167,6 +206,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
+                  _controller.animateTo(0,duration: Duration(milliseconds: 500), curve: Curves.linear);
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(
@@ -184,7 +224,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -215,7 +255,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -246,7 +286,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -277,7 +317,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -308,7 +348,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -334,7 +374,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.BLACK,
+                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         ),
                         SizedBox(width:40),
@@ -346,6 +386,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                               setState(() {
                                 _isDark = value;
                               }); 
+                              _changetheme(value);
                             },
                             activeColor: AppData.ALLCOLOR,
                           ),
@@ -364,5 +405,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
 
     ];
   }
+
+  
 
 }

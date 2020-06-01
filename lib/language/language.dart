@@ -8,10 +8,10 @@ class Language extends StatefulWidget {
   Language({Key key,@required this.languageStateListner, this.loading}) : super(key: key);
 
   @override
-  _LanguageState createState() => _LanguageState();
+  LanguageState createState() => LanguageState();
 }
 
-class _LanguageState extends State<Language> {
+class LanguageState extends State<Language> {
   double _height = 0.0;
   double _width = 0.0;
   List<int> _colorList = [1,0,0];
@@ -24,10 +24,29 @@ class _LanguageState extends State<Language> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setPageHeight();
     });
+    // _choseLanguage();
   }
 
   _setPageHeight(){
     print("set height language");
+  }
+
+  choseLanguage(){
+    print(AppData.language);
+    if(AppData.language == LanguageList.Sinhala){
+      setState(() {
+        _colorList = [1,0,0];
+      });
+    }
+    else if(AppData.language == LanguageList.Tamil){
+      setState(() {
+        _colorList = [0,1,0];
+      });
+    }else{
+      setState(() {
+        _colorList = [0,0,1];
+      });
+    }
   }
 
   

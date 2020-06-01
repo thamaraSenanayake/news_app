@@ -7,12 +7,14 @@ import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/model/systemInfo.dart';
 import 'package:news_app/res/curvePainter.dart';
 
 class Splash extends StatefulWidget {
   final SplashStateListner splashStateListner;
   final LanguageStateListner languageStateListner;
-  Splash({Key key,@required this.splashStateListner, this.languageStateListner}) : super(key: key);
+  final Key languageKey;
+  Splash({Key key,@required this.splashStateListner, this.languageStateListner, this.languageKey}) : super(key: key);
 
   @override
   _SplashState createState() => _SplashState();
@@ -29,6 +31,9 @@ class _SplashState extends State<Splash> {
   bool _loadingData = false;
   bool _waitTimeComplete = false;
   bool _firstLoading = true;
+  bool _moveTolanguageScreen = true;
+  bool _loadingSystemData = false;
+  bool _loadComplete = false;
 
 
   @override
@@ -38,6 +43,7 @@ class _SplashState extends State<Splash> {
       _setPosition();
       _loadData();
       _loadingTime();
+      _loadSystemData();
     });
   }
 
@@ -48,14 +54,27 @@ class _SplashState extends State<Splash> {
   }
 
   _exitFormPage(){
-    // if(_loadingData && _waitTimeComplete){
-    //   widget.splashStateListner.loadingState(true);
-    //   print("set height");
-    //   setState(() {
-    //     _screenHeight = 0.0;
-    //     _languagePageHeight = _height;
-    //   });
-    // }
+    if(_loadingData && _waitTimeComplete && _loadingSystemData){
+
+      setState(() {
+        _loadComplete = true;
+      });
+
+      widget.splashStateListner.loadingState(true);
+      print("set height");
+
+      if(_moveTolanguageScreen){
+        setState(() {
+          _screenHeight = 0.0;
+          _languagePageHeight = _height;
+        });
+      }
+      else{
+        widget.splashStateListner.moveToNewsPage(AppData.isDark);
+        _screenHeight = 0.0;
+        _languagePageHeight = _height;
+      }
+    }
   }
 
   _loadData() async{
@@ -110,6 +129,23 @@ class _SplashState extends State<Splash> {
     }
 
     _loadingData = true;
+    _exitFormPage();
+  }
+
+  _loadSystemData() async{
+    SystemInfo systemInfo = await DBProvider.db.getSystemData();
+    if(systemInfo == null){
+      _moveTolanguageScreen = true;
+    }
+    else{
+      print("splash");
+      print(systemInfo.isDrak);
+      AppData.language = systemInfo.language;
+      AppData.isDark = systemInfo.isDrak;
+      _moveTolanguageScreen = false;
+    }
+
+    _loadingSystemData =true;
     _exitFormPage();
   }
 
@@ -179,12 +215,6 @@ class _SplashState extends State<Splash> {
                               decoration: BoxDecoration(
                                 color: Color(0xff161617),
                                 shape: BoxShape.circle,
-                                // image: DecorationImage(
-                                //   image:AssetImage(
-                                //     AppData.LOGO,
-              
-                                //   ),
-                                // ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey,
@@ -203,7 +233,7 @@ class _SplashState extends State<Splash> {
                       ),
 
                       //loading
-                      AnimatedPositioned(
+                      !_loadComplete?AnimatedPositioned(
                         duration: Duration(milliseconds:1000),
                         bottom:_loadingPostion,
                         child: Container(
@@ -220,7 +250,9 @@ class _SplashState extends State<Splash> {
                             ),
                           ),
                         ), 
-                      ),
+                      ):Container(),
+
+
                     ],
                   ),
                 ),
@@ -231,7 +263,7 @@ class _SplashState extends State<Splash> {
                   duration: Duration(milliseconds: 500),
                   color: Colors.grey[200].withOpacity(0.7),
                   child: SingleChildScrollView(
-                    child: Language(languageStateListner: widget.languageStateListner)
+                    child: Language(languageStateListner: widget.languageStateListner,key:widget.languageKey)
                   ),
                 ),
               ],

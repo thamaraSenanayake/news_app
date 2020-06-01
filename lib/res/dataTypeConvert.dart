@@ -1,10 +1,10 @@
 import 'package:news_app/const.dart';
 
 LanguageList languageConvert(var language){
-  if(language == LanguageList.English){
+  if(language == LanguageList.English.toString()){
     return LanguageList.English;
   }
-  else if(language == LanguageList.Sinhala){
+  else if(language == LanguageList.Sinhala.toString()){
     return LanguageList.Sinhala;
   }
   else{

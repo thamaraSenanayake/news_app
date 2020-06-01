@@ -73,7 +73,11 @@ class _NormalNewsState extends State<NormalNews> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        widget.news.titleEnglish,
+                        AppData.language == LanguageList.Sinhala?
+                         widget.news.titleSinhala:
+                        AppData.language == LanguageList.English?
+                          widget.news.titleEnglish:
+                        widget.news.titleTamil,
                         style:TextStyle(
                           color: widget.secondColor,
                           fontSize: 15,
@@ -82,7 +86,11 @@ class _NormalNewsState extends State<NormalNews> {
                         ),
                       ),
                       Text(
-                        widget.news.contentEnglish,
+                        AppData.language == LanguageList.Sinhala?
+                         widget.news.contentSinhala:
+                        AppData.language == LanguageList.English?
+                          widget.news.contentEnglish:
+                        widget.news.contentTamil,
                         style:TextStyle(
                           color: AppData.BLACK,
                           fontSize: 13,
