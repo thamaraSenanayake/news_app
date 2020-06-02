@@ -6,7 +6,7 @@ import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
-import 'package:news_app/newsPage.dart';
+import 'package:news_app/newspages/newsPage.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -115,6 +115,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
 
 
 
+
   @override
   homePageActivityClick(HomePageActivity homePageActivity) {
     if(homePageActivity == HomePageActivity.MenuOpen){
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
-  _changetheme(bool value) {
+  _changetheme(bool value) async{
     
     if(value){
       setState(() {
@@ -146,8 +147,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     }
 
     print(AppData.isDark);
-    DBProvider.db.addSystemData(AppData.language,AppData.isDark);
-    
+    await DBProvider.db.addSystemData(AppData.language,AppData.isDark);
+    _newsPageState.currentState.loadNews();
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 

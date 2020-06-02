@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
-import 'package:news_app/fullPageNews.dart';
+import 'package:news_app/database/sqlLitedatabase.dart';
+import 'package:news_app/dropDown/dropDownOverlay.dart';
+import 'package:news_app/newspages/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
 import 'package:news_app/module/normalNews.dart';
 import 'package:news_app/module/topNews.dart';
 
-import 'database/sqlLitedatabase.dart';
 
 class NewsPage extends StatefulWidget {
   final HomePageListner homePageActivity;
@@ -49,9 +50,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   ScrollController _controller;
 
   String mainTitle = "All News";
-  Color mainTitleColor = AppData.ALLCOLOR;
-  String nextTitle = "Local";
-  Color nextTitleColor = AppData.LOCALCOLOR;
+  String nextTitle = "Articales";
   int currentNewsTab = 0;
   bool _showToster = false;
   String _tosterMsg = "New News";
@@ -81,41 +80,37 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     if(pageNum == 0){
       setState(() {
         mainTitle = "All News";
+        nextTitle= "Articales";
+      });
+    }
+    else if(pageNum == 1){
+      setState(() {
+        mainTitle = "Articales";
         nextTitle= "Local";
-        mainTitleColor = AppData.ALLCOLOR;
-        nextTitleColor = AppData.LOCALCOLOR;
       });
     }
     else if(pageNum == 1){
       setState(() {
         mainTitle = "Local News";
         nextTitle= "Forign";
-        mainTitleColor = AppData.LOCALCOLOR;
-        nextTitleColor = AppData.FORIGNCOLOR;
       });
     }
     else if(pageNum == 2){
       setState(() {
         mainTitle = "Forign News";
         nextTitle= "Sport";
-        mainTitleColor = AppData.FORIGNCOLOR;
-        nextTitleColor = AppData.SPORTCOLOR;
       });
     }
     else if(pageNum == 3){
       setState(() {
         mainTitle = "Sport News";
         nextTitle= "Weather";
-        mainTitleColor = AppData.SPORTCOLOR;
-        nextTitleColor = AppData.WEATHERCOLOR;
       });
     }
     else if(pageNum == 4){
       setState(() {
         mainTitle = "Weather News";
         nextTitle= "";
-        mainTitleColor = AppData.WEATHERCOLOR;
-        nextTitleColor = AppData.WEATHERCOLOR;
       });
     }
   }
@@ -363,34 +358,42 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
             height: _height,
             width: _width,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
-              ),
+              gradient: AppData.isDark == 1? 
+                LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppData.BLACK, Color.fromRGBO(0, 0, 0, 0.8)]
+                )
+              
+                :LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
+                ),
             ),
             child: Column(
               children: <Widget>[
 
                 //top bar
                 Container(
-                  height: 100,
+                  height: 80,
                   width: _width,
+                  
                   child: Stack(
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(left:8.0),
+                        padding: EdgeInsets.only(left:8.0,bottom:5),
                         child: Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: Alignment.bottomLeft,
                           child: GestureDetector(
                             onTap: (){
                               widget.homePageActivity.homePageActivityClick(HomePageActivity.MenuOpen);
                             },
                             child: Card(
                               child: Container(
-                                height: 50,
-                                width:50,
+                                height: 40,
+                                width:40,
                                 
                                 child:Icon(
                                   Icons.menu,
@@ -407,12 +410,13 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       ),
 
                       nextTitle !=""? Padding(
-                        padding: const EdgeInsets.only(right:8.0,top:20.0),
+                        padding: const EdgeInsets.only(right:8.0,top:25.0),
                         child: Align(
                           alignment: Alignment.topRight,
                           child:GestureDetector(
                             onTap: (){
-                              _next();
+                              // _next();
+                              Navigator.of(context).push(DropDownOverlay());
                             },
                             child: Container(
                               width:105,
@@ -422,7 +426,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                                   Text(
                                     nextTitle,
                                     style:TextStyle(
-                                      color: mainTitleColor,
+                                      color: AppData.ALLCOLOR,
                                       fontSize: 18,
                                       fontFamily: "lato",
                                     )
@@ -442,13 +446,13 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       ):Container(),
 
                       Padding(
-                        padding: EdgeInsets.only(bottom:15.0),
+                        padding: const EdgeInsets.only(bottom:5.0),
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             mainTitle,
                             style:TextStyle(
-                              color: mainTitleColor,
+                              color: AppData.ALLCOLOR,
                               fontSize: 28,
                               fontFamily: "lato",
                               fontWeight: FontWeight.w600
@@ -461,25 +465,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                     ],
                   ),
                   decoration: BoxDecoration(
-                    // color: AppData.BLACK,
-                    boxShadow: [
-                      // BoxShadow(
-                      //   color: Colors.grey,
-                      //   blurRadius: 2.0,
-                      //   spreadRadius: 2.0, 
-                      //   offset: Offset(
-                      //     1.0,
-                      //     2.0,
-                      //   ),
-                      // )
-                    ],
+                    // color: Colors.grey,
                   ),
                 ),
 
                 //news container
                 Container(
                   width: _width,
-                  height: _height-100,
+                  height: _height-80,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     controller: _controller,
@@ -488,7 +481,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                       //all news 
                       Container(
                         width: _width,
-                        height: _height-100,
+                        height: _height-80,
 
                         child: MediaQuery.removePadding(
                           context: context,
@@ -511,7 +504,21 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                           ),
                         )
                       ),
-                      
+
+                      //articales
+                      Container(
+                        width: _width,
+                        height: _height-80,
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: <Widget>[
+                              Text("not yet")
+                            ]
+                          )
+                        )
+                      ),
 
                       //local
                       Container(

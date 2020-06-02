@@ -80,7 +80,8 @@ class LanguageState extends State<Language> {
                     });
                     selectedLanguage =  LanguageList.Sinhala;
                   },
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds:200),
                     child:Stack(
                       children: <Widget>[
                         Align(
@@ -141,7 +142,8 @@ class LanguageState extends State<Language> {
                     });
                     selectedLanguage =  LanguageList.Tamil;
                   },
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds:200),
                     child:Stack(
                       children: <Widget>[
                         Align(

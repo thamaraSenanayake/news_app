@@ -62,7 +62,11 @@ class _TopNewsState extends State<TopNews> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.news.titleEnglish,
+                            AppData.language == LanguageList.Sinhala?
+                              widget.news.titleSinhala:
+                            AppData.language == LanguageList.English?
+                              widget.news.titleEnglish:
+                            widget.news.titleTamil,
                             style:TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -87,8 +91,6 @@ class _TopNewsState extends State<TopNews> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-
-
                         ],
                       ),
                     ),
