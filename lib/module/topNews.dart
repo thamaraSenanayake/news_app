@@ -97,6 +97,27 @@ class _TopNewsState extends State<TopNews> {
                   ),
                 ),
               ),
+
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right:8.0,top:8.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      widget.newsClickListner.savedNews(widget.news);
+                    },
+                    child: Container(
+                      child: Icon(
+                        widget.news.isSaved ==0 ? 
+                          Icons.bookmark_border :
+                          Icons.bookmark,
+                        color:AppData.ALLCOLOR,
+                      ),  
+                    ),
+                  ),
+                ),
+              )
+
             ],
           ),
         ),

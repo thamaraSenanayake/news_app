@@ -36,7 +36,7 @@ class DBProvider {
   initDB() async {
     print("create DB");
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "news4.db");
+    String path = join(documentsDirectory.path, "news5.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE News ("
@@ -52,6 +52,7 @@ class DBProvider {
           "author TEXT NOT NULL,"
           "bigNews INTEGER NOT NULL,"
           "isRead INTEGER NOT NULL,"
+          "isSaved INTEGER NOT NULL,"
           "type TEXT NOT NULL,"
           "timeStamp INTEGER NOT NULL"
           ")");
@@ -152,7 +153,7 @@ class DBProvider {
     final db = await database;
     var res = 'done';
     String sql =
-        "INSERT INTO News (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp)VALUES ";
+        "INSERT INTO News (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp,isSaved)VALUES ";
 
     for (var item in newsList) {
 
@@ -182,6 +183,7 @@ class DBProvider {
           item.type.toString() +
           "'," +
           item.timeStamp.toString() +
+          ",0,'" +
           ")";
       if (newsList.indexOf(item) != newsList.length - 1) {
         sql += ",";
@@ -263,7 +265,7 @@ class DBProvider {
     final db = await database;
     var res = 'done';
     String sql =
-        "INSERT INTO Articale (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,isRead)VALUES ";
+        "INSERT INTO Articale (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,isRead,isSaved)VALUES ";
 
     for (var item in newsList) {
 
@@ -287,6 +289,8 @@ class DBProvider {
           item.date +
           "','" +
           item.author +
+          "'," +
+          0.toString() +
           "'," +
           0.toString() +
           ")";
@@ -347,7 +351,7 @@ class DBProvider {
     var date = new DateTime.now().subtract(Duration(days:7));
 
     try {
-      await db.execute("DELETE FROM `news` WHERE timeStamp > " + date.toString());
+      await db.execute("DELETE FROM `news` WHERE isSaved = 0 and timeStamp > " + date.toString());
     } catch (e) {
       print(e);
       return e.toString();
@@ -385,6 +389,48 @@ class DBProvider {
           isRead:item["isRead"],
           type:newsTypeCovert(item["type"]),
           timeStamp:item["timeStamp"],
+          isSaved: item["isSaved"],
+        );
+        newsList.add(news);
+        
+      }
+    } catch (e) {
+      print(e.toString());
+      // return e.toString();
+    }
+    return newsList;
+  }
+
+  Future<List<News>> viewSavedNews(String date) async{
+    final db = await database;
+    List<News> newsList = [];
+    News news;
+    String imageList = "";
+    
+    
+    try {
+      var res = await db.query("News",orderBy:'id DESC',where:"isSaved = 1"  );
+      for (var item in res) {
+        //remove brackets
+        imageList = item["imgUrl"].toString().replaceAll("[", "");
+        imageList = imageList.replaceAll("]", "");
+
+        news = News(
+          id:item["id"],
+          imgUrl:imageList.split(","),
+          titleSinhala:item["titleSinhala"],
+          titleTamil:item["titleTamil"],
+          titleEnglish:item["titleEnglish"],
+          contentSinhala:item["contentSinhala"],
+          contentTamil:item["contentTamil"],
+          contentEnglish:item["contentEnglish"],
+          date:item["date"],
+          author:item["author"],
+          bigNews:item["bigNews"],
+          isRead:item["isRead"],
+          type:newsTypeCovert(item["type"]),
+          timeStamp:item["timeStamp"],
+          isSaved: item["isSaved"],
         );
         newsList.add(news);
         
@@ -416,6 +462,41 @@ class DBProvider {
           date:item["date"],
           author:item["author"],
           isRead:item["isRead"],
+          isSaved: item["isSaved"],
+        );
+        newsList.add(news);
+        
+      }
+    } catch (e) {
+      print(e.toString());
+      // return e.toString();
+    }
+    return newsList;
+  }
+
+
+  //view saved articale
+  Future<List<News>> viewSavedArticale() async{
+    final db = await database;
+    List<News> newsList = [];
+    News news;
+    
+    try {
+      var res = await db.query("Articale",orderBy: "id DESC",where: "isSaved = 1");
+      for (var item in res) {
+        news = News(
+          id:item["id"],
+          imgUrl:item["imgUrl"],
+          titleSinhala:item["titleSinhala"],
+          titleTamil:item["titleTamil"],
+          titleEnglish:item["titleEnglish"],
+          contentSinhala:item["contentSinhala"],
+          contentTamil:item["contentTamil"],
+          contentEnglish:item["contentEnglish"],
+          date:item["date"],
+          author:item["author"],
+          isRead:item["isRead"],
+          isSaved: item["isSaved"],
         );
         newsList.add(news);
         
@@ -492,6 +573,36 @@ class DBProvider {
 
     try {
       await db.execute("UPDATE `Articale` SET `isRead`=1 WHERE `id` = "+id);
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+
+    return res;
+  }
+
+  // save news
+  saveNewsDB(String id) async {
+    final db = await database;
+    var res = 'done';
+
+    try {
+      await db.execute("UPDATE `News` SET `isSaved`=1 WHERE `id` = "+id);
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+
+    return res;
+  }
+
+  // save articles
+  saveArticaleDB(String id) async {
+    final db = await database;
+    var res = 'done';
+
+    try {
+      await db.execute("UPDATE `Articale` SET `isSaved`=1 WHERE `id` = "+id);
     } catch (e) {
       print(e);
       return e.toString();

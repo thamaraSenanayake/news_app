@@ -15,6 +15,7 @@ class News{
   final int isRead;
   final NewsType type;
   final int timeStamp;
+  final int isSaved;
 
-  News( {this.timeStamp, this.id, this.imgUrl,this.titleSinhala, this.titleTamil, this.titleEnglish, this.contentSinhala, this.contentTamil, this.contentEnglish, this.date, this.author, this.bigNews, this.isRead, this.type});
+  News({this.isSaved,this.timeStamp, this.id, this.imgUrl,this.titleSinhala, this.titleTamil, this.titleEnglish, this.contentSinhala, this.contentTamil, this.contentEnglish, this.date, this.author, this.bigNews, this.isRead, this.type});
 }

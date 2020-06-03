@@ -68,6 +68,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
 
   }
 
+  reloadNews(){
+    _topNewsLoad();
+    _normalNewsLoad(normalNews,true);
+    setState(() {
+      newNormalNews =[];
+      newNormalNewsWidgetAll =[];
+      newNormalNewsWidgetLocal = [];
+      newNormalNewsWidgetForign = [];
+      newNormalNewsWidgetSports = [];
+      newNormalNewsWidgetWeather = [];
+    });
+  }
+
   loadNews() async{
     normalNews = await DBProvider.db.viewNews("");
     topNewsList = await DBProvider.db.viewHotNews();
@@ -320,6 +333,9 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
       await DBProvider.db.addNewsData(newNews);
       _normalNewsLoad(newNews,false);
       _addToster();
+      for (var item in newNews) {
+        normalNews.insert(0, item);
+      }
     }else{
       print("no new news");
     }
@@ -682,5 +698,38 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
         builder: (context) => FullPageNews(news: news,)
       ),
     );
+  }
+
+  @override
+  savedNews(News news) async{
+    News newNews = News(
+      id:news.id,
+      imgUrl:news.imgUrl,
+      titleSinhala:news.titleSinhala,
+      titleTamil:news.titleTamil,
+      titleEnglish:news.titleEnglish,
+      contentSinhala:news.contentSinhala,
+      contentTamil:news.contentTamil,
+      contentEnglish:news.contentEnglish,
+      date:news.date,
+      author:news.author,
+      bigNews:news.bigNews,
+      isRead:news.isRead,
+      type:news.type,
+      timeStamp:news.timeStamp,
+      isSaved:1,
+    );
+    await DBProvider.db.saveNewsDB(news.id.toString());
+    if(normalNews.contains(news)){
+      int index = normalNews.indexOf(news);
+      normalNews.insert(index, newNews);
+      normalNews.removeAt(index+1);
+    }
+    if(topNewsList.contains(news)){
+      int index = topNewsList.indexOf(news);
+      topNewsList.insert(index, newNews);
+      topNewsList.removeAt(index+1);
+    }
+    reloadNews();
   }
 }
