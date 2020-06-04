@@ -72,6 +72,7 @@ class DBProvider {
           "author TEXT NOT NULL,"
           "bigNews INTEGER NOT NULL,"
           "isRead INTEGER NOT NULL,"
+          "isSaved INTEGER NOT NULL,"
           "timeStamp INTEGER NOT NULL"
           ")");
 
@@ -183,7 +184,7 @@ class DBProvider {
           item.type.toString() +
           "'," +
           item.timeStamp.toString() +
-          ",0,'" +
+          ",0" +
           ")";
       if (newsList.indexOf(item) != newsList.length - 1) {
         sql += ",";
@@ -209,7 +210,7 @@ class DBProvider {
     final db = await database;
     var res = 'done';
     String sql =
-        "REPLACE INTO HotNews (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp)VALUES ";
+        "REPLACE INTO HotNews (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp,isSaved)VALUES ";
 
     for (var item in newsList) {
 
@@ -241,6 +242,7 @@ class DBProvider {
           item.type.toString() +
           "'," +
           item.timeStamp.toString() +
+          ",0" +
           ")";
       if (newsList.indexOf(item) != newsList.length - 1) {
         sql += ",";
@@ -619,3 +621,4 @@ class DBProvider {
 }
 
 // INSERT INTO News (id ,imgUrl,titleSinhala,titleEnglish,titleTamil,contentSinhala,contentEnglish,contentTamil,date,author,bigNews,isRead,type,timeStamp)VALUES (1,'url','title Sinhala','title English','title Tamil','Sinhala Lorem ipsum dolor sit amet','English Lorem ipsum dolor sit amet','Tamil Lorem ipsum dolor sit amet','date','author',0,0,'NewsType.Local','1589723003961),(2,'url1','title 1 Sinhala','title 1 English','title 1 Tamil','Sinhala Lorem ipsum dolor sit amet','English Lorem ipsum dolor sit amet','Tamil Lorem ipsum dolor sit amet','date1','author1',1,0,'NewsType.Forign','1589723003961)
+

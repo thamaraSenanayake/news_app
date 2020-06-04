@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/const.dart';
 
 class DropDownOverlay extends ModalRoute<void> {
   // final int checkedButton;
@@ -66,11 +67,110 @@ class DropDownOverlay extends ModalRoute<void> {
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              RaisedButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Dismiss'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "All news",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato"
+                      ),
+                    )
+                  ),
+                ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "Article",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato",
+                        color: AppData.ALLCOLOR
+                      ),
+                    )
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "Local News",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato",
+                        color: AppData.ALLCOLOR
+                      ),
+                    )
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "Forign News",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato",
+                        color: AppData.ALLCOLOR
+                      ),
+                    )
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "Sports News",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato",
+                        color: AppData.ALLCOLOR
+                      ),
+                    )
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:40.0),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    child:Text(
+                      "Weather News",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "lato",
+                        color: AppData.ALLCOLOR
+                      ),
+                    )
+                  ),
+                ),
+              ),
+
             ],
           ),
           Container()

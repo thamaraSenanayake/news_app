@@ -140,7 +140,7 @@ class _NormalNewsState extends State<NormalNews> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(right:8.0,top:8.0),
+                    padding: const EdgeInsets.only(right:3.0,top:3.0),
                     child: GestureDetector(
                       onTap: (){
                         widget.newsClickListner.savedNews(widget.news);

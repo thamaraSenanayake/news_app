@@ -102,25 +102,25 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
         nextTitle= "Local";
       });
     }
-    else if(pageNum == 1){
+    else if(pageNum == 2){
       setState(() {
         mainTitle = "Local News";
         nextTitle= "Forign";
       });
     }
-    else if(pageNum == 2){
+    else if(pageNum == 3){
       setState(() {
         mainTitle = "Forign News";
         nextTitle= "Sport";
       });
     }
-    else if(pageNum == 3){
+    else if(pageNum == 4){
       setState(() {
         mainTitle = "Sport News";
         nextTitle= "Weather";
       });
     }
-    else if(pageNum == 4){
+    else if(pageNum == 5){
       setState(() {
         mainTitle = "Weather News";
         nextTitle= "";

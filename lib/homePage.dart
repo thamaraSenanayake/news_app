@@ -7,6 +7,7 @@ import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/newspages/newsPage.dart';
+import 'package:news_app/savedNews.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
           physics: const NeverScrollableScrollPhysics(),
           controller: _controller,
           children: <Widget>[
+            
             Container(
               height: _height,
               width: _width,
@@ -77,10 +79,17 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
             Container(
               height: _height,
               width: _width,
-              // color: Colors.blue,
               child: NewsPage(
                 homePageActivity: this,
                 key: _newsPageState,
+              ),
+            ),
+
+            Container(
+              height: _height,
+              width: _width,
+              child: SavedNews(
+                homePageActivity: this,
               ),
             ),
 
@@ -120,6 +129,9 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   homePageActivityClick(HomePageActivity homePageActivity) {
     if(homePageActivity == HomePageActivity.MenuOpen){
       _scaffoldKey.currentState.openDrawer();
+    }
+    else if(homePageActivity == HomePageActivity.SavedNewsPAgeback){
+      _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
     }
   }
 
@@ -332,6 +344,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
+                   _controller.animateTo(_width*2,duration: Duration(milliseconds: 500), curve: Curves.linear);
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(

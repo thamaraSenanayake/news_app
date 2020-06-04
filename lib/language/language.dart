@@ -15,7 +15,7 @@ class LanguageState extends State<Language> {
   double _height = 0.0;
   double _width = 0.0;
   List<int> _colorList = [1,0,0];
-  LanguageList selectedLanguage;
+  LanguageList selectedLanguage = LanguageList.Sinhala;
   
 
   @override

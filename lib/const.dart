@@ -16,6 +16,7 @@ enum NewsType{
 
 enum HomePageActivity{
   MenuOpen,
+  SavedNewsPAgeback
 }
 
 class AppData{
