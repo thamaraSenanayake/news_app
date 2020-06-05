@@ -87,7 +87,8 @@ class DBProvider {
           "contentTamil TEXT NOT NULL,"
           "date TEXT NOT NULL,"
           "author TEXT NOT NULL,"
-          "isRead INTEGER NOT NULL"
+          "isRead INTEGER NOT NULL,"
+          "isSaved INTEGER NOT NULL"
           ")");
         
       await db.execute("CREATE TABLE SystemInfo ("
@@ -293,7 +294,7 @@ class DBProvider {
           item.author +
           "'," +
           0.toString() +
-          "'," +
+          "," +
           0.toString() +
           ")";
       if (newsList.indexOf(item) != newsList.length - 1) {
@@ -403,7 +404,7 @@ class DBProvider {
     return newsList;
   }
 
-  Future<List<News>> viewSavedNews(String date) async{
+  Future<List<News>> viewSavedNews() async{
     final db = await database;
     List<News> newsList = [];
     News news;
@@ -584,12 +585,12 @@ class DBProvider {
   }
 
   // save news
-  saveNewsDB(String id) async {
+  saveUnSaveNewsDB(String id,int save) async {
     final db = await database;
     var res = 'done';
 
     try {
-      await db.execute("UPDATE `News` SET `isSaved`=1 WHERE `id` = "+id);
+      await db.execute("UPDATE `News` SET `isSaved`="+save.toString()+" WHERE `id` = "+id);
     } catch (e) {
       print(e);
       return e.toString();
@@ -599,12 +600,12 @@ class DBProvider {
   }
 
   // save articles
-  saveArticaleDB(String id) async {
+  saveUnsaveArticaleDB(String id,int save) async {
     final db = await database;
     var res = 'done';
 
     try {
-      await db.execute("UPDATE `Articale` SET `isSaved`=1 WHERE `id` = "+id);
+      await db.execute("UPDATE `Articale` SET `isSaved`="+save.toString()+" WHERE `id` = "+id);
     } catch (e) {
       print(e);
       return e.toString();

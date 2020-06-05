@@ -39,11 +39,14 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
+    print("splah page run"+_loadComplete.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      _setPosition();
-      _loadData();
-      _loadingTime();
-      _loadSystemData();
+      if(!_loadComplete){
+        _setPosition();
+        _loadData();
+        _loadingTime();
+        _loadSystemData();
+      }
     });
   }
 

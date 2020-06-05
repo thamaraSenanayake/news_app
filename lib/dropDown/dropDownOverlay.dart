@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/const.dart';
 
+import 'dropDownListner.dart';
+
 class DropDownOverlay extends ModalRoute<void> {
-  // final int checkedButton;
-  // DropDownOverlay(this.checkedButton);
+  final DropDownListner dropDownListner;
+  DropDownOverlay({this.dropDownListner});
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 200);
@@ -73,15 +75,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "All news",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato"
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.AllNews);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "All news",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),
@@ -89,16 +101,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "Article",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato",
-                        color: AppData.ALLCOLOR
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.Articles);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "Articles",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),
@@ -106,16 +127,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "Local News",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato",
-                        color: AppData.ALLCOLOR
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.Local);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "Local News",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),
@@ -123,16 +153,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "Forign News",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato",
-                        color: AppData.ALLCOLOR
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.Forign);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "Forign News",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),
@@ -140,16 +179,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "Sports News",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato",
-                        color: AppData.ALLCOLOR
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.Sport);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "Sports News",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),
@@ -157,16 +205,25 @@ class DropDownOverlay extends ModalRoute<void> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal:40.0),
                 child: Card(
-                  child: Container(
-                    height: 40,
-                    child:Text(
-                      "Weather News",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "lato",
-                        color: AppData.ALLCOLOR
-                      ),
-                    )
+                  child: GestureDetector(
+                    onTap: (){
+                      dropDownListner.dropDownClickListner(PageList.Whether);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 50,
+                      child:Center(
+                        child: Text(
+                          "Weather News",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "lato",
+                            color: AppData.ALLCOLOR,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      )
+                    ),
                   ),
                 ),
               ),

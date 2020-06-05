@@ -85,14 +85,6 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               ),
             ),
 
-            Container(
-              height: _height,
-              width: _width,
-              child: SavedNews(
-                homePageActivity: this,
-              ),
-            ),
-
           ],
         )
        ),
@@ -131,7 +123,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
       _scaffoldKey.currentState.openDrawer();
     }
     else if(homePageActivity == HomePageActivity.SavedNewsPAgeback){
-      _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsPageState.currentState.loadNews();
     }
   }
 
@@ -344,7 +336,12 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                   _controller.animateTo(_width*2,duration: Duration(milliseconds: 500), curve: Curves.linear);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SavedNews(homePageActivity:this)
+                    ),
+                  );
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(

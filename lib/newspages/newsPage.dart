@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
+import 'package:news_app/dropDown/dropDownListner.dart';
 import 'package:news_app/dropDown/dropDownOverlay.dart';
 import 'package:news_app/newspages/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
@@ -21,7 +22,7 @@ class NewsPage extends StatefulWidget {
   NewsPageState createState() => NewsPageState();
 }
 
-class NewsPageState extends State<NewsPage>  implements NewsClickListner{
+class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDownListner{
   double _height = 0.0;
   double _width = 0.0;
   List<News> topNewsList =[];
@@ -53,6 +54,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   String nextTitle = "Articales";
   int currentNewsTab = 0;
   bool _showToster = false;
+  bool _goForwed = true;
   String _tosterMsg = "New News";
 
   double _newsTabPostion = 0.0;
@@ -65,7 +67,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     _getLiveUpdate();
-
   }
 
   reloadNews(){
@@ -90,41 +91,75 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   }
 
   _setTitle(int pageNum){
+    print(pageNum);
     if(pageNum == 0){
       setState(() {
         mainTitle = "All News";
         nextTitle= "Articales";
+        _goForwed = true;
       });
     }
     else if(pageNum == 1){
-      setState(() {
-        mainTitle = "Articales";
-        nextTitle= "Local";
-      });
+      if(_goForwed){
+        setState(() {
+          mainTitle = "Articales";
+          nextTitle= "Local";
+        });
+      }
+      else{
+        setState(() {
+          mainTitle = "Articales";
+          nextTitle= "All";
+        });
+      }
     }
     else if(pageNum == 2){
-      setState(() {
-        mainTitle = "Local News";
-        nextTitle= "Forign";
-      });
+      if(_goForwed){
+        setState(() {
+          mainTitle = "Local News";
+          nextTitle= "Forign";
+        });
+      }
+      else{
+        setState(() {
+          mainTitle = "Local News";
+          nextTitle= "Articales";
+        });
+      }
     }
     else if(pageNum == 3){
-      setState(() {
-        mainTitle = "Forign News";
-        nextTitle= "Sport";
-      });
+      if(_goForwed){
+        setState(() {
+          mainTitle = "Forign News";
+          nextTitle= "Sport";
+        });
+      }
+      else{
+        setState(() {
+          mainTitle = "Forign News";
+          nextTitle= "Local";
+        });
+      }
     }
     else if(pageNum == 4){
-      setState(() {
-        mainTitle = "Sport News";
-        nextTitle= "Weather";
-      });
+      if(_goForwed){
+        setState(() {
+          mainTitle = "Sport News";
+          nextTitle= "Weather";
+        });
+      }else{
+        setState(() {
+          mainTitle = "Sport News";
+          nextTitle= "Forign";
+        });
+      }
     }
     else if(pageNum == 5){
       setState(() {
         mainTitle = "Weather News";
-        nextTitle= "";
-      });
+        nextTitle= "Sport";
+        _goForwed = false;
+      });        
     }
   }
 
@@ -132,7 +167,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   _scrollListener() {
     //news scroll to next tab
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*4) {
+      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*5) {
         _next();
       }
     }
@@ -145,18 +180,23 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
   }
 
   _next(){
-      _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion += _width;
-      _setTitle(++currentNewsTab);
+    _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    _newsTabPostion += _width;
+    setState(() {
+      _goForwed =true;
+    });
+    _setTitle(++currentNewsTab);
     
   }
 
   _back(){
       _controller.animateTo(_newsTabPostion - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion -= _width;
+      setState(() {
+        _goForwed =false;
+      });
       _setTitle(--currentNewsTab);
-    if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
-    }
+    
   }
 
   _topNewsLoad(){
@@ -425,20 +465,26 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                         ),
                       ),
 
-                      nextTitle !=""? Padding(
+                      Padding(
                         padding: const EdgeInsets.only(right:8.0,top:25.0),
                         child: Align(
                           alignment: Alignment.topRight,
                           child:GestureDetector(
                             onTap: (){
-                              // _next();
-                              Navigator.of(context).push(DropDownOverlay());
+                              Navigator.of(context).push(DropDownOverlay(dropDownListner:this));
                             },
                             child: Container(
-                              width:105,
+                              width:130,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
+                                  Icon(
+                                    _goForwed? Icons.arrow_drop_down:Icons.arrow_back,
+                                    color: AppData.BLACK,
+                                  ),
+                                  SizedBox(
+                                    width:_goForwed?0:10
+                                  ),
                                   Text(
                                     nextTitle,
                                     style:TextStyle(
@@ -448,10 +494,10 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                                     )
                                   ),
                                   SizedBox(
-                                    width:10
+                                    width:_goForwed?10:0
                                   ),
                                   Icon(
-                                    Icons.arrow_forward,
+                                    _goForwed? Icons.arrow_forward:Icons.arrow_drop_down,
                                     color: AppData.BLACK,
                                   )
                                 ],
@@ -459,7 +505,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
                             ),
                           ),
                         )
-                      ):Container(),
+                      ),
 
                       Padding(
                         padding: const EdgeInsets.only(bottom:5.0),
@@ -702,6 +748,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
 
   @override
   savedNews(News news) async{
+    int save =1;
+
+    if(news.isSaved == 1){
+      save = 0;
+    }
+    else{
+      save = 1;
+    }
     News newNews = News(
       id:news.id,
       imgUrl:news.imgUrl,
@@ -717,19 +771,59 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner{
       isRead:news.isRead,
       type:news.type,
       timeStamp:news.timeStamp,
-      isSaved:1,
+      isSaved:save,
     );
-    await DBProvider.db.saveNewsDB(news.id.toString());
+    await DBProvider.db.saveUnSaveNewsDB(news.id.toString(),save);
     if(normalNews.contains(news)){
       int index = normalNews.indexOf(news);
       normalNews.insert(index, newNews);
       normalNews.removeAt(index+1);
     }
-    if(topNewsList.contains(news)){
+    else if(topNewsList.contains(news)){
       int index = topNewsList.indexOf(news);
       topNewsList.insert(index, newNews);
       topNewsList.removeAt(index+1);
     }
     reloadNews();
+  }
+
+  @override
+  dropDownClickListner(PageList page) {
+    if(page == PageList.AllNews){
+      _controller.animateTo(0,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = 0;
+      currentNewsTab = 0;
+      _setTitle(currentNewsTab);
+    }
+    else if(page == PageList.Articles){
+      _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = _width;
+      currentNewsTab = 1;
+      _setTitle(currentNewsTab);
+    }
+    else if(page == PageList.Local){
+      _controller.animateTo(_width*2,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = _width*2;
+      currentNewsTab = 2;
+      _setTitle(currentNewsTab);
+    }
+    else if(page == PageList.Forign){
+      _controller.animateTo(_width*3,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = _width*3;
+      currentNewsTab =3;
+      _setTitle(currentNewsTab);
+    }
+    else if(page == PageList.Sport){
+      _controller.animateTo(_width*4,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = _width*4;
+      currentNewsTab = 4;
+      _setTitle(currentNewsTab);
+    }
+    else if(page == PageList.Whether){
+      _controller.animateTo(_width*5,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPostion = _width*5;
+      currentNewsTab =5;
+      _setTitle(currentNewsTab);
+    }
   }
 }

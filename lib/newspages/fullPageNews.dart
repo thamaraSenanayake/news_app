@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/zoomPage.dart';
 
 class FullPageNews extends StatefulWidget {
   final News news;
@@ -21,6 +22,10 @@ class _FullPageNewsState extends State<FullPageNews> {
   Color _nextButtonColor = AppData.BLACK;
   Color _backButtonColor = AppData.GRAY;
   double _phtoContainerHeight = 300;
+  List<Widget> _photoList = [];
+  List<Widget> _tabList = [];
+  bool _isButtonShow = true;
+  bool _isArrowButtonShow = true;
 
   _innerControllerListener()
   {
@@ -29,6 +34,7 @@ class _FullPageNewsState extends State<FullPageNews> {
       if(_phtoContainerHeight > 100){
         setState(() {
           _phtoContainerHeight -= 10;
+          _isButtonShow = false;
         });
       }
     }
@@ -36,6 +42,11 @@ class _FullPageNewsState extends State<FullPageNews> {
       if(_phtoContainerHeight <= 300){
         setState(() {
           _phtoContainerHeight += 10;
+        });
+      }
+      else{
+        setState(() {
+          _isButtonShow = true;
         });
       }
     }
@@ -80,11 +91,12 @@ class _FullPageNewsState extends State<FullPageNews> {
 
 
   _next(){
-    if(_currentPhoto != 2){
+    if(_currentPhoto != widget.news.imgUrl.length-1){
       _controller.animateTo(_width + _slidShowPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _slidShowPostion += _width;
       ++_currentPhoto;
       _setButtonColor();
+      _tabLoad();
     }
   }
 
@@ -94,7 +106,51 @@ class _FullPageNewsState extends State<FullPageNews> {
       _slidShowPostion -= _width;
       --_currentPhoto;
       _setButtonColor();
+      _tabLoad();
     }
+  }
+
+  _loadPhotos(){
+    List<Widget> _photoListTemp =[]; 
+    for (var item in widget.news.imgUrl) {
+      _photoListTemp.add(
+        Container(
+          height: 300,
+          width: _width,
+          child: Image.network(
+            item,
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+    setState(() {
+      _photoList = _photoListTemp;
+    });
+  }
+
+  _tabLoad(){
+    List<Widget> _tabListTemp = [];
+    for (var i = 0; i < widget.news.imgUrl.length; i++) {
+      _tabListTemp.add(
+        Padding(
+          padding: EdgeInsets.all(
+            2.5
+          ),
+          child: Container(
+            height: 15,
+            width: 15,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _currentPhoto == i? AppData.DARKGRAY:AppData.GRAY
+            ),
+          ),
+        )
+      );
+    }
+    setState(() {
+      _tabList = _tabListTemp;
+    });
   }
 
   @override
@@ -106,6 +162,13 @@ class _FullPageNewsState extends State<FullPageNews> {
 
     _innerController = ScrollController();
     _innerController.addListener(_innerControllerListener);
+    _tabLoad();
+    _loadPhotos();
+    if(widget.news.imgUrl.length == 1){
+      setState(() {
+        _isArrowButtonShow = false;
+      });
+    }
 
   }
 
@@ -121,11 +184,18 @@ class _FullPageNewsState extends State<FullPageNews> {
          height: _height,
          width: _width,
          decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
-          ),
+          gradient: AppData.isDark == 1? 
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [AppData.BLACK, Color.fromRGBO(0, 0, 0, 0.8)]
+            )
+          
+            :LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
+            ),
         ),
          child: Column(
            children: <Widget>[
@@ -197,44 +267,32 @@ class _FullPageNewsState extends State<FullPageNews> {
                               child: ListView(
                                 scrollDirection:Axis.horizontal,
                                 controller: _controller,
-                                children: <Widget>[
-                                  Container(
-                                    height: 300,
-                                    width: _width,
-                                    child: Image.network(
-                                      "https://cdn.newsfirst.lk/english-uploads/2020/05/13b23a13-97cc2493-f18fe9cb-cbsl_850x460_acf_cropped_850x460_acf_cropped.jpg",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 300,
-                                    width: _width,
-                                    child: Image.network(
-                                      "https://ichef.bbci.co.uk/news/1024/branded_news/33D6/production/_108207231_f63d6143-fff6-48af-a4a2-071b0de87628.gif",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 300,
-                                    width: _width,
-                                    child: Image.network(
-                                      "https://img.youtube.com/vi/IC4BpAJzXTI/0.jpg",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                ],
+                                children: _photoList,
                               )
                             ),
                           ),
 
-                          //backButton
+                          //tabView
                           Padding(
+                            padding: const EdgeInsets.only(bottom:8.0),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: _tabList,
+                              ),
+                            ),
+                          ),
+
+                          //backButton
+                          _isArrowButtonShow && _isButtonShow? Padding(
                             padding: EdgeInsets.only(left:10.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: GestureDetector(
                                 onTap: (){
-                                  
+                                  _back();
                                 },
                                 child: Card(
                                   child:Padding(
@@ -247,41 +305,51 @@ class _FullPageNewsState extends State<FullPageNews> {
                                 ),
                               )
                             ),
-                          ),
+                          ):Container(),
 
                           //forwaordButton
-                          Padding(
+                          _isArrowButtonShow && _isButtonShow? Padding(
                             padding:  EdgeInsets.only(left:10.0),
                             child: Align(
                               alignment: Alignment.centerRight,
-                              child: Card(
-                                child:Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Icon(
-                                    Icons.arrow_forward,
-                                    color: _nextButtonColor,
-                                  ),
-                                )
+                              child: GestureDetector(
+                                onTap: (){
+                                  _next();
+                                },
+                                child: Card(
+                                  child:Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Icon(
+                                      Icons.arrow_forward,
+                                      color: _nextButtonColor,
+                                    ),
+                                  )
+                                ),
                               )
                             ),
-                          ),
+                          ):Container(),
 
                           //zoomButton
-                          Padding(
+                          _isButtonShow? Padding(
                             padding:  EdgeInsets.only(right:10.0,bottom: 10.0),
                             child: Align(
                               alignment: Alignment.bottomRight,
-                              child: Card(
-                                child:Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Icon(
-                                    Icons.zoom_in,
-                                    color: AppData.BLACK,
-                                  ),
-                                )
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context).push(ZoomPage(image: widget.news.imgUrl[_currentPhoto]));
+                                },
+                                child: Card(
+                                  child:Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Icon(
+                                      Icons.zoom_in,
+                                      color: AppData.BLACK,
+                                    ),
+                                  )
+                                ),
                               )
                             ),
-                          )
+                          ):Container()
                           
                         ],
                       ),
@@ -328,7 +396,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                                 wordSpacing:1,
                                 height: 1.5,
                                 fontFamily: 'lato',
-                                color: AppData.BLACK,
+                                color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
                                 fontSize: 16
                               ),
                               textAlign: TextAlign.justify,
