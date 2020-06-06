@@ -14,6 +14,11 @@ enum NewsType{
   AllTop
 }
 
+enum TabType{
+  News,
+  Article
+}
+
 enum HomePageActivity{
   MenuOpen,
   SavedNewsPAgeback

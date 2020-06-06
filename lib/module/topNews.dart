@@ -7,7 +7,8 @@ class TopNews extends StatefulWidget {
   final NewsClickListner newsClickListner;
   final News news; 
   final Color secondColor;
-  TopNews({Key key, this.newsClickListner, this.news, this.secondColor}) : super(key: key);
+  final TabType tabType;
+  TopNews({Key key,@required this.newsClickListner,@required this.news, this.secondColor,@required this.tabType}) : super(key: key);
 
   @override
   _TopNewsState createState() => _TopNewsState();
@@ -24,7 +25,11 @@ class _TopNewsState extends State<TopNews> {
     return //Top news
       GestureDetector(
         onTap: (){
-          widget.newsClickListner.clickedNews(widget.news);
+          if(widget.tabType == TabType.News){
+            widget.newsClickListner.clickedNews(widget.news);
+          }else{
+            widget.newsClickListner.clickedArticle(widget.news);
+          }
         },
         child: Container(
           height:250,
@@ -104,7 +109,12 @@ class _TopNewsState extends State<TopNews> {
                   padding: const EdgeInsets.only(right:3.0,top:3.0),
                   child: GestureDetector(
                     onTap: (){
-                      widget.newsClickListner.savedNews(widget.news);
+                      if(widget.tabType == TabType.News){
+                        widget.newsClickListner.savedNews(widget.news);
+                      }
+                      else{
+                        widget.newsClickListner.savedArticle(widget.news);
+                      }
                     },
                     child: Container(
                       child: Icon(

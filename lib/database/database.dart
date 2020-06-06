@@ -8,6 +8,7 @@ class Database{
   
   //collection refreence 
   final CollectionReference newsCollection = Firestore.instance.collection('news');
+  final CollectionReference articleCollection = Firestore.instance.collection('article');
   final CollectionReference hotNewsCollection = Firestore.instance.collection('hotNews');
   final CollectionReference systemData = Firestore.instance.collection('systemData');
 
@@ -25,8 +26,23 @@ class Database{
       "date":news.date,
       "author":news.author,
       "bigNews":news.bigNews,
-      "isRead":news.isRead,
       "type":news.type.toString(),
+      "timeStamp":news.timeStamp,
+    });
+  }
+
+  Future addArticle(News news) async{
+    await articleCollection.document(news.id.toString()).setData({
+      "id":news.id,
+      "imgUrl":news.imgUrl,
+      "titleSinhala":news.titleSinhala,
+      "titleTamil":news.titleTamil,
+      "titleEnglish":news.titleEnglish,
+      "contentSinhala":news.contentSinhala,
+      "contentTamil":news.contentTamil,
+      "contentEnglish":news.contentEnglish,
+      "date":news.date,
+      "author":news.author,
       "timeStamp":news.timeStamp,
     });
   }
@@ -43,8 +59,6 @@ class Database{
       "contentEnglish":news.contentEnglish,
       "date":news.date,
       "author":news.author,
-      "bigNews":news.bigNews,
-      "isRead":news.isRead,
       "type":news.type.toString(),
       "timeStamp":news.timeStamp,
     });
@@ -117,7 +131,6 @@ class Database{
         date:item["date"],
         author:item["author"],
         bigNews:item["bigNews"],
-        isRead:item["isRead"],
         type:newsTypeCovert(item["type"]),
         timeStamp:item["timeStamp"],
       );
@@ -127,6 +140,40 @@ class Database{
     print(newsList.length);
 
     return newsList;
+  }
+
+  Future<List<News>> readArticles(int lastId) async{
+    List<News> articleList = [];
+    News article;
+    
+    QuerySnapshot querySnapshot = await articleCollection.where('id',isGreaterThan:lastId).getDocuments();
+    for (var item in querySnapshot.documents) {
+      
+
+      List imageList = item["imgUrl"];
+      List<String> imageListString = imageList.cast<String>().toList();
+          
+
+      article = News(
+        id:item["id"],
+        imgUrl:imageListString,
+        titleSinhala:item["titleSinhala"],
+        titleTamil:item["titleTamil"],
+        titleEnglish:item["titleEnglish"],
+        contentSinhala:item["contentSinhala"],
+        contentTamil:item["contentTamil"],
+        contentEnglish:item["contentEnglish"],
+        date:item["date"],
+        author:item["author"],
+        type:newsTypeCovert(item["type"]),
+        timeStamp:item["timeStamp"],
+      );
+      articleList.add(article);
+    }
+
+    print(articleList.length);
+
+    return articleList;
   }
 
   Future<List<News>> readHotNews() async{

@@ -84,6 +84,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
           news: item,
           newsClickListner: this,
           secondColor: AppData.ALLCOLOR,
+          tabType: TabType.News,
         )
       );
     }
@@ -126,6 +127,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
           news: item,
           newsClickListner: this,
           secondColor: AppData.ALLCOLOR,
+          tabType: TabType.News,
         )
       );
     }
@@ -321,5 +323,17 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
     _savedNews.remove(news);
     _viewNews(_savedNews);
     
+  }
+
+  @override
+  clickedArticle(News news) {
+    // TODO: implement clickedArticle
+    return null;
+  }
+
+  @override
+  savedArticle(News news) {
+    // TODO: implement savedArticle
+    return null;
   }
 }

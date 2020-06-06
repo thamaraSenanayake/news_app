@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/zoomPage.dart';
+import 'package:share/share.dart';
+
 
 class FullPageNews extends StatefulWidget {
   final News news;
@@ -26,6 +28,7 @@ class _FullPageNewsState extends State<FullPageNews> {
   List<Widget> _tabList = [];
   bool _isButtonShow = true;
   bool _isArrowButtonShow = true;
+
 
   _innerControllerListener()
   {

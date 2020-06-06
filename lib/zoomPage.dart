@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/const.dart';
-
+import 'package:zoom_widget/zoom_widget.dart';
 
 class ZoomPage extends ModalRoute<void> {
   final String image;
@@ -67,8 +66,19 @@ class ZoomPage extends ModalRoute<void> {
           ),
 
           Container(
-            child: Image.network(
-              image
+            child: Zoom(
+              width: 2*(MediaQuery.of(context).size.width),
+              height: 2*(MediaQuery.of(context).size.height-144),
+              centerOnScale: true,
+              enableScroll: true,
+              doubleTapZoom: false,
+              zoomSensibility: 2.3,
+              initZoom: 0.0,
+              backgroundColor: Colors.white,
+              scrollWeight: 2.0,
+              child: Image.network(
+                image
+              ),
             ),
           )
 

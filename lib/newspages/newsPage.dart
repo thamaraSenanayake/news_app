@@ -46,6 +46,9 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   List<Widget> newNormalNewsWidgetSports = [];
   List<Widget> newNormalNewsWidgetWeather = [];
 
+  List<News> articleList =[];
+  List<Widget> articleWidget =[];
+
   bool _isloaded = false;
 
   ScrollController _controller;
@@ -85,9 +88,37 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   loadNews() async{
     normalNews = await DBProvider.db.viewNews("");
     topNewsList = await DBProvider.db.viewHotNews();
+    articleList = await DBProvider.db.viewArticale();
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
     _isloaded = true;
+  }
+
+  _loadArticle(){
+
+    List<Widget> articleWidgetTemp = [];
+
+    for(var item in articleList){
+      if(articleList.indexOf(item)==0){
+        articleWidgetTemp.add(
+          TopNews(
+            tabType: TabType.Article,
+            news: item,
+            newsClickListner: this,
+            secondColor: AppData.ALLCOLOR,
+          )
+        );
+      }else{
+        articleWidgetTemp.add( 
+          NormalNews(
+            news: item,
+            newsClickListner: this,
+            secondColor: AppData.ALLCOLOR,
+            tabType: TabType.Article,
+          )
+        );
+      }
+    }
   }
 
   _setTitle(int pageNum){
@@ -211,6 +242,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       if(item.type == NewsType.AllTop){
         topNewsWidgetTemp.add(
           TopNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -220,6 +252,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Local){
         topNewsWidgetLocalTemp.add(
           TopNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -229,6 +262,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Forign){
         topNewsWidgetForignTemp.add(
           TopNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -239,6 +273,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Sport){
         topNewsWidgetSportsTemp.add(
           TopNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -249,6 +284,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Whether){
         topNewsWidgetWeatherTemp.add(
           TopNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.WEATHERCOLOR,
@@ -278,6 +314,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     for (var item in newsList) {
       normalNewsWidgetAllTemp.add(
         NormalNews(
+          tabType: TabType.News,
           news: item,
           newsClickListner: this,
           secondColor: AppData.ALLCOLOR,
@@ -286,6 +323,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       if(item.type == NewsType.Local){
         normalNewsWidgetLocalTemp.add(
           NormalNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -295,6 +333,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Forign){
         normalNewsWidgetForignTemp.add(
           NormalNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -304,6 +343,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Sport){
         normalNewsWidgetSportsTemp.add(
           NormalNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -313,6 +353,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else if(item.type == NewsType.Whether){
         normalNewsWidgetWeatherTemp.add(
           NormalNews(
+            tabType: TabType.News,
             news: item,
             newsClickListner: this,
             secondColor: AppData.ALLCOLOR,
@@ -575,9 +616,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                           context: context,
                           removeTop:true,
                           child: ListView(
-                            children: <Widget>[
-                              Text("not yet")
-                            ]
+                            children: articleWidget
                           )
                         )
                       ),
@@ -825,5 +864,17 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       currentNewsTab =5;
       _setTitle(currentNewsTab);
     }
+  }
+
+  @override
+  clickedArticle(News news) {
+    // TODO: implement clickedArticle
+    return null;
+  }
+
+  @override
+  savedArticle(News news) {
+    // TODO: implement savedArticle
+    return null;
   }
 }

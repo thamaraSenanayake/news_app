@@ -8,6 +8,10 @@ import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/newspages/newsPage.dart';
 import 'package:news_app/savedNews.dart';
+import 'package:launch_review/launch_review.dart'; 
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
+
 
 
 class HomePage extends StatefulWidget {
@@ -22,8 +26,9 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   double _height = 0.0;
   double _width = 0.0;
   ScrollController _controller;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isDark = false;
+  
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<NewsPageState> _newsPageState = GlobalKey();
   final GlobalKey<LanguageState> _languagePageState = GlobalKey();
 
@@ -48,7 +53,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
         ),
         child: Drawer(
           child: ListView(
-            children: _appDrawerContent(),
+            children: _appDrawerContent(context),
           ),
         ),
       ),
@@ -156,9 +161,41 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
+  _shareWithOther(){
+    Share.share('Andriod https://play.google.com/store/apps/details?id=com.supercell.clashofclans iOS https://apps.apple.com/us/app/clash-of-clans/id529479190', subject: 'Check This new News App');
+  }
+
+  _rateUs(){
+    LaunchReview.launch(androidAppId: "com.supercell.clashofclans",iOSAppId: "529479190");
+  }
+  
+  _loadBottomBar(context){
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc){
+          return Container(
+            child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                leading: new Icon(Icons.music_note),
+                title: new Text('Music'),
+                onTap: () => {}          
+              ),
+              new ListTile(
+                leading: new Icon(Icons.videocam),
+                title: new Text('Video'),
+                onTap: () => {},          
+              ),
+            ],
+          ),
+          );
+      }
+    );
+  }
+
 
   //app drawer
-  List<Widget> _appDrawerContent() {
+  List<Widget> _appDrawerContent(context) {
     return [
       Container(
         color: AppData.BLACK,
@@ -243,6 +280,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
+                  _rateUs();
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(
@@ -274,6 +312,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
+                  _loadBottomBar(context);
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(
@@ -305,6 +344,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
+                  _shareWithOther();
                   _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(

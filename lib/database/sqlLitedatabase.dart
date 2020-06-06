@@ -36,7 +36,7 @@ class DBProvider {
   initDB() async {
     print("create DB");
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "news5.db");
+    String path = join(documentsDirectory.path, "news6.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE News ("
@@ -277,17 +277,17 @@ class DBProvider {
           ",'" +
           item.imgUrl.toString() +
           "','" +
-          item.titleSinhala +
+          item.titleSinhala.toString().replaceAll('\'', "*") +
           "','" +
-          item.titleEnglish +
+          item.titleEnglish.toString().replaceAll('\'', "*") +
           "','" +
-          item.titleTamil +
+          item.titleTamil.toString().replaceAll('\'', "*") +
           "','" +
-          item.contentSinhala +
+          item.contentSinhala.toString().replaceAll('\'', "*") +
           "','" +
-          item.contentEnglish +
+          item.contentEnglish.toString().replaceAll('\'', "*") +
           "','" +
-          item.contentTamil +
+          item.contentTamil.toString().replaceAll('\'', "*") +
           "','" +
           item.date +
           "','" +

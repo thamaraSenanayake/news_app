@@ -7,7 +7,8 @@ class NormalNews extends StatefulWidget {
   final NewsClickListner newsClickListner;
   final News news; 
   final Color secondColor;
-  NormalNews({Key key, this.newsClickListner, this.news, this.secondColor}) : super(key: key);
+  final TabType tabType;
+  NormalNews({Key key,@required this.newsClickListner,@required this.news, this.secondColor,@required this.tabType}) : super(key: key);
 
   @override
   _NormalNewsState createState() => _NormalNewsState();
@@ -24,7 +25,11 @@ class _NormalNewsState extends State<NormalNews> {
       padding: const EdgeInsets.only(left:10.0,right:10.0,bottom: 15),
       child: GestureDetector(
         onTap: (){
-          widget.newsClickListner.clickedNews(widget.news);
+          if(widget.tabType == TabType.News){
+            widget.newsClickListner.clickedNews(widget.news);
+          }else{
+            widget.newsClickListner.clickedArticle(widget.news);
+          }
         },
         child: Card(
           child: Container(
@@ -143,7 +148,12 @@ class _NormalNewsState extends State<NormalNews> {
                     padding: const EdgeInsets.only(right:3.0,top:3.0),
                     child: GestureDetector(
                       onTap: (){
-                        widget.newsClickListner.savedNews(widget.news);
+                        if(widget.tabType == TabType.News){
+                          widget.newsClickListner.savedNews(widget.news);
+                        }
+                        else{
+                          widget.newsClickListner.savedArticle(widget.news);
+                        }
                       },
                       child: Container(
                         child: Icon(
