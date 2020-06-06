@@ -6,6 +6,7 @@ import 'package:news_app/database/database.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/dropDown/dropDownListner.dart';
 import 'package:news_app/dropDown/dropDownOverlay.dart';
+import 'package:news_app/newspages/fullPageArticle.dart';
 import 'package:news_app/newspages/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/model/news.dart';
@@ -75,6 +76,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   reloadNews(){
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
+    
     setState(() {
       newNormalNews =[];
       newNormalNewsWidgetAll =[];
@@ -91,12 +93,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     articleList = await DBProvider.db.viewArticale();
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
+    _loadArticle();
     _isloaded = true;
   }
 
   _loadArticle(){
 
     List<Widget> articleWidgetTemp = [];
+    print(articleList.length);
 
     for(var item in articleList){
       if(articleList.indexOf(item)==0){
@@ -119,6 +123,10 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         );
       }
     }
+
+    setState(() {
+      articleWidget = articleWidgetTemp;
+    });
   }
 
   _setTitle(int pageNum){
@@ -521,7 +529,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                                 children: <Widget>[
                                   Icon(
                                     _goForwed? Icons.arrow_drop_down:Icons.arrow_back,
-                                    color: AppData.BLACK,
+                                    color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
                                   ),
                                   SizedBox(
                                     width:_goForwed?0:10
@@ -539,7 +547,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                                   ),
                                   Icon(
                                     _goForwed? Icons.arrow_forward:Icons.arrow_drop_down,
-                                    color: AppData.BLACK,
+                                    color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
                                   )
                                 ],
                               ),
@@ -867,14 +875,45 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   }
 
   @override
-  clickedArticle(News news) {
-    // TODO: implement clickedArticle
-    return null;
+  clickedArticle(News article) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullPageArticle(article: article,)
+      ),
+    );
   }
 
   @override
-  savedArticle(News news) {
-    // TODO: implement savedArticle
-    return null;
+  savedArticle(News article) async {
+    int save =1;
+
+    if(article.isSaved == 1){
+      save = 0;
+    }
+    else{
+      save = 1;
+    }
+    News newArticle = News(
+      id:article.id,
+      imgUrl:article.imgUrl,
+      titleSinhala:article.titleSinhala,
+      titleTamil:article.titleTamil,
+      titleEnglish:article.titleEnglish,
+      contentSinhala:article.contentSinhala,
+      contentTamil:article.contentTamil,
+      contentEnglish:article.contentEnglish,
+      date:article.date,
+      author:article.author,
+      isRead:article.isRead,
+      timeStamp:article.timeStamp,
+      isSaved:save,
+    );
+    await DBProvider.db.saveUnsaveArticaleDB(article.id.toString(),save);
+    int index = articleList.indexOf(article);
+    articleList.insert(index, newArticle);
+    articleList.removeAt(index+1);
+    
+    _loadArticle();
   }
 }

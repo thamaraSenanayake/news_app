@@ -3,7 +3,9 @@ import 'package:zoom_widget/zoom_widget.dart';
 
 class ZoomPage extends ModalRoute<void> {
   final String image;
-  ZoomPage({this.image});
+  final double height;
+  final double width;
+  ZoomPage({this.height, this.width, this.image});
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 200);
@@ -66,9 +68,11 @@ class ZoomPage extends ModalRoute<void> {
           ),
 
           Container(
+            width: height,
+            height: width,
             child: Zoom(
-              width: 2*(MediaQuery.of(context).size.width),
-              height: 2*(MediaQuery.of(context).size.height-144),
+              width: height*2,
+              height: width*2,
               centerOnScale: true,
               enableScroll: true,
               doubleTapZoom: false,

@@ -162,37 +162,22 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   }
 
   _shareWithOther(){
-    Share.share('Andriod https://play.google.com/store/apps/details?id=com.supercell.clashofclans iOS https://apps.apple.com/us/app/clash-of-clans/id529479190', subject: 'Check This new News App');
+    Share.share('Andriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod+' iOS https://apps.apple.com/us/app/clash-of-clans/id'+AppData.appIdIos+'', subject: 'Check This new News App');
   }
 
   _rateUs(){
-    LaunchReview.launch(androidAppId: "com.supercell.clashofclans",iOSAppId: "529479190");
-  }
-  
-  _loadBottomBar(context){
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc){
-          return Container(
-            child: new Wrap(
-            children: <Widget>[
-              new ListTile(
-                leading: new Icon(Icons.music_note),
-                title: new Text('Music'),
-                onTap: () => {}          
-              ),
-              new ListTile(
-                leading: new Icon(Icons.videocam),
-                title: new Text('Video'),
-                onTap: () => {},          
-              ),
-            ],
-          ),
-          );
-      }
-    );
+    LaunchReview.launch(androidAppId: AppData.appIdAndriod,iOSAppId: AppData.appIdIos);
   }
 
+  _sendMail() async{
+    
+    var emailaddress = 'mailto:'+AppData.email;
+
+    if(await canLaunch(emailaddress)) {
+      await launch(emailaddress);
+    }   
+  
+  }
 
   //app drawer
   List<Widget> _appDrawerContent(context) {
@@ -312,8 +297,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  _loadBottomBar(context);
                   _scaffoldKey.currentState.openEndDrawer();
+                  _sendMail();
                 },
                 child: Container(
                   child: Padding(

@@ -41,6 +41,9 @@ class AppData{
 
   static LanguageList language = LanguageList.Sinhala;
   static int isDark = 0;
+  static String appIdAndriod ="";
+  static String appIdIos ="";
+  static String email ="";
 }
 
 

@@ -22,7 +22,7 @@ class _NormalNewsState extends State<NormalNews> {
       _width = MediaQuery.of(context).size.width;
     });
     return Padding(
-      padding: const EdgeInsets.only(left:10.0,right:10.0,bottom: 15),
+      padding: const EdgeInsets.only(left:3.0,right:3.0,bottom: 3),
       child: GestureDetector(
         onTap: (){
           if(widget.tabType == TabType.News){

@@ -164,17 +164,17 @@ class DBProvider {
           ",'" +
           item.imgUrl.toString() +
           "','" +
-          item.titleSinhala +
+          item.titleSinhala.replaceAll('\'', "*") +
           "','" +
-          item.titleEnglish +
+          item.titleEnglish.replaceAll('\'', "*") +
           "','" +
-          item.titleTamil +
+          item.titleTamil.replaceAll('\'', "*") +
           "','" +
-          item.contentSinhala +
+          item.contentSinhala.replaceAll('\'', "*") +
           "','" +
-          item.contentEnglish +
+          item.contentEnglish.replaceAll('\'', "*") +
           "','" +
-          item.contentTamil +
+          item.contentTamil.replaceAll('\'', "*") +
           "','" +
           item.date +
           "','" +
@@ -220,17 +220,17 @@ class DBProvider {
           ",'" +
           item.imgUrl.toString() +
           "','" +
-          item.titleSinhala +
+          item.titleSinhala.replaceAll('\'', "*") +
           "','" +
-          item.titleEnglish +
+          item.titleEnglish.replaceAll('\'', "*") +
           "','" +
-          item.titleTamil +
+          item.titleTamil.replaceAll('\'', "*") +
           "','" +
-          item.contentSinhala +
+          item.contentSinhala.replaceAll('\'', "*") +
           "','" +
-          item.contentEnglish +
+          item.contentEnglish.replaceAll('\'', "*") +
           "','" +
-          item.contentTamil +
+          item.contentTamil.replaceAll('\'', "*") +
           "','" +
           item.date +
           "','" +
@@ -380,12 +380,12 @@ class DBProvider {
         news = News(
           id:item["id"],
           imgUrl:imageList.split(","),
-          titleSinhala:item["titleSinhala"],
-          titleTamil:item["titleTamil"],
-          titleEnglish:item["titleEnglish"],
-          contentSinhala:item["contentSinhala"],
-          contentTamil:item["contentTamil"],
-          contentEnglish:item["contentEnglish"],
+          titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
+          titleTamil:item["titleTamil"].replaceAll('*', "\'"),
+          titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
+          contentSinhala:item["contentSinhala"].replaceAll('*', "\'"),
+          contentTamil:item["contentTamil"].replaceAll('*', "\'"),
+          contentEnglish:item["contentEnglish"].replaceAll('*', "\'"),
           date:item["date"],
           author:item["author"],
           bigNews:item["bigNews"],
@@ -421,12 +421,12 @@ class DBProvider {
         news = News(
           id:item["id"],
           imgUrl:imageList.split(","),
-          titleSinhala:item["titleSinhala"],
-          titleTamil:item["titleTamil"],
-          titleEnglish:item["titleEnglish"],
-          contentSinhala:item["contentSinhala"],
-          contentTamil:item["contentTamil"],
-          contentEnglish:item["contentEnglish"],
+          titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
+          titleTamil:item["titleTamil"].replaceAll('*', "\'"),
+          titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
+          contentSinhala:item["contentSinhala"].replaceAll('*', "\'"),
+          contentTamil:item["contentTamil"].replaceAll('*', "\'"),
+          contentEnglish:item["contentEnglish"].replaceAll('*', "\'"),
           date:item["date"],
           author:item["author"],
           bigNews:item["bigNews"],
@@ -449,19 +449,22 @@ class DBProvider {
     final db = await database;
     List<News> newsList = [];
     News news;
+    String imageList = "";
     
     try {
       var res = await db.query("Articale",orderBy: "id DESC");
       for (var item in res) {
+        imageList = item["imgUrl"].toString().replaceAll("[", "");
+        imageList = imageList.replaceAll("]", "");
         news = News(
           id:item["id"],
-          imgUrl:item["imgUrl"],
-          titleSinhala:item["titleSinhala"],
-          titleTamil:item["titleTamil"],
-          titleEnglish:item["titleEnglish"],
-          contentSinhala:item["contentSinhala"],
-          contentTamil:item["contentTamil"],
-          contentEnglish:item["contentEnglish"],
+          imgUrl:imageList.split(","),
+          titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
+          titleTamil:item["titleTamil"].replaceAll('*', "\'"),
+          titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
+          contentSinhala:item["contentSinhala"].replaceAll('*', "\'"),
+          contentTamil:item["contentTamil"].replaceAll('*', "\'"),
+          contentEnglish:item["contentEnglish"].replaceAll('*', "\'"),
           date:item["date"],
           author:item["author"],
           isRead:item["isRead"],
@@ -490,12 +493,12 @@ class DBProvider {
         news = News(
           id:item["id"],
           imgUrl:item["imgUrl"],
-          titleSinhala:item["titleSinhala"],
-          titleTamil:item["titleTamil"],
-          titleEnglish:item["titleEnglish"],
-          contentSinhala:item["contentSinhala"],
-          contentTamil:item["contentTamil"],
-          contentEnglish:item["contentEnglish"],
+          titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
+          titleTamil:item["titleTamil"].replaceAll('*', "\'"),
+          titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
+          contentSinhala:item["contentSinhala"].replaceAll('*', "\'"),
+          contentTamil:item["contentTamil"].replaceAll('*', "\'"),
+          contentEnglish:item["contentEnglish"].replaceAll('*', "\'"),
           date:item["date"],
           author:item["author"],
           isRead:item["isRead"],
@@ -528,12 +531,12 @@ class DBProvider {
         news = News(
           id:item["id"],
           imgUrl:imageList.split(","),
-          titleSinhala:item["titleSinhala"],
-          titleTamil:item["titleTamil"],
-          titleEnglish:item["titleEnglish"],
-          contentSinhala:item["contentSinhala"],
-          contentTamil:item["contentTamil"],
-          contentEnglish:item["contentEnglish"],
+          titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
+          titleTamil:item["titleTamil"].replaceAll('*', "\'"),
+          titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
+          contentSinhala:item["contentSinhala"].replaceAll('*', "\'"),
+          contentTamil:item["contentTamil"].replaceAll('*', "\'"),
+          contentEnglish:item["contentEnglish"].replaceAll('*', "\'"),
           date:item["date"],
           author:item["author"],
           bigNews:item["bigNews"],

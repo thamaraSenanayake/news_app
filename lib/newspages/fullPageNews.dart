@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
-import 'package:news_app/zoomPage.dart';
 import 'package:share/share.dart';
 
 
@@ -28,6 +27,25 @@ class _FullPageNewsState extends State<FullPageNews> {
   List<Widget> _tabList = [];
   bool _isButtonShow = true;
   bool _isArrowButtonShow = true;
+
+
+  _share(){
+    String content = "";
+    String title = "";
+    if(AppData.language == LanguageList.Sinhala){
+      content = widget.news.contentSinhala;
+      title = widget.news.titleSinhala;
+    }
+    else if(AppData.language == LanguageList.English){
+      content = widget.news.contentEnglish;
+      title = widget.news.titleEnglish;
+    }
+    else{
+      content = widget.news.contentTamil;
+      title = widget.news.titleTamil;
+    }
+    Share.share(content+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod+' \niOS https://apps.apple.com/us/app/clash-of-clans/id'+AppData.appIdIos+'', subject: title);
+  }
 
 
   _innerControllerListener()
@@ -115,11 +133,13 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _loadPhotos(){
     List<Widget> _photoListTemp =[]; 
+    print(widget.news.imgUrl);
     for (var item in widget.news.imgUrl) {
       _photoListTemp.add(
         Container(
           height: 300,
           width: _width,
+          color: Colors.amber,
           child: Image.network(
             item,
             fit: BoxFit.cover,
@@ -172,6 +192,10 @@ class _FullPageNewsState extends State<FullPageNews> {
         _isArrowButtonShow = false;
       });
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      _loadPhotos();
+    });
 
   }
 
@@ -228,10 +252,15 @@ class _FullPageNewsState extends State<FullPageNews> {
 
                    Padding(
                      padding: const EdgeInsets.only(right:10.0),
-                     child: Icon(
-                       Icons.share,
-                       color:AppData.ALLCOLOR,
-                       size: 28,
+                     child: GestureDetector(
+                       onTap: (){
+                         _share();
+                       },
+                       child: Icon(
+                         Icons.share,
+                         color:AppData.ALLCOLOR,
+                         size: 28,
+                       ),
                      ),
                    )
                  ],
@@ -333,26 +362,26 @@ class _FullPageNewsState extends State<FullPageNews> {
                           ):Container(),
 
                           //zoomButton
-                          _isButtonShow? Padding(
-                            padding:  EdgeInsets.only(right:10.0,bottom: 10.0),
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: GestureDetector(
-                                onTap: (){
-                                  Navigator.of(context).push(ZoomPage(image: widget.news.imgUrl[_currentPhoto]));
-                                },
-                                child: Card(
-                                  child:Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Icon(
-                                      Icons.zoom_in,
-                                      color: AppData.BLACK,
-                                    ),
-                                  )
-                                ),
-                              )
-                            ),
-                          ):Container()
+                          // _isButtonShow? Padding(
+                          //   padding:  EdgeInsets.only(right:10.0,bottom: 10.0),
+                          //   child: Align(
+                          //     alignment: Alignment.bottomRight,
+                          //     child: GestureDetector(
+                          //       onTap: (){
+                          //         Navigator.of(context).push(ZoomPage(image: widget.news.imgUrl[_currentPhoto],height: _height,width: _width));
+                          //       },
+                          //       child: Card(
+                          //         child:Padding(
+                          //           padding: const EdgeInsets.all(3.0),
+                          //           child: Icon(
+                          //             Icons.zoom_in,
+                          //             color: AppData.BLACK,
+                          //           ),
+                          //         )
+                          //       ),
+                          //     )
+                          //   ),
+                          // ):Container()
                           
                         ],
                       ),
@@ -367,11 +396,15 @@ class _FullPageNewsState extends State<FullPageNews> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              widget.news.titleEnglish,
+                              AppData.language == LanguageList.Sinhala?
+                                widget.news.titleSinhala:
+                              AppData.language == LanguageList.English?
+                                widget.news.titleEnglish:
+                              widget.news.titleTamil,
                               style: TextStyle(
                                 fontFamily: 'lato',
                                 fontSize: 23,
-                                color: AppData.BLACK,
+                                color:AppData.isDark ==1 ?AppData.WHITE:AppData.BLACK,
                                 fontWeight: FontWeight.w600
                               ),
                             ),
@@ -393,7 +426,11 @@ class _FullPageNewsState extends State<FullPageNews> {
                           Padding(
                             padding: const EdgeInsets.only(bottom:5.0),
                             child: Text(
-                              widget.news.contentEnglish+""+widget.news.contentEnglish+""+widget.news.contentEnglish+""+widget.news.contentEnglish,
+                              AppData.language == LanguageList.Sinhala?
+                                 widget.news.contentSinhala:
+                                AppData.language == LanguageList.English?
+                                  widget.news.contentEnglish:
+                                widget.news.contentTamil,
                               style: TextStyle(
                                 letterSpacing:1.8,
                                 wordSpacing:1,
