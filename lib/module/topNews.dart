@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
+import 'package:news_app/res/remaningTime.dart';
 
 class TopNews extends StatefulWidget {
   final NewsClickListner newsClickListner;
@@ -16,6 +18,21 @@ class TopNews extends StatefulWidget {
 
 class _TopNewsState extends State<TopNews> {
   double _width = 0.0;
+  String fontFamily = "Lato";
+
+  @override
+  void initState() {
+    super.initState();
+    if(AppData.language == LanguageList.Sinhala){
+      fontFamily = "Abhaya";
+    }
+    else if(AppData.language == LanguageList.Tamil){
+      fontFamily = "HindMadurai";
+    }
+    else{
+      fontFamily = "Lato";
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -40,8 +57,8 @@ class _TopNewsState extends State<TopNews> {
                 height:250,
                 width: _width,
                 padding: EdgeInsets.all(3),
-                child: Image.network(
-                  widget.news.imgUrl[0],
+                child: CachedNetworkImage(
+                  imageUrl:widget.news.imgUrl[0],
                   fit: BoxFit.cover,
                 ),
               ),
@@ -75,7 +92,7 @@ class _TopNewsState extends State<TopNews> {
                             style:TextStyle(
                               color: Colors.white,
                               fontSize: 20,
-                              fontFamily: "lato",
+                              fontFamily: fontFamily,
                               fontWeight: FontWeight.w600
                             ),
                             maxLines: 1,
@@ -85,7 +102,7 @@ class _TopNewsState extends State<TopNews> {
                           Container(
                             width: _width-6,
                             child: Text(
-                              "1 S ago",
+                              TimeCalculater.timeDifferentCalculator(widget.news.date),
                               style:TextStyle(
                                 color: widget.secondColor,
                                 fontSize: 12,

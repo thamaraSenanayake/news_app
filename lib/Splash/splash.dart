@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:news_app/Splash/dialoagLister.dart';
+import 'package:news_app/Splash/noInterNet.dart';
 import 'package:news_app/Splash/splashListner.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
@@ -9,6 +11,7 @@ import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/model/systemInfo.dart';
 import 'package:news_app/res/curvePainter.dart';
+import 'package:news_app/res/resources.dart';
 
 class Splash extends StatefulWidget {
   final SplashStateListner splashStateListner;
@@ -20,7 +23,7 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   double _height = 0.0;
   double _width = 0.0;
   double _screenHeight = 0.0;
@@ -41,14 +44,38 @@ class _SplashState extends State<Splash> {
     super.initState();
     print("splah page run"+_loadComplete.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) { 
+      _startLoadData();
+    });
+  }
+
+  _startLoadData() async{
+    //check sqlLite data avalablity
+    bool avalablity = await DBProvider.db.databaseAvalablity();
+
+    //check internet avalablity
+    bool internet = await Resousers.checkInternetConectivity();
+
+    if(!internet && !avalablity){
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (context, _, __) => NoInternet(
+            netTryAginListen: this,
+          ),
+          opaque: false
+        ),
+      );
+      return;
+    }
+    else{
       if(!_loadComplete){
         _setPosition();
         _loadData();
         _loadingTime();
         _loadSystemData();
       }
-    });
+    }
   }
+
 
   _loadingTime() async{
     await new Future.delayed(const Duration(seconds : 3));
@@ -91,6 +118,9 @@ class _SplashState extends State<Splash> {
 
     //get firebase last added news only use when add news
     int firebaseArticleCount =await database.getArticaleCount();
+
+    //get system data
+    await database.getSystemData();
 
     //get sql lite last added news only use when retrive news
     int id = await DBProvider.db.getLastNewsId();
@@ -324,5 +354,11 @@ contentTamil +="[PICTURE]அலாஸ்கா கடற்கரையிலி
         ],
       ),
     );
+  }
+
+  @override
+  void tryAgainClick() async{
+    await new Future.delayed(const Duration(seconds : 3));
+    _startLoadData();
   }
 }

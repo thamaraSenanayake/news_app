@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
+import 'package:news_app/res/remaningTime.dart';
 
 class NormalNews extends StatefulWidget {
   final NewsClickListner newsClickListner;
@@ -15,11 +17,27 @@ class NormalNews extends StatefulWidget {
 }
 
 class _NormalNewsState extends State<NormalNews> {
+  String fontFamily = "Lato";
+
+  @override
+  void initState() { 
+    super.initState();
+    if(AppData.language == LanguageList.Sinhala){
+      fontFamily = "Abhaya";
+    }
+    else if(AppData.language == LanguageList.Tamil){
+      fontFamily = "HindMadurai";
+    }
+    else{
+      fontFamily = "Lato";
+    }
+  }
   double _width = 0.0;
   @override
   Widget build(BuildContext context) {
     setState(() {
       _width = MediaQuery.of(context).size.width;
+      //print(TimeCalculater.timeDifferentCalculator("2020-06-02 14:08:57.495216"));
     });
     return Padding(
       padding: const EdgeInsets.only(left:3.0,right:3.0,bottom: 3),
@@ -77,7 +95,7 @@ class _NormalNewsState extends State<NormalNews> {
                             bottomLeft:Radius.circular(3),
                           ),
                           image:DecorationImage(
-                            image: NetworkImage(widget.news.imgUrl[0]),
+                            image: CachedNetworkImageProvider(widget.news.imgUrl[0]),
                             fit: BoxFit.cover
                           ),
                           color: Colors.blue, 
@@ -99,7 +117,7 @@ class _NormalNewsState extends State<NormalNews> {
                                 style:TextStyle(
                                   color: widget.secondColor,
                                   fontSize: 16,
-                                  fontFamily: "lato",
+                                  fontFamily: fontFamily,
                                   fontWeight: FontWeight.w600
                                 ),
                               ),
@@ -112,7 +130,7 @@ class _NormalNewsState extends State<NormalNews> {
                                 style:TextStyle(
                                   color:AppData.isDark == 1?  AppData.WHITE : AppData.BLACK,
                                   fontSize: 13,
-                                  fontFamily: "lato",
+                                  fontFamily: fontFamily,
                                   height: 1.3,
                                   fontWeight: FontWeight.w500
                                 ),
@@ -123,11 +141,11 @@ class _NormalNewsState extends State<NormalNews> {
                               Container(
                                 width: _width-6,
                                 child: Text(
-                                  "1 S ago",
+                                  TimeCalculater.timeDifferentCalculator(widget.news.date),
                                   style:TextStyle(
                                     color: widget.secondColor,
                                     fontSize: 12,
-                                    fontFamily: "lato",
+                                    fontFamily: "Lato",
                                   ),
                                   textAlign: TextAlign.right,
                                   maxLines: 1,

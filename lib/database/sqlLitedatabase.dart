@@ -25,18 +25,19 @@ class DBProvider {
     }
   }
 
-  databaseAvalablity() {
-    if (_database != null) {
-      return false;
-    }
-    return true;
+  databaseAvalablity() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, "news7.db");
+    bool avalablity = await databaseFactory.databaseExists(path);
+
+    return avalablity;
   }
 
   //create the databse in app Directory
   initDB() async {
     print("create DB");
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "news6.db");
+    String path = join(documentsDirectory.path, "news7.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE News ("
@@ -452,7 +453,7 @@ class DBProvider {
     String imageList = "";
     
     try {
-      var res = await db.query("Articale",orderBy: "id DESC");
+      var res = await db.query("Articale",orderBy: "isRead ASC ,id DESC");
       for (var item in res) {
         imageList = item["imgUrl"].toString().replaceAll("[", "");
         imageList = imageList.replaceAll("]", "");
@@ -471,7 +472,6 @@ class DBProvider {
           isSaved: item["isSaved"],
         );
         newsList.add(news);
-        
       }
     } catch (e) {
       print(e.toString());
@@ -486,13 +486,16 @@ class DBProvider {
     final db = await database;
     List<News> newsList = [];
     News news;
+    String imageList = "";
     
     try {
-      var res = await db.query("Articale",orderBy: "id DESC",where: "isSaved = 1");
+      var res = await db.query("Articale",orderBy: "isRead ASC , id DESC",where: "isSaved = 1");
       for (var item in res) {
+        imageList = item["imgUrl"].toString().replaceAll("[", "");
+        imageList = imageList.replaceAll("]", "");
         news = News(
           id:item["id"],
-          imgUrl:item["imgUrl"],
+          imgUrl:imageList.split(","),
           titleSinhala:item["titleSinhala"].replaceAll('*', "\'"),
           titleTamil:item["titleTamil"].replaceAll('*', "\'"),
           titleEnglish:item["titleEnglish"].replaceAll('*', "\'"),
@@ -543,6 +546,7 @@ class DBProvider {
           isRead:item["isRead"],
           type:newsTypeCovert(item["type"]),
           timeStamp:item["timeStamp"],
+          isSaved:item['isSaved']
         );
         newsList.add(news);
         

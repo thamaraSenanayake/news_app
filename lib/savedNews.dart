@@ -4,6 +4,7 @@ import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/module/newsListner.dart';
 import 'package:news_app/module/normalNews.dart';
+import 'package:news_app/newspages/fullPageArticle.dart';
 import 'package:news_app/newspages/fullPageNews.dart';
 
 import 'homePageListner.dart';
@@ -127,7 +128,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
           news: item,
           newsClickListner: this,
           secondColor: AppData.ALLCOLOR,
-          tabType: TabType.News,
+          tabType: TabType.Article,
         )
       );
     }
@@ -326,14 +327,20 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
   }
 
   @override
-  clickedArticle(News news) {
-    // TODO: implement clickedArticle
-    return null;
+  clickedArticle(News article) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullPageArticle(article: article,)
+      ),
+    );
   }
 
   @override
-  savedArticle(News news) {
-    // TODO: implement savedArticle
-    return null;
+  savedArticle(News article) async{
+    await DBProvider.db.saveUnsaveArticaleDB(article.id.toString(),0);
+    widget.homePageActivity.homePageActivityClick(HomePageActivity.SavedNewsPAgeback);
+    _savedArticles.remove(article);
+    _viewArticle(_savedArticles);
   }
 }

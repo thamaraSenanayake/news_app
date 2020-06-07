@@ -87,10 +87,10 @@ class LanguageState extends State<Language> {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Sinhala",
+                            "සිංහල",
                             style: TextStyle(
                               color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                              fontFamily: "Lato",
+                              fontFamily: "Abhaya",
                               fontSize: 20,
                               fontWeight: FontWeight.w600
                             ),
@@ -149,10 +149,10 @@ class LanguageState extends State<Language> {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Tamil",
+                            "தமிழ்",
                             style: TextStyle(
                               color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                              fontFamily: "Lato",
+                              fontFamily: "HindMadurai",
                               fontSize: 20,
                               fontWeight: FontWeight.w600
                             ),

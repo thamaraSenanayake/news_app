@@ -1,7 +1,10 @@
 import 'package:intl/intl.dart';
 
 class TimeCalculater{
-  static String timeDifferentCalculator(var date, var time){
+  //2020-06-02 14:08:57.495216
+  static String timeDifferentCalculator(var fullTime){
+    var date =  fullTime.toString().split(" ")[0];
+    var time =  fullTime.toString().split(" ")[1];
     var dateTime = date + " " + time + "Z";
     var currentTime = new DateTime.now();
     Duration difference = currentTime.difference(DateTime.parse(dateTime));
@@ -18,8 +21,9 @@ class TimeCalculater{
       return difference.inHours.toString()+"hours ago" ;
     }
     else {
-      return dateTime = DateFormat("dd/MM/yyyy").add_jm().format(DateTime.parse(dateTime));
+      return dateTime = DateFormat("dd/MM/yyyy").format(DateTime.parse(dateTime));
     }
     
   }
+
 }

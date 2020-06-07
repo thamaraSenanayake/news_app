@@ -75,6 +75,20 @@ class Database{
 
   }
 
+  Future<int> getSystemData() async{
+    int done = 0;
+
+    await systemData.document('news').get().then((document){
+      AppData.email = document['email'];
+      AppData.appIdIos = document['appIdIos'];
+      AppData.appIdAndriod = document['appIdAndriod'];
+      done = 1;
+    });
+
+    return done;
+
+  }
+
   Future<int> getArticaleCount() async{
     int articaleCount = 0;
 

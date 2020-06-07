@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/res/remaningTime.dart';
 import 'package:share/share.dart';
 
 
@@ -27,6 +30,7 @@ class _FullPageNewsState extends State<FullPageNews> {
   List<Widget> _tabList = [];
   bool _isButtonShow = true;
   bool _isArrowButtonShow = true;
+  String fontFamily = "Lato";
 
 
   _share(){
@@ -140,9 +144,9 @@ class _FullPageNewsState extends State<FullPageNews> {
           height: 300,
           width: _width,
           color: Colors.amber,
-          child: Image.network(
-            item,
-            fit: BoxFit.cover,
+          child: CachedNetworkImage(
+            fit: BoxFit.cover, 
+            imageUrl: item.trim(),
           ),
         ),
       );
@@ -176,9 +180,23 @@ class _FullPageNewsState extends State<FullPageNews> {
     });
   }
 
+  _setNewsAsRead() {
+    DBProvider.db.markAsReadNews(widget.news.id.toString());
+  }
+
   @override
   void initState() {
     super.initState();
+
+    if(AppData.language == LanguageList.Sinhala){
+      fontFamily = "Abhaya";
+    }
+    else if(AppData.language == LanguageList.Tamil){
+      fontFamily = "HindMadurai";
+    }
+    else{
+      fontFamily = "Lato";
+    }
     
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
@@ -196,6 +214,7 @@ class _FullPageNewsState extends State<FullPageNews> {
     WidgetsBinding.instance.addPostFrameCallback((_) { 
       _loadPhotos();
     });
+    _setNewsAsRead();
 
   }
 
@@ -402,7 +421,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                                 widget.news.titleEnglish:
                               widget.news.titleTamil,
                               style: TextStyle(
-                                fontFamily: 'lato',
+                                fontFamily: fontFamily,
                                 fontSize: 23,
                                 color:AppData.isDark ==1 ?AppData.WHITE:AppData.BLACK,
                                 fontWeight: FontWeight.w600
@@ -413,11 +432,11 @@ class _FullPageNewsState extends State<FullPageNews> {
                           Padding(
                             padding: const EdgeInsets.only(bottom:15.0),
                             child: Text(
-                              '1 Sec ago',
+                              TimeCalculater.timeDifferentCalculator(widget.news.date),
                               style: TextStyle(
                                 letterSpacing:1.5,
                                 wordSpacing:1,
-                                fontFamily: 'lato',
+                                fontFamily: "Lato",
                                 color: AppData.ALLCOLOR
                               ),
                             ),
@@ -435,7 +454,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                                 letterSpacing:1.8,
                                 wordSpacing:1,
                                 height: 1.5,
-                                fontFamily: 'lato',
+                                fontFamily: fontFamily,
                                 color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
                                 fontSize: 16
                               ),
@@ -448,7 +467,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                             child: Text(
                               'by: Xyz',
                               style: TextStyle(
-                                fontFamily: 'lato',
+                                fontFamily: 'Lato',
                                 color: AppData.ALLCOLOR,
                                 fontWeight: FontWeight.w700
                               ),

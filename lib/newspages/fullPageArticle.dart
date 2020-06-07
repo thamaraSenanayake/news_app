@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:news_app/const.dart';
+import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/res/remaningTime.dart';
 import 'package:share/share.dart';
 
 
@@ -19,7 +22,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
   List<Widget> _displayArticle = [];
   String title ='';
   List<String> contentList = [];
-  String fontFamily ="";
+  String fontFamily ="Lato";
 
 
 
@@ -36,6 +39,11 @@ class _FullPageArticleState extends State<FullPageArticle> {
       fontFamily = "Lato";
     }
     _loadArticle();
+    _setArticleAsRead();
+  }
+
+  _setArticleAsRead(){
+    DBProvider.db.markAsReadArticale(widget.article.id.toString());
   }
 
   _loadArticle(){
@@ -67,7 +75,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(3),
             image: DecorationImage(
-              image: NetworkImage(widget.article.imgUrl[currentPhoto].trim()),
+              image: CachedNetworkImageProvider(widget.article.imgUrl[currentPhoto].trim()),
               fit: BoxFit.cover,
             ),
           ),
@@ -96,7 +104,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
           Padding(
             padding: const EdgeInsets.only(bottom:15.0),
             child: Text(
-              '1 Sec ago',
+              TimeCalculater.timeDifferentCalculator(widget.article.date),
               style: TextStyle(
                 letterSpacing:1.5,
                 wordSpacing:1,
