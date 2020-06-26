@@ -156,6 +156,34 @@ class Database{
     return newsList;
   }
 
+  Future<List<int>> deleteArticles() async{
+    print("----------");
+    List<int> deleteArticleIdList = [];
+
+    await systemData.document('deleteArticles').get().then((document){
+      if(document['id'] != null){
+        deleteArticleIdList = (document['id'] as List<dynamic>).cast<int>();
+      }
+    });
+    
+    return deleteArticleIdList;
+
+  }
+
+  Future<List<int>> deleteNews() async{
+    print("----------");
+    List<int> deleteNewsIdList = [];
+
+    await systemData.document('deleteNews').get().then((document){
+      if(document['id'] != null){
+        deleteNewsIdList = (document['id'] as List<dynamic>).cast<int>();
+      }
+    });
+    
+    return deleteNewsIdList;
+
+  }
+
   Future<List<News>> readArticles(int lastId) async{
     List<News> articleList = [];
     News article;

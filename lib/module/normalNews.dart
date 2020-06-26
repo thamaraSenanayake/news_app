@@ -120,6 +120,8 @@ class _NormalNewsState extends State<NormalNews> {
                                   fontFamily: fontFamily,
                                   fontWeight: FontWeight.w600
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 AppData.language == LanguageList.Sinhala?

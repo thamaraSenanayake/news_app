@@ -465,7 +465,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                           Padding(
                             padding: const EdgeInsets.only(top:30.0),
                             child: Text(
-                              'by: Xyz',
+                              'by: '+widget.news.author,
                               style: TextStyle(
                                 fontFamily: 'Lato',
                                 color: AppData.ALLCOLOR,

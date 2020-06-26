@@ -203,6 +203,23 @@ class DBProvider {
     return res;
   }
 
+  deleteNews(List<int> delteList) async {
+    final db = await database;
+    var res = 'done';
+
+    try {
+      for (var item in delteList) {
+        await db.execute("DELETE FROM `News` where id = "+item.toString());
+      }
+
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+
+    return res;
+  }
+
 
   // add hot news to sql lite
   addHotNewsData(List<News> newsList) async {
@@ -312,6 +329,25 @@ class DBProvider {
 
     return res;
   }
+
+  deleteArticale(List<int> delteList) async {
+    final db = await database;
+    var res = 'done';
+
+    try {
+      for (var item in delteList) {
+        await db.execute("DELETE FROM `Articale` where id = "+item.toString());
+      }
+
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+
+    return res;
+  }
+
+  
 
 
   // get last insert news

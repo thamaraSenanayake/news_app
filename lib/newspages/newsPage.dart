@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +15,8 @@ import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
 import 'package:news_app/module/normalNews.dart';
 import 'package:news_app/module/topNews.dart';
+import 'package:news_app/res/addmob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 
 class NewsPage extends StatefulWidget {
@@ -63,6 +67,8 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
   double _newsTabPostion = 0.0;
   Database database = Database();
+  final addMobSerivce = AddMobSerivce();
+  var rng = new Random();
 
 
   @override
@@ -71,6 +77,8 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     _getLiveUpdate();
+    Admob.initialize(addMobSerivce.getAppId());
+
   }
 
   reloadNews(){
@@ -313,6 +321,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   }
 
   _normalNewsLoad(List<News> newsList,bool _isFrirstLoad){
+    int addShow = 0;
     List<Widget> normalNewsWidgetAllTemp = [];
     List<Widget> normalNewsWidgetLocalTemp = [];
     List<Widget> normalNewsWidgetForignTemp = [];
@@ -320,6 +329,8 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     List<Widget> normalNewsWidgetWeatherTemp = [];
 
     for (var item in newsList) {
+      addShow = rng.nextInt(8);
+      print(addShow);
       normalNewsWidgetAllTemp.add(
         NormalNews(
           tabType: TabType.News,
@@ -328,6 +339,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           secondColor: AppData.ALLCOLOR,
         )
       );
+      if(addShow == 7){
+        normalNewsWidgetAllTemp.add(
+          AdmobBanner(
+            adUnitId: addMobSerivce.getBannerAddId(),
+            adSize: AdmobBannerSize.FULL_BANNER
+          )
+        );
+      }
       if(item.type == NewsType.Local){
         normalNewsWidgetLocalTemp.add(
           NormalNews(
