@@ -84,10 +84,16 @@ class _FullPageArticleState extends State<FullPageArticle> {
       currentPhoto++;
 
       if(contentList.indexOf(item)==0){
+
+        _displayArticleTemp.add(
+          SizedBox(
+            height:15
+          )
+        );
         
         _displayArticleTemp.add(
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+             padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
             child: Text(
               title,
               style: TextStyle(
@@ -102,7 +108,22 @@ class _FullPageArticleState extends State<FullPageArticle> {
 
         _displayArticleTemp.add(
           Padding(
-            padding: const EdgeInsets.only(bottom:15.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              "by: "+widget.article.author,
+              style: TextStyle(
+                letterSpacing:1.5,
+                wordSpacing:1,
+                fontFamily: 'Lato',
+                color: AppData.BLACK
+              ),
+            ),
+          ),
+        );
+
+        _displayArticleTemp.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom:15.0,left:10,right:10),
             child: Text(
               TimeCalculater.timeDifferentCalculator(widget.article.date),
               style: TextStyle(
@@ -118,7 +139,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
 
       _displayArticleTemp.add(
         Padding(
-          padding: const EdgeInsets.only(bottom:5.0,left:6,right:6),
+          padding: const EdgeInsets.only(bottom:5.0,left:20,right:20),
           child: Text(
             item,
             style: TextStyle(
@@ -127,7 +148,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
               height: 1.5,
               fontFamily: fontFamily,
               color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
-              fontSize: 16
+              fontSize: 17
             ),
             textAlign: TextAlign.justify,
           ),
@@ -179,34 +200,39 @@ class _FullPageArticleState extends State<FullPageArticle> {
                height: 70,
                width: _width,
               //  color: Colors.amber,
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 crossAxisAlignment: CrossAxisAlignment.center,
+               child: Stack(
+                 
                  children: <Widget>[
-                   Padding(
-                     padding: const EdgeInsets.only(left:10.0,top:8),
-                     child: GestureDetector(
-                       onTap: (){
-                         Navigator.pop(context);
-                       },
-                       child: Icon(
-                         Icons.arrow_back,
-                         color:AppData.ALLCOLOR,
-                         size: 30,
+                   Align(
+                     alignment: Alignment.bottomLeft,
+                     child: Padding(
+                       padding: const EdgeInsets.only(left:10.0,bottom:10),
+                       child: GestureDetector(
+                         onTap: (){
+                           Navigator.pop(context);
+                         },
+                         child: Icon(
+                           Icons.arrow_back,
+                           color:AppData.ALLCOLOR,
+                           size: 30,
+                         ),
                        ),
                      ),
                    ),
 
-                   Padding(
-                     padding: const EdgeInsets.only(right:10.0),
-                     child: GestureDetector(
-                       onTap: (){
-                         _share();
-                       },
-                       child: Icon(
-                         Icons.share,
-                         color:AppData.ALLCOLOR,
-                         size: 28,
+                   Align(
+                     alignment: Alignment.bottomRight,
+                     child: Padding(
+                       padding: const EdgeInsets.only(right:10.0,bottom:10),
+                       child: GestureDetector(
+                         onTap: (){
+                           _share();
+                         },
+                         child: Icon(
+                           Icons.share,
+                           color:AppData.ALLCOLOR,
+                           size: 28,
+                         ),
                        ),
                      ),
                    )

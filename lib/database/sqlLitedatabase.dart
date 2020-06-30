@@ -223,8 +223,12 @@ class DBProvider {
 
   // add hot news to sql lite
   addHotNewsData(List<News> newsList) async {
-    print("+++++++++++++++++++++++++++");
+    print("+++++++++");
     print(newsList.length);
+    for (var item in newsList) {
+      print(item.type);
+      print(item.titleSinhala);
+    }
   
     final db = await database;
     var res = 'done';

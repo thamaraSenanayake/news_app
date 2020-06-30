@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
+import 'package:news_app/module/shadowText.dart';
 import 'package:news_app/res/remaningTime.dart';
 
 class NormalNews extends StatefulWidget {
@@ -116,9 +117,9 @@ class _NormalNewsState extends State<NormalNews> {
                                 widget.news.titleTamil,
                                 style:TextStyle(
                                   color: widget.secondColor,
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w600
+                                  fontWeight: FontWeight.w700
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -131,27 +132,28 @@ class _NormalNewsState extends State<NormalNews> {
                                 widget.news.contentTamil,
                                 style:TextStyle(
                                   color:AppData.isDark == 1?  AppData.WHITE : AppData.BLACK,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontFamily: fontFamily,
                                   height: 1.3,
                                   fontWeight: FontWeight.w500
                                 ),
-                                maxLines: 3,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.justify,
                               ),
                               Container(
                                 width: _width-6,
-                                child: Text(
-                                  TimeCalculater.timeDifferentCalculator(widget.news.date),
-                                  style:TextStyle(
-                                    color: widget.secondColor,
-                                    fontSize: 12,
-                                    fontFamily: "Lato",
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ShadowText(
+                                    TimeCalculater.timeDifferentCalculator(widget.news.date),
+                                    style:TextStyle(
+                                      color: widget.secondColor,
+                                      fontSize: 12,
+                                      fontFamily: "Lato",
+                                    ),
+                                    maxLines: 1,
                                   ),
-                                  textAlign: TextAlign.right,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],

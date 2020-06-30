@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/module/newsListner.dart';
+import 'package:news_app/module/shadowText.dart';
 import 'package:news_app/res/remaningTime.dart';
 
 class TopNews extends StatefulWidget {
@@ -56,7 +57,7 @@ class _TopNewsState extends State<TopNews> {
               Container(
                 height:250,
                 width: _width,
-                padding: EdgeInsets.all(3),
+                padding: EdgeInsets.symmetric(vertical: 3,horizontal:5,),
                 child: CachedNetworkImage(
                   imageUrl:widget.news.imgUrl[0],
                   fit: BoxFit.cover,
@@ -66,7 +67,7 @@ class _TopNewsState extends State<TopNews> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: EdgeInsets.only(left:3,right:3),
+                  padding: EdgeInsets.only(left:5,right:5),
                   child: Container(
                     height:50,
                     width: _width-6,
@@ -74,7 +75,7 @@ class _TopNewsState extends State<TopNews> {
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [AppData.BLACK.withOpacity(0.8), Color.fromRGBO(255, 255, 255, 0.0)]
+                        colors: [AppData.BLACK.withOpacity(0.8), AppData.BLACK.withOpacity(0.2),AppData.BLACK.withOpacity(0.8)]
                       ),
                     ),
                     child: Padding(
@@ -91,9 +92,9 @@ class _TopNewsState extends State<TopNews> {
                             widget.news.titleTamil,
                             style:TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 24,
                               fontFamily: fontFamily,
-                              fontWeight: FontWeight.w600
+                              fontWeight: FontWeight.w700
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -101,16 +102,17 @@ class _TopNewsState extends State<TopNews> {
 
                           Container(
                             width: _width-6,
-                            child: Text(
-                              TimeCalculater.timeDifferentCalculator(widget.news.date),
-                              style:TextStyle(
-                                color: widget.secondColor,
-                                fontSize: 12,
-                                fontFamily: "lato",
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: ShadowText(
+                                TimeCalculater.timeDifferentCalculator(widget.news.date),
+                                style:TextStyle(
+                                  color: AppData.ALLCOLOR,
+                                  fontSize: 13,
+                                  fontFamily: "lato",
+                                ),
+                                maxLines: 1,
                               ),
-                              textAlign: TextAlign.right,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
