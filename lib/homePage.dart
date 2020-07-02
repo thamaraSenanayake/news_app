@@ -111,16 +111,13 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   @override
   languageState(LanguageList language) {
     AppData.language = language;
-    _newsPageState.currentState.loadNews();
+    _newsPageState.currentState.reloadNews();
     print("languageState");
     print(AppData.isDark);
     DBProvider.db.addSystemData(AppData.language,AppData.isDark);
     print(language);
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
-
-
-
 
   @override
   homePageActivityClick(HomePageActivity homePageActivity) {
@@ -157,7 +154,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
 
     print(AppData.isDark);
     await DBProvider.db.addSystemData(AppData.language,AppData.isDark);
-    _newsPageState.currentState.loadNews();
+    _newsPageState.currentState.reloadNews();
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 

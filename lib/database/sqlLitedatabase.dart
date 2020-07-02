@@ -409,10 +409,10 @@ class DBProvider {
     List<News> newsList = [];
     News news;
     String imageList = "";
-    
+    int timestamp = DateTime.now().subtract(Duration(days:7)).millisecondsSinceEpoch;
     
     try {
-      var res = await db.query("News",orderBy:'id DESC' );
+      var res = await db.query("News",orderBy:'id DESC',where: 'timeStamp >'+timestamp.toString());
       for (var item in res) {
         //remove brackets
         imageList = item["imgUrl"].toString().replaceAll("[", "");

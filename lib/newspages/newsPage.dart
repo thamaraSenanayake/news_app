@@ -142,25 +142,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     if(pageNum == 0){
       setState(() {
         mainTitle = "All News";
-        nextTitle= "Articales";
+        nextTitle= "Local";
         _goForwed = true;
       });
     }
     else if(pageNum == 1){
-      if(_goForwed){
-        setState(() {
-          mainTitle = "Articales";
-          nextTitle= "Local";
-        });
-      }
-      else{
-        setState(() {
-          mainTitle = "Articales";
-          nextTitle= "All";
-        });
-      }
-    }
-    else if(pageNum == 2){
       if(_goForwed){
         setState(() {
           mainTitle = "Local News";
@@ -170,11 +156,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       else{
         setState(() {
           mainTitle = "Local News";
-          nextTitle= "Articales";
+          nextTitle= "All";
         });
       }
     }
-    else if(pageNum == 3){
+    else if(pageNum == 2){
       if(_goForwed){
         setState(() {
           mainTitle = "Forign News";
@@ -188,22 +174,36 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         });
       }
     }
-    else if(pageNum == 4){
+    else if(pageNum == 3){
       if(_goForwed){
         setState(() {
           mainTitle = "Sport News";
           nextTitle= "Weather";
         });
-      }else{
+      }
+      else{
         setState(() {
           mainTitle = "Sport News";
           nextTitle= "Forign";
         });
       }
     }
+    else if(pageNum == 4){
+      if(_goForwed){
+        setState(() {
+          mainTitle = "Weather News";
+          nextTitle= "Articles";
+        });
+      }else{
+        setState(() {
+          mainTitle = "Weather News";
+          nextTitle= "Sport";
+        });
+      }
+    }
     else if(pageNum == 5){
       setState(() {
-        mainTitle = "Weather News";
+        mainTitle = "Articles";
         nextTitle= "Sport";
         _goForwed = false;
       });        
@@ -356,6 +356,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             secondColor: AppData.ALLCOLOR,
           )
         );
+
+        if(addShow == 1){
+          normalNewsWidgetLocalTemp.add(
+            AdmobBanner(
+              adUnitId: addMobSerivce.getBannerAddId(),
+              adSize: AdmobBannerSize.FULL_BANNER
+            )
+          );
+        }
       }      
       else if(item.type == NewsType.Forign){
         normalNewsWidgetForignTemp.add(
@@ -366,6 +375,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             secondColor: AppData.ALLCOLOR,
           )
         );
+
+        if(addShow == 2){
+          normalNewsWidgetForignTemp.add(
+            AdmobBanner(
+              adUnitId: addMobSerivce.getBannerAddId(),
+              adSize: AdmobBannerSize.FULL_BANNER
+            )
+          );
+        }
       }
       else if(item.type == NewsType.Sport){
         normalNewsWidgetSportsTemp.add(
@@ -376,6 +394,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             secondColor: AppData.ALLCOLOR,
           )
         );
+        
+        if(addShow == 3){
+          normalNewsWidgetSportsTemp.add(
+            AdmobBanner(
+              adUnitId: addMobSerivce.getBannerAddId(),
+              adSize: AdmobBannerSize.FULL_BANNER
+            )
+          );
+        }
       }
       else if(item.type == NewsType.Whether){
         normalNewsWidgetWeatherTemp.add(
@@ -386,6 +413,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             secondColor: AppData.ALLCOLOR,
           )
         );
+        if(addShow == 4){
+          normalNewsWidgetWeatherTemp.add(
+            AdmobBanner(
+              adUnitId: addMobSerivce.getBannerAddId(),
+              adSize: AdmobBannerSize.FULL_BANNER
+            )
+          );
+        }
       }
     }
 
@@ -635,19 +670,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                         )
                       ),
 
-                      //articales
-                      Container(
-                        width: _width,
-                        height: _height-80,
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop:true,
-                          child: ListView(
-                            children: articleWidget
-                          )
-                        )
-                      ),
-
                       //local
                       Container(
                         width: _width,
@@ -756,6 +778,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                         )
                       ),
 
+                      //articales
+                      Container(
+                        width: _width,
+                        height: _height-80,
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop:true,
+                          child: ListView(
+                            children: articleWidget
+                          )
+                        )
+                      ),
+
                     ],
                   ),
                 )
@@ -861,31 +896,31 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       currentNewsTab = 0;
       _setTitle(currentNewsTab);
     }
-    else if(page == PageList.Articles){
+    else if(page == PageList.Local){
       _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion = _width;
       currentNewsTab = 1;
       _setTitle(currentNewsTab);
     }
-    else if(page == PageList.Local){
+    else if(page == PageList.Forign){
       _controller.animateTo(_width*2,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion = _width*2;
       currentNewsTab = 2;
       _setTitle(currentNewsTab);
     }
-    else if(page == PageList.Forign){
+    else if(page == PageList.Sport){
       _controller.animateTo(_width*3,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion = _width*3;
       currentNewsTab =3;
       _setTitle(currentNewsTab);
     }
-    else if(page == PageList.Sport){
+    else if(page == PageList.Whether){
       _controller.animateTo(_width*4,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion = _width*4;
       currentNewsTab = 4;
       _setTitle(currentNewsTab);
     }
-    else if(page == PageList.Whether){
+    else if(page == PageList.Articles){
       _controller.animateTo(_width*5,duration: Duration(milliseconds: 500), curve: Curves.linear);
       _newsTabPostion = _width*5;
       currentNewsTab =5;

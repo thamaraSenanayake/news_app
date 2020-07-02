@@ -213,6 +213,16 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
       width: _width,
       child: Stack(
         children: <Widget>[
+          
+          //background image
+          Container(
+            height: _height,
+            width:_width,
+            child: Image.asset(
+              AppData.BACKGROUND,
+              fit: BoxFit.cover,
+            ),
+          ),
 
           //canves
           Container(

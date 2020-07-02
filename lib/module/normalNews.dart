@@ -109,20 +109,23 @@ class _NormalNewsState extends State<NormalNews> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                AppData.language == LanguageList.Sinhala?
-                                 widget.news.titleSinhala:
-                                AppData.language == LanguageList.English?
-                                  widget.news.titleEnglish:
-                                widget.news.titleTamil,
-                                style:TextStyle(
-                                  color: widget.secondColor,
-                                  fontSize: 18,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w700
+                              Container(
+                                width: _width-160,
+                                child: Text(
+                                  AppData.language == LanguageList.Sinhala?
+                                   widget.news.titleSinhala:
+                                  AppData.language == LanguageList.English?
+                                    widget.news.titleEnglish:
+                                  widget.news.titleTamil,
+                                  style:TextStyle(
+                                    color: widget.secondColor,
+                                    fontSize: 18,
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.w700
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 AppData.language == LanguageList.Sinhala?

@@ -124,15 +124,20 @@ class Database{
   Future<List<News>> readNews(int lastId) async{
     List<News> newsList = [];
     News news;
-    
-    QuerySnapshot querySnapshot = await newsCollection.where('id',isGreaterThan:lastId).getDocuments();
+    QuerySnapshot querySnapshot;
+
+    int timestamp = DateTime.now().subtract(Duration(days:7)).millisecondsSinceEpoch;
+
+    if(lastId == 0){
+      querySnapshot = await newsCollection.where('timeStamp',isGreaterThan:timestamp).getDocuments();
+    }else{
+      querySnapshot = await newsCollection.where('id',isGreaterThan:lastId).getDocuments();
+    }
     for (var item in querySnapshot.documents) {
       
-
       List imageList = item["imgUrl"];
       List<String> imageListString = imageList.cast<String>().toList();
           
-
       news = News(
         id:item["id"],
         imgUrl:imageListString,

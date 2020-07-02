@@ -251,34 +251,43 @@ class _FullPageNewsState extends State<FullPageNews> {
                height: 70,
                width: _width,
               //  color: Colors.amber,
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 crossAxisAlignment: CrossAxisAlignment.center,
+               child: Stack(
+                 
                  children: <Widget>[
                    Padding(
-                     padding: const EdgeInsets.only(left:10.0,top:8),
-                     child: GestureDetector(
-                       onTap: (){
-                         Navigator.pop(context);
-                       },
-                       child: Icon(
-                         Icons.arrow_back,
-                         color:AppData.ALLCOLOR,
-                         size: 30,
+                     padding: const EdgeInsets.only(left:10.0,top:10.0),
+                     child: Align(
+                       alignment: Alignment.bottomLeft,
+                       child: GestureDetector(
+                         onTap: (){
+                           Navigator.pop(context);
+                         },
+                         child: Container(
+                           child: Icon(
+                             Icons.arrow_back,
+                             color:AppData.ALLCOLOR,
+                             size: 30,
+                           ),
+                         ),
                        ),
                      ),
                    ),
 
                    Padding(
-                     padding: const EdgeInsets.only(right:10.0),
-                     child: GestureDetector(
-                       onTap: (){
-                         _share();
-                       },
-                       child: Icon(
-                         Icons.share,
-                         color:AppData.ALLCOLOR,
-                         size: 28,
+                     padding: const EdgeInsets.only(right:10.0,bottom: 10.0),
+                     child: Align(
+                       alignment: Alignment.bottomRight,
+                       child: GestureDetector(
+                         onTap: (){
+                           _share();
+                         },
+                         child: Container(
+                           child: Icon(
+                             Icons.share,
+                             color:AppData.ALLCOLOR,
+                             size: 28,
+                           ),
+                         ),
                        ),
                      ),
                    )
