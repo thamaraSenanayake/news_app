@@ -118,7 +118,7 @@ class _NormalNewsState extends State<NormalNews> {
                                     widget.news.titleEnglish:
                                   widget.news.titleTamil,
                                   style:TextStyle(
-                                    color: widget.secondColor,
+                                    // color: widget.secondColor,
                                     fontSize: 18,
                                     fontFamily: fontFamily,
                                     fontWeight: FontWeight.w700

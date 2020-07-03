@@ -54,7 +54,6 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _innerControllerListener()
   {
-    print(_innerController.position.userScrollDirection);
     if (_innerController.position.userScrollDirection == ScrollDirection.reverse) {
       if(_phtoContainerHeight > 100){
         setState(() {
@@ -137,7 +136,7 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _loadPhotos(){
     List<Widget> _photoListTemp =[]; 
-    print(widget.news.imgUrl);
+    
     for (var item in widget.news.imgUrl) {
       _photoListTemp.add(
         Container(
