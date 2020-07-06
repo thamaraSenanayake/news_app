@@ -17,6 +17,7 @@ import 'package:news_app/module/normalNews.dart';
 import 'package:news_app/module/topNews.dart';
 import 'package:news_app/res/addmob.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:intl/intl.dart';
 
 
 class NewsPage extends StatefulWidget {
@@ -69,6 +70,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   Database database = Database();
   final addMobSerivce = AddMobSerivce();
   var rng = new Random();
+  String dateDisplay = "";
+  String today = DateFormat("yyyy/MM/dd").format(DateTime.now());
+  String newsDate="";
+  final now = DateTime.now();
+
 
 
   @override
@@ -329,8 +335,57 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     List<Widget> normalNewsWidgetWeatherTemp = [];
 
     for (var item in newsList) {
-      addShow = rng.nextInt(8);
-      print(addShow);
+      Widget dateWidget = Container();
+      // addShow = rng.nextInt(8);
+      //print(addShow);
+      if(item.date.split(" ")[0] != newsDate){
+        newsDate = item.date.split(" ")[0];
+        if(newsDate == today){
+          dateWidget = Container(
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                "Today",
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+        else if(newsDate == DateTime(now.year, now.month, now.day - 1).toString()){
+          dateWidget = Container(
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                "Yesterday",
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+        else {
+          dateWidget = Container(
+            // color: Colors.red,
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                newsDate,
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+      }
+
+      normalNewsWidgetAllTemp.add(dateWidget);
       normalNewsWidgetAllTemp.add(
         NormalNews(
           tabType: TabType.News,
@@ -348,6 +403,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         );
       }
       if(item.type == NewsType.Local){
+        normalNewsWidgetLocalTemp.add(dateWidget);
         normalNewsWidgetLocalTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -367,6 +423,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }      
       else if(item.type == NewsType.Forign){
+        normalNewsWidgetForignTemp.add(dateWidget);
         normalNewsWidgetForignTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -386,6 +443,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }
       else if(item.type == NewsType.Sport){
+        normalNewsWidgetSportsTemp.add(dateWidget);
         normalNewsWidgetSportsTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -405,6 +463,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }
       else if(item.type == NewsType.Whether){
+        normalNewsWidgetWeatherTemp.add(dateWidget);
         normalNewsWidgetWeatherTemp.add(
           NormalNews(
             tabType: TabType.News,
