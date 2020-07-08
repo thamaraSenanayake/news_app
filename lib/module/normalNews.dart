@@ -127,22 +127,25 @@ class _NormalNewsState extends State<NormalNews> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              Text(
-                                AppData.language == LanguageList.Sinhala?
-                                 widget.news.contentSinhala:
-                                AppData.language == LanguageList.English?
-                                  widget.news.contentEnglish:
-                                widget.news.contentTamil,
-                                style:TextStyle(
-                                  color:AppData.isDark == 1?  AppData.WHITE : AppData.BLACK,
-                                  fontSize: 14,
-                                  fontFamily: fontFamily,
-                                  height: 1.3,
-                                  fontWeight: FontWeight.w500
+                              Container(
+                                // color: Colors.amber,
+                                child: Text(
+                                  AppData.language == LanguageList.Sinhala?
+                                   widget.news.contentSinhala.trim():
+                                  AppData.language == LanguageList.English?
+                                    widget.news.contentEnglish.trim():
+                                  widget.news.contentTamil.trim(),
+                                  style:TextStyle(
+                                    color:AppData.isDark == 1?  AppData.WHITE : AppData.BLACK,
+                                    fontSize: 14,
+                                    fontFamily: fontFamily,
+                                    height: 1.3,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.justify,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.justify,
                               ),
                               Container(
                                 width: _width-6,

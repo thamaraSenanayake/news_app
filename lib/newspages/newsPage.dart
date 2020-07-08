@@ -59,7 +59,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
   ScrollController _controller;
 
-  String mainTitle = "All News";
+  String mainTitle = "News";
   String nextTitle = "Articales";
   int currentNewsTab = 0;
   bool _showToster = false;
@@ -71,9 +71,10 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   final addMobSerivce = AddMobSerivce();
   var rng = new Random();
   String dateDisplay = "";
-  String today = DateFormat("yyyy/MM/dd").format(DateTime.now());
-  String newsDate="";
   final now = DateTime.now();
+  String today = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  String yesterday = '';
+  String newsDate="";
 
 
 
@@ -84,6 +85,9 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     _controller.addListener(_scrollListener);
     _getLiveUpdate();
     Admob.initialize(addMobSerivce.getAppId());
+    yesterday =  DateFormat("yyyy-MM-dd").format(DateTime(now.year, now.month, now.day - 1));
+    print(today);
+    print(yesterday);
 
   }
 
@@ -147,70 +151,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     print(pageNum);
     if(pageNum == 0){
       setState(() {
-        mainTitle = "All News";
-        nextTitle= "Local";
+        mainTitle = "News";
+        nextTitle= "Articles";
         _goForwed = true;
       });
     }
     else if(pageNum == 1){
-      if(_goForwed){
-        setState(() {
-          mainTitle = "Local News";
-          nextTitle= "Forign";
-        });
-      }
-      else{
-        setState(() {
-          mainTitle = "Local News";
-          nextTitle= "All";
-        });
-      }
-    }
-    else if(pageNum == 2){
-      if(_goForwed){
-        setState(() {
-          mainTitle = "Forign News";
-          nextTitle= "Sport";
-        });
-      }
-      else{
-        setState(() {
-          mainTitle = "Forign News";
-          nextTitle= "Local";
-        });
-      }
-    }
-    else if(pageNum == 3){
-      if(_goForwed){
-        setState(() {
-          mainTitle = "Sport News";
-          nextTitle= "Weather";
-        });
-      }
-      else{
-        setState(() {
-          mainTitle = "Sport News";
-          nextTitle= "Forign";
-        });
-      }
-    }
-    else if(pageNum == 4){
-      if(_goForwed){
-        setState(() {
-          mainTitle = "Weather News";
-          nextTitle= "Articles";
-        });
-      }else{
-        setState(() {
-          mainTitle = "Weather News";
-          nextTitle= "Sport";
-        });
-      }
-    }
-    else if(pageNum == 5){
       setState(() {
         mainTitle = "Articles";
-        nextTitle= "Sport";
+        nextTitle= "News";
         _goForwed = false;
       });        
     }
@@ -220,7 +169,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   _scrollListener() {
     //news scroll to next tab
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width*5) {
+      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width) {
         _next();
       }
     }
@@ -334,12 +283,20 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     List<Widget> normalNewsWidgetSportsTemp = [];
     List<Widget> normalNewsWidgetWeatherTemp = [];
 
+    if(newsList.length != 0){
+      newsDate = newsList[0].date.split(" ")[0];
+    }
+    else{
+      newsDate = today;
+    }
+
     for (var item in newsList) {
       Widget dateWidget = Container();
-      // addShow = rng.nextInt(8);
-      //print(addShow);
+
       if(item.date.split(" ")[0] != newsDate){
-        newsDate = item.date.split(" ")[0];
+        print("======");
+        print(newsList.indexOf(item));
+        
         if(newsDate == today){
           dateWidget = Container(
             width: _width,
@@ -383,27 +340,117 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             ),
           );
         }
-      }
+        normalNewsWidgetAllTemp.add(dateWidget);
+        if(normalNewsWidgetLocalTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Local news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetLocalTemp);
+        }
+        
+        if(normalNewsWidgetForignTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Forign news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForignTemp);
+        }
+        if(normalNewsWidgetSportsTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Sports news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetSportsTemp);
+        }
+        if(normalNewsWidgetWeatherTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Weather news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetWeatherTemp);
+        }
 
-      normalNewsWidgetAllTemp.add(dateWidget);
-      normalNewsWidgetAllTemp.add(
-        NormalNews(
-          tabType: TabType.News,
-          news: item,
-          newsClickListner: this,
-          secondColor: AppData.ALLCOLOR,
-        )
-      );
-      if(addShow == 7){
-        normalNewsWidgetAllTemp.add(
-          AdmobBanner(
-            adUnitId: addMobSerivce.getBannerAddId(),
-            adSize: AdmobBannerSize.FULL_BANNER
-          )
-        );
+        normalNewsWidgetWeatherTemp = [];
+        normalNewsWidgetLocalTemp =[];
+        normalNewsWidgetForignTemp = [];
+        normalNewsWidgetSportsTemp = [];
+        newsDate = item.date.split(" ")[0];
       }
+      // addShow = rng.nextInt(8);
+      //print(addShow);
+      
+
+      // normalNewsWidgetAllTemp.add(
+      //   NormalNews(
+      //     tabType: TabType.News,
+      //     news: item,
+      //     newsClickListner: this,
+      //     secondColor: AppData.ALLCOLOR,
+      //   )
+      // );
+      // if(addShow == 7){
+      //   normalNewsWidgetAllTemp.add(
+      //     AdmobBanner(
+      //       adUnitId: addMobSerivce.getBannerAddId(),
+      //       adSize: AdmobBannerSize.FULL_BANNER
+      //     )
+      //   );
+      // }
       if(item.type == NewsType.Local){
-        normalNewsWidgetLocalTemp.add(dateWidget);
+        // normalNewsWidgetLocalTemp.add(dateWidget);
         normalNewsWidgetLocalTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -423,7 +470,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }      
       else if(item.type == NewsType.Forign){
-        normalNewsWidgetForignTemp.add(dateWidget);
+        // normalNewsWidgetForignTemp.add(dateWidget);
         normalNewsWidgetForignTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -443,7 +490,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }
       else if(item.type == NewsType.Sport){
-        normalNewsWidgetSportsTemp.add(dateWidget);
+        // normalNewsWidgetSportsTemp.add(dateWidget);
         normalNewsWidgetSportsTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -463,7 +510,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         }
       }
       else if(item.type == NewsType.Whether){
-        normalNewsWidgetWeatherTemp.add(dateWidget);
+        // normalNewsWidgetWeatherTemp.add(dateWidget);
         normalNewsWidgetWeatherTemp.add(
           NormalNews(
             tabType: TabType.News,
@@ -481,33 +528,163 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           );
         }
       }
+
+
+      if(newsList.indexOf(item) == newsList.length - 1){
+        print("======");
+        print(newsList.indexOf(item));
+        
+        if(newsDate == today){
+          dateWidget = Container(
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                "Today",
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+        else if(newsDate == DateTime(now.year, now.month, now.day - 1).toString()){
+          dateWidget = Container(
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                "Yesterday",
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+        else {
+          dateWidget = Container(
+            // color: Colors.red,
+            width: _width,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: Text(
+                newsDate,
+                style: TextStyle(
+                  color: AppData.DARKGRAY
+                ),
+              ),
+            ),
+          );
+        }
+        normalNewsWidgetAllTemp.add(dateWidget);
+        if(normalNewsWidgetLocalTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Local news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetLocalTemp);
+        }
+        
+        if(normalNewsWidgetForignTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Forign news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForignTemp);
+        }
+        if(normalNewsWidgetSportsTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Sports news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetSportsTemp);
+        }
+        if(normalNewsWidgetWeatherTemp.length > 0){
+          normalNewsWidgetAllTemp.add(
+            Container(
+              width: _width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text(
+                  "Weather news",
+                  style: TextStyle(
+                    color: AppData.ALLCOLOR,
+                    fontFamily: "Lato",
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            )
+          );
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetWeatherTemp);
+        }
+
+        // normalNewsWidgetWeather = [];
+        // normalNewsWidgetLocalTemp =[];
+        // normalNewsWidgetForign = [];
+        // normalNewsWidgetSports = [];
+        newsDate = item.date.split(" ")[0];
+      }
+
+      
+
     }
 
     if(_isFrirstLoad){
       print("add old news");
       setState(() {
         normalNewsWidgetAll = normalNewsWidgetAllTemp;
-        normalNewsWidgetLocal = normalNewsWidgetLocalTemp;
-        normalNewsWidgetForign = normalNewsWidgetForignTemp;
-        normalNewsWidgetSports = normalNewsWidgetSportsTemp;
-        normalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
-        newNormalNewsWidgetAll =[];
-        newNormalNewsWidgetLocal =[];
-        newNormalNewsWidgetForign =[];
-        newNormalNewsWidgetSports =[];
-        newNormalNewsWidgetWeather =[];
       });
     }else{
       print("add new news");
       setState(() {
         newNormalNewsWidgetAll = normalNewsWidgetAllTemp;
-        newNormalNewsWidgetLocal = normalNewsWidgetLocalTemp;
-        newNormalNewsWidgetForign = normalNewsWidgetForignTemp;
-        newNormalNewsWidgetSports = normalNewsWidgetSportsTemp;
-        newNormalNewsWidgetWeather = normalNewsWidgetWeatherTemp;
       });
 
     }
+
+    
   }
 
   _getLiveUpdate(){
@@ -633,7 +810,12 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                           alignment: Alignment.topRight,
                           child:GestureDetector(
                             onTap: (){
-                              Navigator.of(context).push(DropDownOverlay(dropDownListner:this));
+                              if(currentNewsTab == 0){
+                                _next();
+                              }else{
+                                _back();
+                              }
+                              // Navigator.of(context).push(DropDownOverlay(dropDownListner:this));
                             },
                             child: Container(
                               width:130,
@@ -723,114 +905,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                               ),
                               Column(
                                 children: normalNewsWidgetAll
-                              )
-                            ]
-                          ),
-                        )
-                      ),
-
-                      //local
-                      Container(
-                        width: _width,
-                        height: _height-100,
-
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop:true,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                children: topNewsWidgetLocal
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Column(
-                                children: newNormalNewsWidgetLocal
-                              ),
-                              Column(
-                                children: normalNewsWidgetLocal
-                              )
-                            ]
-                          ),
-                        )
-                      ),
-
-                      //forign
-                      Container(
-                        width: _width,
-                        height: _height-100,
-
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop:true,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                children: topNewsWidgetForign
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Column(
-                                children: newNormalNewsWidgetForign
-                              ),
-                              Column(
-                                children: normalNewsWidgetForign
-                              )
-                            ]
-                          ),
-                        )
-                      ),
-
-                      //sports
-                      Container(
-                        width: _width,
-                        height: _height-100,
-
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop:true,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                children: topNewsWidgetSports
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Column(
-                                children: newNormalNewsWidgetSports
-                              ),
-                              Column(
-                                children: normalNewsWidgetSports
-                              )
-                            ]
-                          ),
-                        )
-                      ),
-
-                      //weather
-                      Container(
-                        width: _width,
-                        height: _height-100,
-
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop:true,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                children: topNewsWidgetWeather
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Column(
-                                children: newNormalNewsWidgetWeather
-                              ),
-                              Column(
-                                children: normalNewsWidgetWeather
                               )
                             ]
                           ),

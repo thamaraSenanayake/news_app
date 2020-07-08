@@ -206,7 +206,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
                    Align(
                      alignment: Alignment.bottomLeft,
                      child: Padding(
-                       padding: const EdgeInsets.only(left:10.0,bottom:10),
+                       padding: const EdgeInsets.only(left:10.0,bottom:8),
                        child: GestureDetector(
                          onTap: (){
                            Navigator.pop(context);

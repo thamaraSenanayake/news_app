@@ -254,7 +254,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                  
                  children: <Widget>[
                    Padding(
-                     padding: const EdgeInsets.only(left:10.0,top:10.0),
+                     padding: const EdgeInsets.only(left:10.0,bottom:8.0),
                      child: Align(
                        alignment: Alignment.bottomLeft,
                        child: GestureDetector(
