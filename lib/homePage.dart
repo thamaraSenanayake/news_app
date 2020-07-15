@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/Splash/splash.dart';
@@ -28,9 +29,12 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   ScrollController _controller;
   bool _isDark = false;
   
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<NewsPageState> _newsPageState = GlobalKey();
   final GlobalKey<LanguageState> _languagePageState = GlobalKey();
+
 
   @override
   void initState() {
@@ -116,6 +120,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     print(AppData.isDark);
     DBProvider.db.addSystemData(AppData.language,AppData.isDark);
     print(language);
+    _firebaseMessaging.subscribeToTopic(language.toString());
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 

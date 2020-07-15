@@ -12,6 +12,8 @@ import 'package:news_app/model/news.dart';
 import 'package:news_app/model/systemInfo.dart';
 import 'package:news_app/res/curvePainter.dart';
 import 'package:news_app/res/resources.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class Splash extends StatefulWidget {
   final SplashStateListner splashStateListner;
@@ -24,6 +26,7 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   double _height = 0.0;
   double _width = 0.0;
   double _screenHeight = 0.0;
@@ -42,6 +45,20 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   @override
   void initState() {
     super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        // _showItemDialog(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // _navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // _navigateToItemDetail(message);
+      },
+    );
     print("splah page run"+_loadComplete.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) { 
       _startLoadData();
@@ -54,6 +71,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
 
     //check internet avalablity
     bool internet = await Resousers.checkInternetConectivity();
+    print("internet"+internet.toString());
 
     if(!internet && !avalablity){
       Navigator.of(context).push(
