@@ -40,7 +40,18 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   bool _moveTolanguageScreen = true;
   bool _loadingSystemData = false;
   bool _loadComplete = false;
+  bool _noInterNet = false;
+  bool internet = false;
 
+  _noInternetDialog() async{
+    setState(() {
+      _noInterNet = true;
+    });
+    await new Future.delayed(const Duration(seconds : 3));
+    setState(() {
+      _noInterNet =false;
+    });
+  }
 
   @override
   void initState() {
@@ -70,7 +81,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
     bool avalablity = await DBProvider.db.databaseAvalablity();
 
     //check internet avalablity
-    bool internet = await Resousers.checkInternetConectivity();
+    internet = await Resousers.checkInternetConectivity();
     print("internet"+internet.toString());
 
     if(!internet && !avalablity){
@@ -85,6 +96,9 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
       return;
     }
     else{
+      if(!internet){
+        _noInternetDialog();
+      }
       if(!_loadComplete){
         _setPosition();
         _loadData();
@@ -152,14 +166,19 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
     ////print("last artcle firsbase id "+firebaseNewsCount.toString());
     print("last sqllite artcle id "+id.toString());
 
-    //get articles
-    articleList = await database.readArticles(articleiId);
-    
-    //get normal news
-    newsList = await database.readNews(id);
+    if(internet){
 
-    //get hot news
-    hotNewsList = await database.readHotNews();
+      //get articles
+      articleList = await database.readArticles(articleiId);
+      
+      //get normal news
+      newsList = await database.readNews(id);
+
+      //get hot news
+      hotNewsList = await database.readHotNews();
+      
+    }
+
     print(newsList.length);
 
     if(newsList.length != 0){
@@ -338,6 +357,20 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
               ],
             ),
           ),
+
+          _noInterNet?Padding(
+            padding: EdgeInsets.only(bottom: 50),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child:Chip(
+                label: Text(
+                  "Connect app to the internet to load more news",
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.grey[800],
+              ) ,
+            ),
+          ):Container(),
         ],
       ),
     );

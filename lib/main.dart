@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Online පත්තරේ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

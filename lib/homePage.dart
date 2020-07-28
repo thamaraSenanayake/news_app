@@ -120,7 +120,23 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
     print(AppData.isDark);
     DBProvider.db.addSystemData(AppData.language,AppData.isDark);
     print(language);
-    _firebaseMessaging.subscribeToTopic(language.toString());
+    
+    if(language == LanguageList.English){
+      _firebaseMessaging.subscribeToTopic(language.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Tamil.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Sinhala.toString());
+    }
+    else if(language == LanguageList.Sinhala){
+      _firebaseMessaging.subscribeToTopic(language.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.English.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Tamil.toString());
+    }
+    else if(language == LanguageList.Tamil){
+      _firebaseMessaging.subscribeToTopic(language.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.English.toString());
+      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Sinhala.toString());
+    }
+
     _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 

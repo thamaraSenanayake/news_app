@@ -185,7 +185,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
             
             //top bar
             Container(
-              height: 70,
+              height: 80,
               width: _width,
               child: Stack(
                 // crossAxisAlignment: CrossAxisAlignment.center,

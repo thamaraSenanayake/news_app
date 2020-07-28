@@ -7,7 +7,6 @@ import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/dropDown/dropDownListner.dart';
-import 'package:news_app/dropDown/dropDownOverlay.dart';
 import 'package:news_app/newspages/fullPageArticle.dart';
 import 'package:news_app/newspages/fullPageNews.dart';
 import 'package:news_app/homePageListner.dart';
@@ -33,10 +32,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   double _width = 0.0;
   List<News> topNewsList =[];
   List<Widget> topNewsWidgetAll = [];
-  List<Widget> topNewsWidgetLocal = [];
-  List<Widget> topNewsWidgetForign = [];
-  List<Widget> topNewsWidgetSports = [];
-  List<Widget> topNewsWidgetWeather = [];
+
 
   List<News> normalNews =[];
   List<Widget> normalNewsWidgetAll =[];
@@ -203,10 +199,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
   _topNewsLoad(){
     List<Widget> topNewsWidgetTemp =[];
-    List<Widget> topNewsWidgetLocalTemp = [];
-    List<Widget> topNewsWidgetForignTemp = [];
-    List<Widget> topNewsWidgetSportsTemp = [];
-    List<Widget> topNewsWidgetWeatherTemp = [];
 
     for (var item in topNewsList) {
 
@@ -220,57 +212,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           )
         );
       }
-      else if(item.type == NewsType.Local){
-        topNewsWidgetLocalTemp.add(
-          TopNews(
-            tabType: TabType.News,
-            news: item,
-            newsClickListner: this,
-            secondColor: AppData.ALLCOLOR,
-          )
-        );
-      }
-      else if(item.type == NewsType.Forign){
-        topNewsWidgetForignTemp.add(
-          TopNews(
-            tabType: TabType.News,
-            news: item,
-            newsClickListner: this,
-            secondColor: AppData.ALLCOLOR,
-          )
-        );
-      }
-
-      else if(item.type == NewsType.Sport){
-        topNewsWidgetSportsTemp.add(
-          TopNews(
-            tabType: TabType.News,
-            news: item,
-            newsClickListner: this,
-            secondColor: AppData.ALLCOLOR,
-          )
-        );
-      }
-
-      else if(item.type == NewsType.Whether){
-        topNewsWidgetWeatherTemp.add(
-          TopNews(
-            tabType: TabType.News,
-            news: item,
-            newsClickListner: this,
-            secondColor: AppData.WEATHERCOLOR,
-          )
-        );
-      }
       
     }
-
     setState(() {
       topNewsWidgetAll = topNewsWidgetTemp;
-      topNewsWidgetLocal = topNewsWidgetLocalTemp;
-      topNewsWidgetForign = topNewsWidgetForignTemp;
-      topNewsWidgetSports = topNewsWidgetSportsTemp;
-      topNewsWidgetWeather = topNewsWidgetWeatherTemp;
+      
     });
 
   }
@@ -430,7 +376,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         newsDate = item.date.split(" ")[0];
       }
       // addShow = rng.nextInt(8);
-      //print(addShow);
+      // print(addShow);
       
 
       // normalNewsWidgetAllTemp.add(

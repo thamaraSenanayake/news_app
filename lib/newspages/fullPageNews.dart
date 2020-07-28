@@ -157,6 +157,13 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _tabLoad(){
     List<Widget> _tabListTemp = [];
+
+    if(widget.news.imgUrl.length == 1){
+      setState(() {
+        _tabList = _tabListTemp;
+      });
+      return;
+    }
     for (var i = 0; i < widget.news.imgUrl.length; i++) {
       _tabListTemp.add(
         Padding(
@@ -471,7 +478,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(top:30.0),
+                            padding: const EdgeInsets.only(top:30.0,bottom: 10.0),
                             child: Text(
                               'by: '+widget.news.author,
                               style: TextStyle(

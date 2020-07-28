@@ -126,7 +126,7 @@ class Database{
     News news;
     QuerySnapshot querySnapshot;
 
-    int timestamp = DateTime.now().subtract(Duration(days:7)).millisecondsSinceEpoch;
+    int timestamp = DateTime.now().subtract(Duration(days:30)).millisecondsSinceEpoch;
 
     if(lastId == 0){
       querySnapshot = await newsCollection.where('timeStamp',isGreaterThan:timestamp).getDocuments();
@@ -156,7 +156,7 @@ class Database{
       newsList.add(news);
     }
 
-    print(newsList.length);
+    print("news lendth"+newsList.length.toString());
 
     return newsList;
   }
