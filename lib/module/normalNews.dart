@@ -19,26 +19,27 @@ class NormalNews extends StatefulWidget {
 
 class _NormalNewsState extends State<NormalNews> {
   String fontFamily = "Lato";
+  double _width = 0.0;
 
   @override
   void initState() { 
     super.initState();
-    if(AppData.language == LanguageList.Sinhala){
-      fontFamily = "Abhaya";
-    }
-    else if(AppData.language == LanguageList.Tamil){
-      fontFamily = "HindMadurai";
-    }
-    else{
-      fontFamily = "Lato";
-    }
   }
-  double _width = 0.0;
+  
   @override
   Widget build(BuildContext context) {
     setState(() {
       _width = MediaQuery.of(context).size.width;
       //print(TimeCalculater.timeDifferentCalculator("2020-06-02 14:08:57.495216"));
+      if(AppData.language == LanguageList.Sinhala){
+        fontFamily = "Abhaya";
+      }
+      else if(AppData.language == LanguageList.Tamil){
+        fontFamily = "HindMadurai";
+      }
+      else{
+        fontFamily = "Lato";
+      }
     });
     return Padding(
       padding: const EdgeInsets.only(left:3.0,right:3.0,bottom: 3),

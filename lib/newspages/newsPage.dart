@@ -751,7 +751,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(right:8.0,top:25.0),
+                        padding: const EdgeInsets.only(right:8.0,top:30.0),
                         child: Align(
                           alignment: Alignment.topRight,
                           child:GestureDetector(

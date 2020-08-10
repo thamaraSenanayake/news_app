@@ -63,6 +63,21 @@ class LanguageState extends State<Language> {
       width:_width,
       child: Stack(
         children: <Widget>[
+
+          Padding(
+            padding: const EdgeInsets.only(top:80.0),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                "Select Your language",
+                style:TextStyle(
+                  fontFamily: "Lato",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600
+                )
+              ),
+            ),
+          ),
           
           Container(
             height: _height,
@@ -204,52 +219,59 @@ class LanguageState extends State<Language> {
                     });
                     selectedLanguage =  LanguageList.English;
                   },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds:200),
-                    child:Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "English",
-                            style: TextStyle(
-                              color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                              fontFamily: "Lato",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
+                  child: ClipRRect(
+                    child: Banner(
+                      message: "Testing",
+                      location: BannerLocation.topEnd,
+                      color: Colors.red,
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds:200),
+                        child:Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "English",
+                                style: TextStyle(
+                                  color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.BLACK,
+                                  fontFamily: "Lato",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(right:15.0),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.check,
-                              color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.WHITE,
-                              size:25
+                            Padding(
+                              padding: const EdgeInsets.only(right:15.0),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Icon(
+                                  Icons.check,
+                                  color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.WHITE,
+                                  size:25
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                    width:_width-80,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: _colorList[2] != 1? AppData.WHITE:AppData.BLACK,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2.0,
-                          spreadRadius: 2.0, 
-                          offset: Offset(
-                            1.0,
-                            2.0,
-                          ),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(3)
+                        width:_width-80,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: _colorList[2] != 1? AppData.WHITE:AppData.BLACK,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2.0,
+                              spreadRadius: 2.0, 
+                              offset: Offset(
+                                1.0,
+                                2.0,
+                              ),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(3)
+                        ),
+                      ),
                     ),
                   ),
                 )

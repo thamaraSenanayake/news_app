@@ -48,7 +48,7 @@ class _FullPageNewsState extends State<FullPageNews> {
       content = widget.news.contentTamil;
       title = widget.news.titleTamil;
     }
-    Share.share(content+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod+' \niOS https://apps.apple.com/us/app/clash-of-clans/id'+AppData.appIdIos+'', subject: title);
+    Share.share(content+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: title);
   }
 
 
@@ -171,8 +171,8 @@ class _FullPageNewsState extends State<FullPageNews> {
             2.5
           ),
           child: Container(
-            height: 15,
-            width: 15,
+            height: 10,
+            width: 10,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _currentPhoto == i? AppData.DARKGRAY:AppData.GRAY
@@ -473,7 +473,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                                 color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
                                 fontSize: 16
                               ),
-                              textAlign: TextAlign.justify,
+                              // textAlign: TextAlign.justify,
                             ),
                           ),
 

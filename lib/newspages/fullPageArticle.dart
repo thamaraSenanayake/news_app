@@ -150,7 +150,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
               color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
               fontSize: 17
             ),
-            textAlign: TextAlign.justify,
+            // textAlign: TextAlign.justify,
           ),
         ),
       );
@@ -164,7 +164,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
   }
 
   _share(){
-    Share.share(contentList.toString()+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod+' \niOS https://apps.apple.com/us/app/clash-of-clans/id'+AppData.appIdIos+'', subject: title);
+    Share.share(contentList.toString()+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: title);
   }
 
 

@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   }
 
   _shareWithOther(){
-    Share.share('Andriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod+' iOS https://apps.apple.com/us/app/clash-of-clans/id'+AppData.appIdIos+'', subject: 'Check This new News App');
+    Share.share('Andriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: 'Check This new News App');
   }
 
   _rateUs(){
@@ -459,7 +459,4 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
 
     ];
   }
-
-  
-
 }

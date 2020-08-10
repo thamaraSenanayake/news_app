@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news_app/Splash/dialoagLister.dart';
@@ -31,7 +33,6 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   double _width = 0.0;
   double _screenHeight = 0.0;
   double _logoPostion = 0.0;
-  double _loadingPostion = 0.0;
   double _languagePageHeight = 0.0;
 
   bool _loadingData = false;
@@ -230,7 +231,6 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   _setPosition(){
     setState(() {
       _logoPostion = 125;
-      _loadingPostion = 150;
     });
   }
 
@@ -255,9 +255,16 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
           Container(
             height: _height,
             width:_width,
-            child: Image.asset(
-              AppData.BACKGROUND,
-              fit: BoxFit.cover,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppData.BACKGROUND)
+              )
+            ),
+            child: new BackdropFilter(
+              filter: new ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: new Container(
+                decoration: new BoxDecoration(color: Colors.white.withOpacity(0.0)),
+              ),
             ),
           ),
 
@@ -321,9 +328,8 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
                       ),
 
                       //loading
-                      !_loadComplete?AnimatedPositioned(
-                        duration: Duration(milliseconds:1000),
-                        bottom:_loadingPostion,
+                      !_loadComplete?Positioned(
+                        bottom:150.0,
                         child: Container(
                           width: _width,
                           child: Align(
