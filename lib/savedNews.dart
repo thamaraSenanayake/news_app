@@ -54,7 +54,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
   }
 
   _next(){
-    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    _controller.animateTo(_width,duration: Duration(milliseconds: 300), curve: Curves.linear);
     setState(() {
       _title ="Saved Article";
       _rightArrow = true;
@@ -62,7 +62,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
   }
 
   _back(){
-    _controller.animateTo(0,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    _controller.animateTo(0,duration: Duration(milliseconds: 300), curve: Curves.linear);
     setState(() {
       _title ="Saved News";
       _rightArrow = false;

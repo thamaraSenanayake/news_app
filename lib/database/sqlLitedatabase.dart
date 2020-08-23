@@ -409,7 +409,7 @@ class DBProvider {
     List<News> newsList = [];
     News news;
     String imageList = "";
-    int timestamp = DateTime.now().subtract(Duration(days:30)).millisecondsSinceEpoch;
+    int timestamp = DateTime.now().subtract(Duration(days:7)).millisecondsSinceEpoch;
     
     try {
       var res = await db.query("News",orderBy:'id DESC',where: 'timeStamp >'+timestamp.toString());

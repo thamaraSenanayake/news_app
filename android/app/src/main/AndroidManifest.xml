@@ -33,7 +33,7 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~6300978111"/>
+            android:value="ca-app-pub-4827514016608108~7352700315"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/transparent" />

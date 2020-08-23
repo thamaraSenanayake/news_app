@@ -398,7 +398,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                         ),
                         SizedBox(width:40),
                         Text(
-                          "Saved News",
+                          "Saved",
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

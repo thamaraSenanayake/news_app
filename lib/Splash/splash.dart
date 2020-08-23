@@ -257,7 +257,8 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
             width:_width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(AppData.BACKGROUND)
+                image: AssetImage(AppData.BACKGROUND),
+                fit: BoxFit.cover
               )
             ),
             child: new BackdropFilter(

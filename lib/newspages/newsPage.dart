@@ -90,6 +90,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   reloadNews(){
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
+    _loadArticle();
     
     setState(() {
       newNormalNews =[];
@@ -202,7 +203,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
     for (var item in topNewsList) {
 
-      if(item.type == NewsType.AllTop){
+      if(item.type == NewsType.Local){
         topNewsWidgetTemp.add(
           TopNews(
             tabType: TabType.News,
@@ -216,7 +217,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     }
     setState(() {
       topNewsWidgetAll = topNewsWidgetTemp;
-      
     });
 
   }
@@ -375,7 +375,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         normalNewsWidgetSportsTemp = [];
         newsDate = item.date.split(" ")[0];
       }
-      // addShow = rng.nextInt(8);
+      addShow = rng.nextInt(8);
       // print(addShow);
       
 
@@ -387,14 +387,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       //     secondColor: AppData.ALLCOLOR,
       //   )
       // );
-      // if(addShow == 7){
-      //   normalNewsWidgetAllTemp.add(
-      //     AdmobBanner(
-      //       adUnitId: addMobSerivce.getBannerAddId(),
-      //       adSize: AdmobBannerSize.FULL_BANNER
-      //     )
-      //   );
-      // }
+      if(addShow == 7){
+        normalNewsWidgetAllTemp.add(
+          Column(
+            children: <Widget>[
+              AdmobBanner(
+                adUnitId: addMobSerivce.getBannerAddId(),
+                adSize: AdmobBannerSize.FULL_BANNER
+              ),
+              Text("Advertisment")
+            ],
+          )
+        );
+      }
       if(item.type == NewsType.Local){
         // normalNewsWidgetLocalTemp.add(dateWidget);
         normalNewsWidgetLocalTemp.add(
