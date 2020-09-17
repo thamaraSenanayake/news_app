@@ -17,6 +17,8 @@ import 'package:news_app/module/topNews.dart';
 import 'package:news_app/res/addmob.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
 
 
 class NewsPage extends StatefulWidget {
@@ -103,12 +105,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   }
 
   loadNews() async{
-    normalNews = await DBProvider.db.viewNews("");
+    normalNews = await DBProvider.db.viewNews();
     topNewsList = await DBProvider.db.viewHotNews();
     articleList = await DBProvider.db.viewArticale();
+    
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
     _loadArticle();
+    DBProvider.db.deleteOldNews();
     _isloaded = true;
   }
 
@@ -773,10 +777,10 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  Icon(
-                                    _goForwed? Icons.arrow_drop_down:Icons.arrow_back,
+                                  !_goForwed?Icon(
+                                    Icons.arrow_back,
                                     color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
-                                  ),
+                                  ):Container(),
                                   SizedBox(
                                     width:_goForwed?0:10
                                   ),
@@ -791,10 +795,10 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                                   SizedBox(
                                     width:_goForwed?10:0
                                   ),
-                                  Icon(
-                                    _goForwed? Icons.arrow_forward:Icons.arrow_drop_down,
+                                  _goForwed?Icon(
+                                    Icons.arrow_forward,
                                     color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
-                                  )
+                                  ):Container()
                                 ],
                               ),
                             ),
@@ -854,8 +858,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                               Column(
                                 children: newNormalNewsWidgetAll
                               ),
-                              Column(
-                                children: normalNewsWidgetAll
+                              AnimationLimiter(
+                                child: Column(
+                                  children: AnimationConfiguration.toStaggeredList(
+                                  duration: const Duration(milliseconds: 375),
+                                    childAnimationBuilder: (widget) => SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: widget,
+                                      ),
+                                    ),
+                                    children: normalNewsWidgetAll,
+                                  ),
+                                ),
                               )
                             ]
                           ),
@@ -869,8 +884,20 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                         child: MediaQuery.removePadding(
                           context: context,
                           removeTop:true,
-                          child: ListView(
-                            children: articleWidget
+                          child: AnimationLimiter(
+                            child: ListView(
+                              children: AnimationConfiguration.toStaggeredList(
+                                duration: const Duration(milliseconds: 375),
+                                childAnimationBuilder: (widget) => SlideAnimation(
+                                  horizontalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: widget,
+                                  ),
+                                ),
+                                children: articleWidget
+                              ),
+                              
+                            ),
                           )
                         )
                       ),

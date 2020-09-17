@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/model/news.dart';
@@ -67,20 +68,35 @@ class _FullPageArticleState extends State<FullPageArticle> {
 
     int currentPhoto =0;
     for (var item in contentList) {
-      
-      _displayArticleTemp.add(
-        Container(
-          height: 300,
-          width: _width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(widget.article.imgUrl[currentPhoto].trim()),
-              fit: BoxFit.cover,
+      if(contentList.indexOf(item)==0){
+        _displayArticleTemp.add(
+          Container(
+            height: 300,
+            width: _width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.article.imgUrl[currentPhoto].trim()),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }else{
+        _displayArticleTemp.add(
+          Container(
+            height: 300,
+            width: _width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.article.imgUrl[currentPhoto].trim()),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        );
+      }
       currentPhoto++;
 
       if(contentList.indexOf(item)==0){
@@ -248,8 +264,19 @@ class _FullPageArticleState extends State<FullPageArticle> {
               child: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: ListView(
-                  children: _displayArticle
+                child: AnimationLimiter(
+                  child: ListView(
+                    children: AnimationConfiguration.toStaggeredList(
+                      duration: const Duration(milliseconds: 500),
+                      childAnimationBuilder: (widget) => SlideAnimation(
+                        horizontalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: widget,
+                        ),
+                      ),
+                      children: _displayArticle
+                    ),
+                  ),
                 ),
               )
             ),

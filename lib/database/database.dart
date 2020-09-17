@@ -226,8 +226,6 @@ class Database{
   Future<List<News>> readHotNews() async{
     List<News> newsList = [];
     News news;
-    List imageList = [];
-    List<String> imageListString = [];
     
     QuerySnapshot querySnapshot = await hotNewsCollection.getDocuments();
     for (var item in querySnapshot.documents) {

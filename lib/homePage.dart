@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/Splash/splash.dart';
 import 'package:news_app/Splash/splashListner.dart';
@@ -45,6 +46,9 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: AppData.ALLCOLOR, 
+    ));
     setState(() {
       _height = MediaQuery.of(context).size.height;
       _width = MediaQuery.of(context).size.width;
@@ -61,6 +65,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
           ),
         ),
       ),
+      
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

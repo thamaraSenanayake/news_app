@@ -14,8 +14,8 @@ class AddMobSerivce{
     if(Platform.isIOS){
       return "ca-app-pub-4827514016608108/6579029918";
     }else{
-      return "ca-app-pub-3940256099942544/6300978111";
-      // return "ca-app-pub-4827514016608108/1901418300";
+      // return "ca-app-pub-3940256099942544/6300978111";
+      return "ca-app-pub-4827514016608108/1901418300";
     }
   }
 

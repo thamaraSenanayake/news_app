@@ -12,7 +12,6 @@ import 'package:news_app/language/language.dart';
 import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/model/systemInfo.dart';
-import 'package:news_app/res/curvePainter.dart';
 import 'package:news_app/res/resources.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -269,14 +268,6 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
             ),
           ),
 
-          //canves
-          Container(
-            height: _height,
-            width:_width,
-            child: CustomPaint(
-              painter:CurvePainter() ,
-            ),
-          ),
           
           SingleChildScrollView(
             child: Column(
@@ -338,7 +329,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
                             child: Container(
                               height: 50,
                               width: 50,
-                              child: SpinKitFadingCube(
+                              child: SpinKitSquareCircle(
                                 color: AppData.ALLCOLOR,
                                 size: 50.0,
                               ),

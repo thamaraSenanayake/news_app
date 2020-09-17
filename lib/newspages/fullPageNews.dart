@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
 import 'package:news_app/model/news.dart';
@@ -423,74 +424,86 @@ class _FullPageNewsState extends State<FullPageNews> {
 
                      Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              AppData.language == LanguageList.Sinhala?
-                                widget.news.titleSinhala:
-                              AppData.language == LanguageList.English?
-                                widget.news.titleEnglish:
-                              widget.news.titleTamil,
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: 23,
-                                color:AppData.isDark ==1 ?AppData.WHITE:AppData.BLACK,
-                                fontWeight: FontWeight.w600
+                        child: AnimationLimiter(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: AnimationConfiguration.toStaggeredList(
+                              duration: const Duration(milliseconds: 500),
+                              childAnimationBuilder: (widget) => SlideAnimation(
+                                horizontalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: widget,
+                                ),
                               ),
-                            ),
-                          ),
+                              // children: ,
+                              children: <Widget>[
 
-                          Padding(
-                            padding: const EdgeInsets.only(bottom:15.0),
-                            child: Text(
-                              TimeCalculater.timeDifferentCalculator(widget.news.date),
-                              style: TextStyle(
-                                letterSpacing:1.5,
-                                wordSpacing:1,
-                                fontFamily: "Lato",
-                                color: AppData.ALLCOLOR
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  AppData.language == LanguageList.Sinhala?
+                                    widget.news.titleSinhala:
+                                  AppData.language == LanguageList.English?
+                                    widget.news.titleEnglish:
+                                  widget.news.titleTamil,
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: 23,
+                                    color:AppData.isDark ==1 ?AppData.WHITE:AppData.BLACK,
+                                    fontWeight: FontWeight.w600
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(bottom:5.0),
-                            child: Text(
-                              AppData.language == LanguageList.Sinhala?
-                                 widget.news.contentSinhala:
-                                AppData.language == LanguageList.English?
-                                  widget.news.contentEnglish:
-                                widget.news.contentTamil,
-                              style: TextStyle(
-                                letterSpacing:1.8,
-                                wordSpacing:1,
-                                height: 1.5,
-                                fontFamily: fontFamily,
-                                color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
-                                fontSize: 16
+                              Padding(
+                                padding: const EdgeInsets.only(bottom:15.0),
+                                child: Text(
+                                  TimeCalculater.timeDifferentCalculator(widget.news.date),
+                                  style: TextStyle(
+                                    letterSpacing:1.5,
+                                    wordSpacing:1,
+                                    fontFamily: "Lato",
+                                    color: AppData.ALLCOLOR
+                                  ),
+                                ),
                               ),
-                              // textAlign: TextAlign.justify,
-                            ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(top:30.0,bottom: 10.0),
-                            child: Text(
-                              'by: '+widget.news.author,
-                              style: TextStyle(
-                                fontFamily: 'Lato',
-                                color: AppData.ALLCOLOR,
-                                fontWeight: FontWeight.w700
+                              Padding(
+                                padding: const EdgeInsets.only(bottom:5.0),
+                                child: Text(
+                                  AppData.language == LanguageList.Sinhala?
+                                    widget.news.contentSinhala:
+                                    AppData.language == LanguageList.English?
+                                      widget.news.contentEnglish:
+                                    widget.news.contentTamil,
+                                  style: TextStyle(
+                                    letterSpacing:1.8,
+                                    wordSpacing:1,
+                                    height: 1.5,
+                                    fontFamily: fontFamily,
+                                    color:AppData.isDark ==1 ?AppData.WHITE: AppData.BLACK,
+                                    fontSize: 16
+                                  ),
+                                  // textAlign: TextAlign.justify,
+                                ),
                               ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(top:30.0,bottom: 10.0),
+                                child: Text(
+                                  'by: '+widget.news.author,
+                                  style: TextStyle(
+                                    fontFamily: 'Lato',
+                                    color: AppData.ALLCOLOR,
+                                    fontWeight: FontWeight.w700
+                                  ),
+                                ),
+                              ),
+                              
+                            ],
                             ),
-                          ),
-                           
-                         ],
                        ),
+                      ),
                      ),
 
 

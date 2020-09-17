@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:news_app/const.dart';
 import 'languageListner.dart';
 
@@ -82,148 +83,28 @@ class LanguageState extends State<Language> {
           Container(
             height: _height,
             width:_width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-
-                //sinhala
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _colorList = [1,0,0];
-                    });
-                    selectedLanguage =  LanguageList.Sinhala;
-                  },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds:200),
-                    child:Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "සිංහල",
-                            style: TextStyle(
-                              color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                              fontFamily: "Abhaya",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(right:15.0),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.check,
-                              color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.WHITE,
-                              size:25
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    width:_width-80,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: _colorList[0] != 1? AppData.WHITE:AppData.BLACK,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2.0,
-                          spreadRadius: 2.0, 
-                          offset: Offset(
-                            1.0,
-                            2.0,
-                          ),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(3)
+            child: AnimationLimiter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: AnimationConfiguration.toStaggeredList(
+                  duration: const Duration(milliseconds: 375),
+                  childAnimationBuilder: (widget) => SlideAnimation(
+                    horizontalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: widget,
                     ),
                   ),
-                ),
+                  children: <Widget>[
 
-                SizedBox(
-                  height:20
-                ),
-
-                //tamil
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _colorList = [0,1,0];
-                    });
-                    selectedLanguage =  LanguageList.Tamil;
-                  },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds:200),
-                    child:Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "தமிழ்",
-                            style: TextStyle(
-                              color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                              fontFamily: "HindMadurai",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(right:15.0),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.check,
-                              color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.WHITE,
-                              size:25
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    width:_width-80,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: _colorList[1] != 1? AppData.WHITE:AppData.BLACK,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2.0,
-                          spreadRadius: 2.0, 
-                          offset: Offset(
-                            1.0,
-                            2.0,
-                          ),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(3)
-                    ),
-                  ),
-                ),
-                
-                SizedBox(
-                  height:20
-                ),
-                
-                //English
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _colorList = [0,0,1];
-                    });
-                    selectedLanguage =  LanguageList.English;
-                  },
-                  child: ClipRRect(
-                    child: Banner(
-                      message: "Testing",
-                      location: BannerLocation.topEnd,
-                      color: Colors.red,
+                    //sinhala
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _colorList = [1,0,0];
+                        });
+                        selectedLanguage =  LanguageList.Sinhala;
+                      },
                       child: AnimatedContainer(
                         duration: Duration(milliseconds:200),
                         child:Stack(
@@ -231,10 +112,10 @@ class LanguageState extends State<Language> {
                             Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "English",
+                                "සිංහල",
                                 style: TextStyle(
-                                  color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.BLACK,
-                                  fontFamily: "Lato",
+                                  color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.BLACK,
+                                  fontFamily: "Abhaya",
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600
                                 ),
@@ -247,7 +128,7 @@ class LanguageState extends State<Language> {
                                 alignment: Alignment.centerRight,
                                 child: Icon(
                                   Icons.check,
-                                  color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.WHITE,
+                                  color: _colorList[0] == 1? AppData.ALLCOLOR:AppData.WHITE,
                                   size:25
                                 ),
                               ),
@@ -257,7 +138,7 @@ class LanguageState extends State<Language> {
                         width:_width-80,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: _colorList[2] != 1? AppData.WHITE:AppData.BLACK,
+                          color: _colorList[0] != 1? AppData.WHITE:AppData.BLACK,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
@@ -273,10 +154,149 @@ class LanguageState extends State<Language> {
                         ),
                       ),
                     ),
-                  ),
-                )
-                
-              ],
+
+                    SizedBox(
+                      height:20
+                    ),
+
+                    //tamil
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _colorList = [0,1,0];
+                        });
+                        selectedLanguage =  LanguageList.Tamil;
+                      },
+                      child: ClipRRect(
+                        child: Banner(
+                          message: "Testing",
+                          location: BannerLocation.topEnd,
+                          color: Colors.red,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds:200),
+                            child:Stack(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "தமிழ்",
+                                    style: TextStyle(
+                                      color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.BLACK,
+                                      fontFamily: "HindMadurai",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(right:15.0),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: _colorList[1] == 1? AppData.ALLCOLOR:AppData.WHITE,
+                                      size:25
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            width:_width-80,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: _colorList[1] != 1? AppData.WHITE:AppData.BLACK,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2.0,
+                                  spreadRadius: 2.0, 
+                                  offset: Offset(
+                                    1.0,
+                                    2.0,
+                                  ),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(3)
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    
+                    SizedBox(
+                      height:20
+                    ),
+                    
+                    //English
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _colorList = [0,0,1];
+                        });
+                        selectedLanguage =  LanguageList.English;
+                      },
+                      child: ClipRRect(
+                        child: Banner(
+                          message: "Testing",
+                          location: BannerLocation.topEnd,
+                          color: Colors.red,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds:200),
+                            child:Stack(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "English",
+                                    style: TextStyle(
+                                      color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.BLACK,
+                                      fontFamily: "Lato",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(right:15.0),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: _colorList[2] == 1? AppData.ALLCOLOR:AppData.WHITE,
+                                      size:25
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            width:_width-80,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: _colorList[2] != 1? AppData.WHITE:AppData.BLACK,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2.0,
+                                  spreadRadius: 2.0, 
+                                  offset: Offset(
+                                    1.0,
+                                    2.0,
+                                  ),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(3)
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    
+                  ],
+                  
+                ),
+              ),
             ),
           ),
 

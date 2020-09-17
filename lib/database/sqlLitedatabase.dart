@@ -209,6 +209,7 @@ class DBProvider {
 
     try {
       for (var item in delteList) {
+        print(item);
         await db.execute("DELETE FROM `News` where id = "+item.toString());
       }
 
@@ -393,9 +394,8 @@ class DBProvider {
     final db = await database;
     var res = "done";
     var date = new DateTime.now().subtract(Duration(days:7));
-
     try {
-      await db.execute("DELETE FROM `news` WHERE isSaved = 0 and timeStamp > " + date.toString());
+      await db.execute("DELETE FROM `news` WHERE isSaved = 0 and timeStamp  <" + date.toString().split(" ")[0]);
     } catch (e) {
       print(e);
       return e.toString();
@@ -404,7 +404,7 @@ class DBProvider {
     return res;
   }
 
-  Future<List<News>> viewNews(String date) async{
+  Future<List<News>> viewNews() async{
     final db = await database;
     List<News> newsList = [];
     News news;
@@ -417,7 +417,7 @@ class DBProvider {
         //remove brackets
         imageList = item["imgUrl"].toString().replaceAll("[", "");
         imageList = imageList.replaceAll("]", "");
-
+        print(item["titleSinhala"]);
         news = News(
           id:item["id"],
           imgUrl:imageList.split(","),

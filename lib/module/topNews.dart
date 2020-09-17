@@ -69,20 +69,14 @@ class _TopNewsState extends State<TopNews> {
                 child: Padding(
                   padding: EdgeInsets.only(left:5,right:5),
                   child: Container(
-                    height:50,
-                    width: _width-6,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppData.BLACK.withOpacity(0.8), AppData.BLACK.withOpacity(0.2),AppData.BLACK.withOpacity(0.8)]
-                      ),
-                    ),
+                    // height:250,
+                    width: _width,
+                    color: AppData.BLACK.withOpacity(0.4),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:10.0),
+                      padding: const EdgeInsets.all(10.0,),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Text(
                             AppData.language == LanguageList.Sinhala?
@@ -101,9 +95,10 @@ class _TopNewsState extends State<TopNews> {
                           ),
 
                           Container(
-                            width: _width-6,
+                            // width: _width-6,
+                            // height:250,
                             child: Align(
-                              alignment: Alignment.centerRight,
+                              alignment: Alignment.bottomRight,
                               child: ShadowText(
                                 TimeCalculater.timeDifferentCalculator(widget.news.date),
                                 style:TextStyle(
