@@ -81,7 +81,7 @@ class Database{
     await systemData.document('news').get().then((document){
       AppData.email = document['email'];
       AppData.appIdIos = document['appIdIos'];
-      AppData.appIdAndriod = document['appIdAndriod'];
+      AppData.appIdAndroid = document['appIdAndriod'];
       done = 1;
     });
 
@@ -156,13 +156,13 @@ class Database{
       newsList.add(news);
     }
 
-    print("news lendth"+newsList.length.toString());
+    
 
     return newsList;
   }
 
   Future<List<int>> deleteArticles() async{
-    print("----------");
+    
     List<int> deleteArticleIdList = [];
 
     await systemData.document('deleteArticles').get().then((document){
@@ -176,7 +176,7 @@ class Database{
   }
 
   Future<List<int>> deleteNews() async{
-    print("----------");
+    
     List<int> deleteNewsIdList = [];
 
     await systemData.document('deleteNews').get().then((document){
@@ -218,7 +218,7 @@ class Database{
       articleList.add(article);
     }
 
-    print(articleList.length);
+    
 
     return articleList;
   }
@@ -251,7 +251,7 @@ class Database{
       newsList.add(news);
     }
 
-    print(newsList.length);
+    
 
     return newsList;
   }

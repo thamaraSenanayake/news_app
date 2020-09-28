@@ -22,14 +22,14 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 
 class NewsPage extends StatefulWidget {
-  final HomePageListner homePageActivity;
+  final HomePageListener homePageActivity;
   NewsPage({Key key, this.homePageActivity}) : super(key: key);
 
   @override
   NewsPageState createState() => NewsPageState();
 }
 
-class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDownListner{
+class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDownListner{
   double _height = 0.0;
   double _width = 0.0;
   List<News> topNewsList =[];
@@ -39,34 +39,34 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   List<News> normalNews =[];
   List<Widget> normalNewsWidgetAll =[];
   List<Widget> normalNewsWidgetLocal = [];
-  List<Widget> normalNewsWidgetForign = [];
+  List<Widget> normalNewsWidgetForeign = [];
   List<Widget> normalNewsWidgetSports = [];
   List<Widget> normalNewsWidgetWeather = [];
 
   List<News> newNormalNews =[];
   List<Widget> newNormalNewsWidgetAll =[];
   List<Widget> newNormalNewsWidgetLocal = [];
-  List<Widget> newNormalNewsWidgetForign = [];
+  List<Widget> newNormalNewsWidgetForeign = [];
   List<Widget> newNormalNewsWidgetSports = [];
   List<Widget> newNormalNewsWidgetWeather = [];
 
   List<News> articleList =[];
   List<Widget> articleWidget =[];
 
-  bool _isloaded = false;
+  bool _isLoaded = false;
 
   ScrollController _controller;
 
   String mainTitle = "News";
-  String nextTitle = "Articales";
+  String nextTitle = "Articles";
   int currentNewsTab = 0;
-  bool _showToster = false;
-  bool _goForwed = true;
-  String _tosterMsg = "New News";
+  bool _showToaster = false;
+  bool _goForward = true;
+  String _toasterMsg = "New News";
 
-  double _newsTabPostion = 0.0;
+  double _newsTabPosition = 0.0;
   Database database = Database();
-  final addMobSerivce = AddMobSerivce();
+  final addMobService = AddMobSerivce();
   var rng = new Random();
   String dateDisplay = "";
   final now = DateTime.now();
@@ -82,11 +82,9 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     _getLiveUpdate();
-    Admob.initialize(addMobSerivce.getAppId());
+    Admob.initialize(addMobService.getAppId());
     yesterday =  DateFormat("yyyy-MM-dd").format(DateTime(now.year, now.month, now.day - 1));
-    print(today);
-    print(yesterday);
-
+    loadNews();
   }
 
   reloadNews(){
@@ -98,7 +96,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       newNormalNews =[];
       newNormalNewsWidgetAll =[];
       newNormalNewsWidgetLocal = [];
-      newNormalNewsWidgetForign = [];
+      newNormalNewsWidgetForeign = [];
       newNormalNewsWidgetSports = [];
       newNormalNewsWidgetWeather = [];
     });
@@ -107,19 +105,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   loadNews() async{
     normalNews = await DBProvider.db.viewNews();
     topNewsList = await DBProvider.db.viewHotNews();
-    articleList = await DBProvider.db.viewArticale();
+    articleList = await DBProvider.db.viewArticle();
     
     _topNewsLoad();
     _normalNewsLoad(normalNews,true);
     _loadArticle();
     DBProvider.db.deleteOldNews();
-    _isloaded = true;
+    _isLoaded = true;
   }
 
   _loadArticle(){
 
     List<Widget> articleWidgetTemp = [];
-    print(articleList.length);
+    
 
     for(var item in articleList){
       if(articleList.indexOf(item)==0){
@@ -127,7 +125,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           TopNews(
             tabType: TabType.Article,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
@@ -135,7 +133,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
         articleWidgetTemp.add( 
           NormalNews(
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
             tabType: TabType.Article,
           )
@@ -149,19 +147,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   }
 
   _setTitle(int pageNum){
-    print(pageNum);
+    
     if(pageNum == 0){
       setState(() {
         mainTitle = "News";
         nextTitle= "Articles";
-        _goForwed = true;
+        _goForward = true;
       });
     }
     else if(pageNum == 1){
       setState(() {
         mainTitle = "Articles";
         nextTitle= "News";
-        _goForwed = false;
+        _goForward = false;
       });        
     }
   }
@@ -170,33 +168,33 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   _scrollListener() {
     //news scroll to next tab
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-      if (_controller.position.pixels > _newsTabPostion + 40 && _newsTabPostion < _width) {
+      if (_controller.position.pixels > _newsTabPosition + 40 && _newsTabPosition < _width) {
         _next();
       }
     }
     //news scroll to previous step
     else if (_controller.position.userScrollDirection == ScrollDirection.forward) {
-      if (_controller.position.pixels < _newsTabPostion - 40 && _newsTabPostion > 0) {
+      if (_controller.position.pixels < _newsTabPosition - 40 && _newsTabPosition > 0) {
         _back();
       }
     }
   }
 
   _next(){
-    _controller.animateTo(_width + _newsTabPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
-    _newsTabPostion += _width;
+    _controller.animateTo(_width + _newsTabPosition,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    _newsTabPosition += _width;
     setState(() {
-      _goForwed =true;
+      _goForward =true;
     });
     _setTitle(++currentNewsTab);
     
   }
 
   _back(){
-      _controller.animateTo(_newsTabPostion - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion -= _width;
+      _controller.animateTo(_newsTabPosition - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _newsTabPosition -= _width;
       setState(() {
-        _goForwed =false;
+        _goForward =false;
       });
       _setTitle(--currentNewsTab);
     
@@ -212,7 +210,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           TopNews(
             tabType: TabType.News,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
@@ -225,11 +223,11 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
   }
 
-  _normalNewsLoad(List<News> newsList,bool _isFrirstLoad){
+  _normalNewsLoad(List<News> newsList,bool _isFirstLoad){
     int addShow = 0;
     List<Widget> normalNewsWidgetAllTemp = [];
     List<Widget> normalNewsWidgetLocalTemp = [];
-    List<Widget> normalNewsWidgetForignTemp = [];
+    List<Widget> normalNewsWidgetForeignTemp = [];
     List<Widget> normalNewsWidgetSportsTemp = [];
     List<Widget> normalNewsWidgetWeatherTemp = [];
 
@@ -244,8 +242,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       Widget dateWidget = Container();
 
       if(item.date.split(" ")[0] != newsDate){
-        print("======");
-        print(newsList.indexOf(item));
         
         if(newsDate == today){
           dateWidget = Container(
@@ -312,14 +308,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           normalNewsWidgetAllTemp.addAll(normalNewsWidgetLocalTemp);
         }
         
-        if(normalNewsWidgetForignTemp.length > 0){
+        if(normalNewsWidgetForeignTemp.length > 0){
           normalNewsWidgetAllTemp.add(
             Container(
               width: _width,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                 child: Text(
-                  "Forign news",
+                  "Foreign news",
                   style: TextStyle(
                     color: AppData.ALLCOLOR,
                     fontFamily: "Lato",
@@ -330,7 +326,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
               ),
             )
           );
-          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForignTemp);
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForeignTemp);
         }
         if(normalNewsWidgetSportsTemp.length > 0){
           normalNewsWidgetAllTemp.add(
@@ -375,7 +371,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
         normalNewsWidgetWeatherTemp = [];
         normalNewsWidgetLocalTemp =[];
-        normalNewsWidgetForignTemp = [];
+        normalNewsWidgetForeignTemp = [];
         normalNewsWidgetSportsTemp = [];
         newsDate = item.date.split(" ")[0];
       }
@@ -391,55 +387,57 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       //     secondColor: AppData.ALLCOLOR,
       //   )
       // );
-      if(addShow == 7){
-        normalNewsWidgetAllTemp.add(
-          Column(
-            children: <Widget>[
-              AdmobBanner(
-                adUnitId: addMobSerivce.getBannerAddId(),
-                adSize: AdmobBannerSize.FULL_BANNER
-              ),
-              Text("Advertisment")
-            ],
-          )
-        );
-      }
+      // if(addShow == 7){
+      //   normalNewsWidgetAllTemp.add(
+      //     Column(
+      //       children: <Widget>[
+      //         Text("Advertisement")
+      //       ],
+      //     )
+      //   );
+      // }
       if(item.type == NewsType.Local){
         // normalNewsWidgetLocalTemp.add(dateWidget);
         normalNewsWidgetLocalTemp.add(
           NormalNews(
             tabType: TabType.News,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
 
         if(addShow == 1){
           normalNewsWidgetLocalTemp.add(
-            AdmobBanner(
-              adUnitId: addMobSerivce.getBannerAddId(),
-              adSize: AdmobBannerSize.FULL_BANNER
+            // AdmobBanner(
+            //   adUnitId: addMobSerivce.getBannerAddId(),
+            //   adSize: AdmobBannerSize.FULL_BANNER
+            // )
+            Container(
+
             )
           );
         }
       }      
-      else if(item.type == NewsType.Forign){
+      else if(item.type == NewsType.Foreign){
         // normalNewsWidgetForignTemp.add(dateWidget);
-        normalNewsWidgetForignTemp.add(
+        normalNewsWidgetForeignTemp.add(
           NormalNews(
             tabType: TabType.News,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
 
         if(addShow == 2){
-          normalNewsWidgetForignTemp.add(
-            AdmobBanner(
-              adUnitId: addMobSerivce.getBannerAddId(),
-              adSize: AdmobBannerSize.FULL_BANNER
+          normalNewsWidgetForeignTemp.add(
+            // AdmobBanner(
+            //   adUnitId: addMobSerivce.getBannerAddId(),
+            //   adSize: AdmobBannerSize.FULL_BANNER
+            // )
+            Container(
+
             )
           );
         }
@@ -450,16 +448,19 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           NormalNews(
             tabType: TabType.News,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
         
         if(addShow == 3){
           normalNewsWidgetSportsTemp.add(
-            AdmobBanner(
-              adUnitId: addMobSerivce.getBannerAddId(),
-              adSize: AdmobBannerSize.FULL_BANNER
+            // AdmobBanner(
+            //   adUnitId: addMobSerivce.getBannerAddId(),
+            //   adSize: AdmobBannerSize.FULL_BANNER
+            // )
+            Container(
+
             )
           );
         }
@@ -470,15 +471,18 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           NormalNews(
             tabType: TabType.News,
             news: item,
-            newsClickListner: this,
+            newsClickListener: this,
             secondColor: AppData.ALLCOLOR,
           )
         );
         if(addShow == 4){
           normalNewsWidgetWeatherTemp.add(
-            AdmobBanner(
-              adUnitId: addMobSerivce.getBannerAddId(),
-              adSize: AdmobBannerSize.FULL_BANNER
+            // AdmobBanner(
+            //   adUnitId: addMobSerivce.getBannerAddId(),
+            //   adSize: AdmobBannerSize.FULL_BANNER
+            // )
+            Container(
+
             )
           );
         }
@@ -486,8 +490,6 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
 
       if(newsList.indexOf(item) == newsList.length - 1){
-        print("======");
-        print(newsList.indexOf(item));
         
         if(newsDate == today){
           dateWidget = Container(
@@ -554,14 +556,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
           normalNewsWidgetAllTemp.addAll(normalNewsWidgetLocalTemp);
         }
         
-        if(normalNewsWidgetForignTemp.length > 0){
+        if(normalNewsWidgetForeignTemp.length > 0){
           normalNewsWidgetAllTemp.add(
             Container(
               width: _width,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                 child: Text(
-                  "Forign news",
+                  "Foreign news",
                   style: TextStyle(
                     color: AppData.ALLCOLOR,
                     fontFamily: "Lato",
@@ -572,7 +574,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
               ),
             )
           );
-          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForignTemp);
+          normalNewsWidgetAllTemp.addAll(normalNewsWidgetForeignTemp);
         }
         if(normalNewsWidgetSportsTemp.length > 0){
           normalNewsWidgetAllTemp.add(
@@ -626,13 +628,12 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
 
     }
 
-    if(_isFrirstLoad){
-      print("add old news");
+    if(_isFirstLoad){
+      
       setState(() {
         normalNewsWidgetAll = normalNewsWidgetAllTemp;
       });
     }else{
-      print("add new news");
       setState(() {
         newNormalNewsWidgetAll = normalNewsWidgetAllTemp;
       });
@@ -646,7 +647,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     CollectionReference reference = database.systemData;
     reference.snapshots().listen((querySnapshot) {
       querySnapshot.documentChanges.forEach((change) {
-        if(_isloaded){
+        if(_isLoaded){
           _loadNewNews();
         }
         
@@ -655,7 +656,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   }
 
   _loadNewNews() async{
-    print("load new news");
+    // print("load new news");
     List<News> newNews =[];
     //get last added news id 
 
@@ -666,28 +667,28 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     if(newNews.length != 0){
       await DBProvider.db.addNewsData(newNews);
       _normalNewsLoad(newNews,false);
-      _addToster();
+      _addToaster();
       for (var item in newNews) {
         normalNews.insert(0, item);
       }
     }else{
-      print("no new news");
+      // print("no new news");
     }
     
   }
 
-  _addToster() async{
+  _addToaster() async{
 
-    //display toster
+    //display toaster
     setState(() {
-      _tosterMsg = "New News";
-      _showToster = true;
+      _toasterMsg = "New News";
+      _showToaster = true;
     });
     await new Future.delayed(const Duration(seconds : 3));
 
-    //after 3 second hide toster
+    //after 3 second hide toaster
     setState(() {
-      _showToster = false;
+      _showToaster = false;
     });
   }
 
@@ -696,7 +697,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
     setState(() {
       _height = MediaQuery.of(context).size.height;
       _width = MediaQuery.of(context).size.width;
-      print(AppData.language);
+     // print(AppData.language);
     });
 
     return Container(
@@ -777,12 +778,12 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  !_goForwed?Icon(
+                                  !_goForward?Icon(
                                     Icons.arrow_back,
                                     color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
                                   ):Container(),
                                   SizedBox(
-                                    width:_goForwed?0:10
+                                    width:_goForward?0:10
                                   ),
                                   Text(
                                     nextTitle,
@@ -793,9 +794,9 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                                     )
                                   ),
                                   SizedBox(
-                                    width:_goForwed?10:0
+                                    width:_goForward?10:0
                                   ),
-                                  _goForwed?Icon(
+                                  _goForward?Icon(
                                     Icons.arrow_forward,
                                     color: AppData.isDark == 1? AppData.WHITE: AppData.BLACK,
                                   ):Container()
@@ -826,7 +827,14 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                     ],
                   ),
                   decoration: BoxDecoration(
-                    // color: Colors.grey,
+                    color: AppData.isDark != 1? AppData.WHITE: AppData.BLACK,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 5.0,
+                          offset: Offset(0.0, 0.50)
+                      )
+                    ],
                   ),
                 ),
 
@@ -843,41 +851,43 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
                       Container(
                         width: _width,
                         height: _height-80,
-
+                        // color:Colors.red,
                         child: MediaQuery.removePadding(
                           context: context,
                           removeTop:true,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                children: topNewsWidgetAll,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Column(
-                                children: newNormalNewsWidgetAll
-                              ),
-                              AnimationLimiter(
-                                child: Column(
-                                  children: AnimationConfiguration.toStaggeredList(
-                                  duration: const Duration(milliseconds: 375),
-                                    childAnimationBuilder: (widget) => SlideAnimation(
-                                      horizontalOffset: 50.0,
-                                      child: FadeInAnimation(
-                                        child: widget,
-                                      ),
-                                    ),
-                                    children: normalNewsWidgetAll,
+                          child: AnimationLimiter(
+                            child: ListView(
+                              children: AnimationConfiguration.toStaggeredList(
+                                duration: const Duration(milliseconds: 1000),
+                                childAnimationBuilder: (widget) => SlideAnimation(
+                                  horizontalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: widget,
                                   ),
                                 ),
-                              )
-                            ]
-                          ),
-                        )
+                                children: <Widget>[
+                                  Column(
+                                    children: topNewsWidgetAll,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Column(
+                                    children: newNormalNewsWidgetAll
+                                  ),
+                                  Column(
+                                    
+                                    children: normalNewsWidgetAll,
+                                    
+                                  )
+                                ]
+                              ),
+                            ),
+                          )
+                        ),
                       ),
 
-                      //articales
+                      //articles
                       Container(
                         width: _width,
                         height: _height-80,
@@ -910,8 +920,8 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
             ),
           ),
 
-          //toster
-          _showToster?
+          //toaster
+          _showToaster?
           Positioned(
             top:105,
             right:10,
@@ -924,7 +934,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
               child: Row(
                 children: <Widget>[
                   Text(
-                    _tosterMsg,
+                    _toasterMsg,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -1003,37 +1013,37 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
   dropDownClickListner(PageList page) {
     if(page == PageList.AllNews){
       _controller.animateTo(0,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = 0;
+      _newsTabPosition = 0;
       currentNewsTab = 0;
       _setTitle(currentNewsTab);
     }
     else if(page == PageList.Local){
       _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = _width;
+      _newsTabPosition = _width;
       currentNewsTab = 1;
       _setTitle(currentNewsTab);
     }
     else if(page == PageList.Forign){
       _controller.animateTo(_width*2,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = _width*2;
+      _newsTabPosition = _width*2;
       currentNewsTab = 2;
       _setTitle(currentNewsTab);
     }
     else if(page == PageList.Sport){
       _controller.animateTo(_width*3,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = _width*3;
+      _newsTabPosition = _width*3;
       currentNewsTab =3;
       _setTitle(currentNewsTab);
     }
     else if(page == PageList.Whether){
       _controller.animateTo(_width*4,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = _width*4;
+      _newsTabPosition = _width*4;
       currentNewsTab = 4;
       _setTitle(currentNewsTab);
     }
     else if(page == PageList.Articles){
       _controller.animateTo(_width*5,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _newsTabPostion = _width*5;
+      _newsTabPosition = _width*5;
       currentNewsTab =5;
       _setTitle(currentNewsTab);
     }
@@ -1074,7 +1084,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListner,DropDow
       timeStamp:article.timeStamp,
       isSaved:save,
     );
-    await DBProvider.db.saveUnsaveArticaleDB(article.id.toString(),save);
+    await DBProvider.db.saveUnsavedArticlesDB(article.id.toString(),save);
     int index = articleList.indexOf(article);
     articleList.insert(index, newArticle);
     articleList.removeAt(index+1);

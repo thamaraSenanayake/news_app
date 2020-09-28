@@ -1,6 +1,6 @@
 import 'package:news_app/model/news.dart';
 
-abstract class NewsClickListner{
+abstract class NewsClickListener{
   clickedNews(News news);
   savedNews(News news);
   clickedArticle(News news);

@@ -106,6 +106,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  fancy_drawer:
+    dependency: "direct main"
+    description:
+      name: fancy_drawer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   file:
     dependency: transitive
     description:

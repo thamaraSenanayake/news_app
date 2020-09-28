@@ -1,24 +1,12 @@
 import 'package:news_app/const.dart';
 
-LanguageList languageConvert(var language){
-  if(language == LanguageList.English.toString()){
-    return LanguageList.English;
-  }
-  else if(language == LanguageList.Sinhala.toString()){
-    return LanguageList.Sinhala;
-  }
-  else{
-    return LanguageList.Tamil;
-  }
-}
-
 NewsType newsTypeCovert(var type){
   NewsType newsType;
   if(type == NewsType.Local.toString()){
     newsType = NewsType.Local; 
   }
-  else if(type == NewsType.Forign.toString()){
-    newsType = NewsType.Forign; 
+  else if(type == NewsType.Foreign.toString()){
+    newsType = NewsType.Foreign; 
   }
   else if(type == NewsType.Sport.toString()){
     newsType = NewsType.Sport; 

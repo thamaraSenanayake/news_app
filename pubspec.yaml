@@ -35,6 +35,8 @@ dependencies:
   admob_flutter: ^0.3.4
   firebase_messaging: ^6.0.16
   flutter_staggered_animations: ^0.1.2
+  fancy_drawer: ^1.0.0
+
 
 
 

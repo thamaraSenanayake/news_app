@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class TimeCalculater{
+class TimeCalculator{
   //2020-06-02 14:08:57.495216
   static String timeDifferentCalculator(var fullTime){
     var date =  fullTime.toString().split(" ")[0];

@@ -11,14 +11,14 @@ import 'homePageListner.dart';
 import 'model/news.dart';
 
 class SavedNews extends StatefulWidget {
-  final HomePageListner homePageActivity;
+  final HomePageListener homePageActivity;
   SavedNews({Key key, this.homePageActivity}) : super(key: key);
 
   @override
   _SavedNewsState createState() => _SavedNewsState();
 }
 
-class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
+class _SavedNewsState extends State<SavedNews> implements NewsClickListener {
   double _height = 0.0;
   double _width = 0.0;
   ScrollController _controller;
@@ -35,7 +35,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     _loadSaveNews();
-    _loadSaveArticale();
+    _loadSaveArticle();
   }
 
   _scrollListener() {
@@ -83,7 +83,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
       _savedNewsWidgetTemp.add(
         NormalNews(
           news: item,
-          newsClickListner: this,
+          newsClickListener: this,
           secondColor: AppData.ALLCOLOR,
           tabType: TabType.News,
         )
@@ -114,8 +114,8 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
 
   }
 
-  _loadSaveArticale() async{
-    _savedArticles = await DBProvider.db.viewSavedArticale();
+  _loadSaveArticle() async{
+    _savedArticles = await DBProvider.db.viewSavedArticle();
     _viewArticle(_savedArticles);
   }
 
@@ -126,7 +126,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
       _savedArticleWidgetTemp.add(
         NormalNews(
           news: item,
-          newsClickListner: this,
+          newsClickListener: this,
           secondColor: AppData.ALLCOLOR,
           tabType: TabType.Article,
         )
@@ -320,7 +320,7 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
   savedNews(News news) async{
 
     await DBProvider.db.saveUnSaveNewsDB(news.id.toString(),0);
-    widget.homePageActivity.homePageActivityClick(HomePageActivity.SavedNewsPAgeback);
+    widget.homePageActivity.homePageActivityClick(HomePageActivity.SavedNewsPageBack);
     _savedNews.remove(news);
     _viewNews(_savedNews);
     
@@ -338,8 +338,8 @@ class _SavedNewsState extends State<SavedNews> implements NewsClickListner {
 
   @override
   savedArticle(News article) async{
-    await DBProvider.db.saveUnsaveArticaleDB(article.id.toString(),0);
-    widget.homePageActivity.homePageActivityClick(HomePageActivity.SavedNewsPAgeback);
+    await DBProvider.db.saveUnsavedArticlesDB(article.id.toString(),0);
+    widget.homePageActivity.homePageActivityClick(HomePageActivity.SavedNewsPageBack);
     _savedArticles.remove(article);
     _viewArticle(_savedArticles);
   }

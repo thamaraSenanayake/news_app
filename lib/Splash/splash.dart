@@ -8,8 +8,6 @@ import 'package:news_app/Splash/splashListner.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/database.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
-import 'package:news_app/language/language.dart';
-import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/model/news.dart';
 import 'package:news_app/model/systemInfo.dart';
 import 'package:news_app/res/resources.dart';
@@ -17,10 +15,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class Splash extends StatefulWidget {
-  final SplashStateListner splashStateListner;
-  final LanguageStateListner languageStateListner;
+  final SplashStateListener splashStateListener;
   final Key languageKey;
-  Splash({Key key,@required this.splashStateListner, this.languageStateListner, this.languageKey}) : super(key: key);
+  Splash({Key key,@required this.splashStateListener, this.languageKey}) : super(key: key);
 
   @override
   _SplashState createState() => _SplashState();
@@ -31,13 +28,10 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   double _height = 0.0;
   double _width = 0.0;
   double _screenHeight = 0.0;
-  double _logoPostion = 0.0;
-  double _languagePageHeight = 0.0;
 
   bool _loadingData = false;
   bool _waitTimeComplete = false;
   bool _firstLoading = true;
-  bool _moveTolanguageScreen = true;
   bool _loadingSystemData = false;
   bool _loadComplete = false;
   bool _noInterNet = false;
@@ -70,21 +64,21 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
         // _navigateToItemDetail(message);
       },
     );
-    print("splah page run"+_loadComplete.toString());
+    print("splash page run"+_loadComplete.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) { 
       _startLoadData();
     });
   }
 
   _startLoadData() async{
-    //check sqlLite data avalablity
-    bool avalablity = await DBProvider.db.databaseAvalablity();
+    //check sqlLite data availability
+    bool availability = await DBProvider.db.databaseAvailability();
 
     //check internet avalablity
-    internet = await Resousers.checkInternetConectivity();
+    internet = await Resources.checkInternetConnectivity();
     print("internet"+internet.toString());
 
-    if(!internet && !avalablity){
+    if(!internet && !availability){
       Navigator.of(context).push(
         PageRouteBuilder(
           pageBuilder: (context, _, __) => NoInternet(
@@ -100,7 +94,6 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
         _noInternetDialog();
       }
       if(!_loadComplete){
-        _setPosition();
         _loadData();
         _loadingTime();
         _loadSystemData();
@@ -122,20 +115,20 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
         _loadComplete = true;
       });
 
-      widget.splashStateListner.loadingState(true);
+      widget.splashStateListener.loadingState(true);
       print("set height");
 
-      if(_moveTolanguageScreen){
-        setState(() {
-          _screenHeight = 0.0;
-          _languagePageHeight = _height;
-        });
-      }
-      else{
-        widget.splashStateListner.moveToNewsPage(AppData.isDark);
-        _screenHeight = 0.0;
-        _languagePageHeight = _height;
-      }
+      // if(_moveTolanguageScreen){
+      //   setState(() {
+      //     _screenHeight = 0.0;
+      //     _languagePageHeight = _height;
+      //   });
+      // }
+      // else{
+      //   widget.splashStateListner.moveToNewsPage(AppData.isDark);
+      //   _screenHeight = 0.0;
+      //   _languagePageHeight = _height;
+      // }
     }
   }
 
@@ -154,22 +147,18 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
     //get system data
     await database.getSystemData();
 
-    //get sql lite last added news only use when retrive news
+    //get sql lite last added news only use when retrieve news
     int id = await DBProvider.db.getLastNewsId();
 
-    //get sql lite last added article id only use when retrive news
-    int articleiId = await DBProvider.db.getLastArticaleId();
+    //get sql lite last added article id only use when retrieve news
+    int articleId = await DBProvider.db.getLastArticleId();
     
-   ////print("last firsbase id "+firebaseNewsCount.toString());
-    print("last sql ite id "+id.toString());
-
-    ////print("last artcle firsbase id "+firebaseNewsCount.toString());
-    print("last sqllite artcle id "+id.toString());
+   
 
     if(internet){
 
       //get articles
-      articleList = await database.readArticles(articleiId);
+      articleList = await database.readArticles(articleId);
       
       //get normal news
       newsList = await database.readNews(id);
@@ -190,20 +179,20 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
     }
 
     if(articleList.length != 0){
-      await DBProvider.db.addAtricaleData(articleList);
+      await DBProvider.db.addArticleData(articleList);
     }
 
     //get deleted news id
-    List<int> deltedNewsId = await database.deleteNews();
-    //get delted article id
-    List<int> deltedArticleId = await database.deleteArticles();
+    List<int> deletedNewsId = await database.deleteNews();
+    //get deleted article id
+    List<int> deletedArticleId = await database.deleteArticles();
     
-    if(deltedNewsId.length != 0){
-      await DBProvider.db.deleteNews(deltedNewsId);
+    if(deletedNewsId.length != 0){
+      await DBProvider.db.deleteNews(deletedNewsId);
     }
 
-    if(deltedArticleId.length != 0){
-      await DBProvider.db.deleteArticale(deltedArticleId);
+    if(deletedArticleId.length != 0){
+      await DBProvider.db.deleteArticle(deletedArticleId);
     }
 
     _loadingData = true;
@@ -213,25 +202,20 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
   _loadSystemData() async{
     SystemInfo systemInfo = await DBProvider.db.getSystemData();
     if(systemInfo == null){
-      _moveTolanguageScreen = true;
+      // _moveTolanguageScreen = true;
     }
     else{
       print("splash");
       print(systemInfo.isDrak);
-      AppData.language = systemInfo.language;
       AppData.isDark = systemInfo.isDrak;
-      _moveTolanguageScreen = false;
+      // _moveTolanguageScreen = false;
     }
 
     _loadingSystemData =true;
     _exitFormPage();
   }
 
-  _setPosition(){
-    setState(() {
-      _logoPostion = 125;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -280,9 +264,8 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
                     children: <Widget>[
 
                       //logo
-                      AnimatedPositioned(
-                        duration: Duration(milliseconds:1000),
-                        top:_logoPostion,
+                      Positioned(
+                        top:125,
                         child: Container(
                           width: _width,
                           child: Align(
@@ -302,17 +285,17 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
                               decoration: BoxDecoration(
                                 color: Color(0xff161617),
                                 shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 2.0,
-                                    spreadRadius: 2.0, 
-                                    offset: Offset(
-                                      1.0,
-                                      2.0,
-                                    ),
-                                  )
-                                ],
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: Colors.grey,
+                                //     blurRadius: 2.0,
+                                //     spreadRadius: 2.0, 
+                                //     offset: Offset(
+                                //       1.0,
+                                //       2.0,
+                                //     ),
+                                //   )
+                                // ],
                               ),
                             ),
                           ),
@@ -343,15 +326,15 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
                   ),
                 ),
 
-                AnimatedContainer(
-                  height: _languagePageHeight,
-                  width: _width,
-                  duration: Duration(milliseconds: 500),
-                  color: Colors.grey[200].withOpacity(0.7),
-                  child: SingleChildScrollView(
-                    child: Language(languageStateListner: widget.languageStateListner,key:widget.languageKey)
-                  ),
-                ),
+                // AnimatedContainer(
+                //   height: _languagePageHeight,
+                //   width: _width,
+                //   duration: Duration(milliseconds: 500),
+                //   color: Colors.grey[200].withOpacity(0.7),
+                //   child: SingleChildScrollView(
+                //     child: Language(languageStateListner: widget.languageStateListner,key:widget.languageKey)
+                //   ),
+                // ),
               ],
             ),
           ),

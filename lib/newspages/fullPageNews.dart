@@ -14,59 +14,49 @@ class FullPageNews extends StatefulWidget {
   FullPageNews({Key key,@required this.news}) : super(key: key);
 
   @override
-  _FullPageNewsState createState() => _FullPageNewsState();
+  listener createState() => listener();
 }
 
-class _FullPageNewsState extends State<FullPageNews> {
+class listener extends State<FullPageNews> {
   double _height = 0.0;
   double _width =0.0;
   ScrollController _controller;
   ScrollController _innerController;
-  double _slidShowPostion = 0.0;
+  double _slidShowPosition = 0.0;
   int _currentPhoto = 0;
   Color _nextButtonColor = AppData.BLACK;
   Color _backButtonColor = AppData.GRAY;
-  double _phtoContainerHeight = 300;
+  double _photoContainerHeight = 300;
   List<Widget> _photoList = [];
   List<Widget> _tabList = [];
   bool _isButtonShow = true;
   bool _isArrowButtonShow = true;
-  String fontFamily = "Lato";
+  String fontFamily = "Abhaya";
 
 
   _share(){
     String content = "";
     String title = "";
-    if(AppData.language == LanguageList.Sinhala){
-      content = widget.news.contentSinhala;
-      title = widget.news.titleSinhala;
-    }
-    else if(AppData.language == LanguageList.English){
-      content = widget.news.contentEnglish;
-      title = widget.news.titleEnglish;
-    }
-    else{
-      content = widget.news.contentTamil;
-      title = widget.news.titleTamil;
-    }
-    Share.share(content+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: title);
+    content = widget.news.contentSinhala;
+    title = widget.news.titleSinhala;
+    Share.share(content+'\nDownload Online පත්තරේ for more news \nAndroid https://play.google.com/store/apps/details?id='+AppData.appIdAndroid, subject: title);
   }
 
 
   _innerControllerListener()
   {
     if (_innerController.position.userScrollDirection == ScrollDirection.reverse) {
-      if(_phtoContainerHeight > 100){
+      if(_photoContainerHeight > 100){
         setState(() {
-          _phtoContainerHeight -= 10;
+          _photoContainerHeight -= 10;
           _isButtonShow = false;
         });
       }
     }
     else if(_innerController.position.userScrollDirection == ScrollDirection.forward){
-      if(_phtoContainerHeight <= 300){
+      if(_photoContainerHeight <= 300){
         setState(() {
-          _phtoContainerHeight += 10;
+          _photoContainerHeight += 10;
         });
       }
       else{
@@ -77,17 +67,17 @@ class _FullPageNewsState extends State<FullPageNews> {
     }
   }
 
-  //photo scroll listner
+  //photo scroll listener
   _scrollListener() {
     //photo scroll to next tab
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-      if (_controller.position.pixels > _slidShowPostion + 40 && _slidShowPostion < _width*4) {
+      if (_controller.position.pixels > _slidShowPosition + 40 && _slidShowPosition < _width*4) {
         _next();
       }
     }
     //photo scroll to previous step
     else if (_controller.position.userScrollDirection == ScrollDirection.forward) {
-      if (_controller.position.pixels < _slidShowPostion - 40 && _slidShowPostion > 0) {
+      if (_controller.position.pixels < _slidShowPosition - 40 && _slidShowPosition > 0) {
         _back();
       }
     }
@@ -117,8 +107,8 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _next(){
     if(_currentPhoto != widget.news.imgUrl.length-1){
-      _controller.animateTo(_width + _slidShowPostion,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _slidShowPostion += _width;
+      _controller.animateTo(_width + _slidShowPosition,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _slidShowPosition += _width;
       ++_currentPhoto;
       _setButtonColor();
       _tabLoad();
@@ -127,8 +117,8 @@ class _FullPageNewsState extends State<FullPageNews> {
 
   _back(){
     if(_currentPhoto != 0){
-      _controller.animateTo(_slidShowPostion - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
-      _slidShowPostion -= _width;
+      _controller.animateTo(_slidShowPosition - _width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+      _slidShowPosition -= _width;
       --_currentPhoto;
       _setButtonColor();
       _tabLoad();
@@ -194,16 +184,6 @@ class _FullPageNewsState extends State<FullPageNews> {
   @override
   void initState() {
     super.initState();
-
-    if(AppData.language == LanguageList.Sinhala){
-      fontFamily = "Abhaya";
-    }
-    else if(AppData.language == LanguageList.Tamil){
-      fontFamily = "HindMadurai";
-    }
-    else{
-      fontFamily = "Lato";
-    }
     
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
@@ -317,7 +297,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                     //photo slider
                      AnimatedContainer(
                       duration: Duration(milliseconds:1),
-                      height: _phtoContainerHeight,
+                      height: _photoContainerHeight,
                       width: _width,
                       //  color: Colors.amberAccent,
                        child: Stack(
@@ -326,7 +306,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                           //photo view
                           AnimatedContainer(
                             duration: Duration(milliseconds:1),
-                            height: _phtoContainerHeight,
+                            height: _photoContainerHeight,
                             width: _width,
                             child: MediaQuery.removePadding(
                               context: context, 
@@ -374,7 +354,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                             ),
                           ):Container(),
 
-                          //forwaordButton
+                          //forwardButton
                           _isArrowButtonShow && _isButtonShow? Padding(
                             padding:  EdgeInsets.only(left:10.0),
                             child: Align(
@@ -396,28 +376,6 @@ class _FullPageNewsState extends State<FullPageNews> {
                             ),
                           ):Container(),
 
-                          //zoomButton
-                          // _isButtonShow? Padding(
-                          //   padding:  EdgeInsets.only(right:10.0,bottom: 10.0),
-                          //   child: Align(
-                          //     alignment: Alignment.bottomRight,
-                          //     child: GestureDetector(
-                          //       onTap: (){
-                          //         Navigator.of(context).push(ZoomPage(image: widget.news.imgUrl[_currentPhoto],height: _height,width: _width));
-                          //       },
-                          //       child: Card(
-                          //         child:Padding(
-                          //           padding: const EdgeInsets.all(3.0),
-                          //           child: Icon(
-                          //             Icons.zoom_in,
-                          //             color: AppData.BLACK,
-                          //           ),
-                          //         )
-                          //       ),
-                          //     )
-                          //   ),
-                          // ):Container()
-                          
                         ],
                       ),
                      ),
@@ -441,11 +399,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5),
                                 child: Text(
-                                  AppData.language == LanguageList.Sinhala?
-                                    widget.news.titleSinhala:
-                                  AppData.language == LanguageList.English?
-                                    widget.news.titleEnglish:
-                                  widget.news.titleTamil,
+                                  widget.news.titleSinhala,
                                   style: TextStyle(
                                     fontFamily: fontFamily,
                                     fontSize: 23,
@@ -458,7 +412,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom:15.0),
                                 child: Text(
-                                  TimeCalculater.timeDifferentCalculator(widget.news.date),
+                                  TimeCalculator.timeDifferentCalculator(widget.news.date),
                                   style: TextStyle(
                                     letterSpacing:1.5,
                                     wordSpacing:1,
@@ -471,11 +425,7 @@ class _FullPageNewsState extends State<FullPageNews> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom:5.0),
                                 child: Text(
-                                  AppData.language == LanguageList.Sinhala?
-                                    widget.news.contentSinhala:
-                                    AppData.language == LanguageList.English?
-                                      widget.news.contentEnglish:
-                                    widget.news.contentTamil,
+                                  widget.news.contentSinhala,
                                   style: TextStyle(
                                     letterSpacing:1.8,
                                     wordSpacing:1,

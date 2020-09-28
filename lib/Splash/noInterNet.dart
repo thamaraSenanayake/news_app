@@ -57,7 +57,7 @@ class _NoInternetState extends State<NoInternet> {
             // dialog centre
             Container(
               child: Text(
-                'No internet conection connnect the aplication to internet and try again',
+                'No internet connection connect the application to internet and try again',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18.0,

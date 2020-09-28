@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum LanguageList{
-  Sinhala,
-  English,
-  Tamil
-}
+// enum LanguageList{
+//   Sinhala,
+//   English,
+//   Tamil
+// }
 
 enum NewsType{
   Local,
-  Forign,
+  Foreign,
   Sport,
   Whether,
   AllTop
@@ -21,7 +21,7 @@ enum TabType{
 
 enum HomePageActivity{
   MenuOpen,
-  SavedNewsPAgeback
+  SavedNewsPageBack
 }
 
 class AppData{
@@ -39,9 +39,8 @@ class AppData{
   static const Color SPORTCOLOR = Color(0xffD34274);
   static const Color WEATHERCOLOR = Color(0xffC2D835);
 
-  static LanguageList language = LanguageList.Sinhala;
   static int isDark = 0;
-  static String appIdAndriod ="";
+  static String appIdAndroid ="";
   static String appIdIos ="";
   static String email ="";
 }

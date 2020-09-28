@@ -1,3 +1,4 @@
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,8 +7,6 @@ import 'package:news_app/Splash/splash.dart';
 import 'package:news_app/Splash/splashListner.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/database/sqlLitedatabase.dart';
-import 'package:news_app/language/language.dart';
-import 'package:news_app/language/languageListner.dart';
 import 'package:news_app/newspages/newsPage.dart';
 import 'package:news_app/savedNews.dart';
 import 'package:launch_review/launch_review.dart'; 
@@ -23,24 +22,28 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> implements SplashStateListner, LanguageStateListner, HomePageListner{
+class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin  implements SplashStateListener, HomePageListener{
 
   double _height = 0.0;
   double _width = 0.0;
-  ScrollController _controller;
   bool _isDark = false;
   
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<NewsPageState> _newsPageState = GlobalKey();
-  final GlobalKey<LanguageState> _languagePageState = GlobalKey();
-
+  bool _finishLoading = false;
+  FancyDrawerController _fancyController;
 
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController();
+    _fancyController = FancyDrawerController(
+        vsync: this, duration: Duration(milliseconds: 250))
+      ..addListener(() {
+        setState(() {});
+      });
+    // _firebaseMessaging.subscribeToTopic(language.toString());
   }
 
 
@@ -53,55 +56,48 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
       _height = MediaQuery.of(context).size.height;
       _width = MediaQuery.of(context).size.width;
     });
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer:Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: AppData.BLACK,
-        ),
-        child: Drawer(
-          child: ListView(
-            children: _appDrawerContent(context),
-          ),
-        ),
-      ),
-      
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
-          ),
-        ),
-        child:ListView(
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _controller,
-          children: <Widget>[
-            
-            Container(
-              height: _height,
-              width: _width,
-              child: Column(
-                children: <Widget>[
-                  Splash(splashStateListner: this,languageStateListner: this,languageKey:_languagePageState),
-                ],
-              )
-            ),
-
-            Container(
-              height: _height,
-              width: _width,
-              child: NewsPage(
-                homePageActivity: this,
-                key: _newsPageState,
+    return Material(
+      child: FancyDrawerWrapper(
+        backgroundColor: AppData.BLACK,
+        controller: _fancyController,
+        drawerItems:  _appDrawerContent(context),
+        child:Scaffold(
+          
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
               ),
             ),
+            child:Column(
+              children: <Widget>[
+                
+                !_finishLoading? Container(
+                  height: _height,
+                  width: _width,
+                  child: Column(
+                    children: <Widget>[
+                      Splash(splashStateListener: this),
+                    ],
+                  )
+                ):
 
-          ],
-        )
-       ),
+                Container(
+                  height: _height,
+                  width: _width,
+                  child: NewsPage(
+                    homePageActivity: this,
+                    key: _newsPageState,
+                  ),
+                ),
+
+              ],
+            )
+           ),
+        ),
+      )
     );
   }
 
@@ -109,48 +105,22 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   loadingState(bool load) {
     //load news
     //_newsPageState
-    print("load news done");
-    print(load);
 
     //callling news page
-    _newsPageState.currentState.loadNews();
-
+    // _newsPageState.currentState.loadNews();
+    setState(() {
+      _finishLoading = true;
+    });
   }
 
-  @override
-  languageState(LanguageList language) {
-    AppData.language = language;
-    _newsPageState.currentState.reloadNews();
-    print("languageState");
-    print(AppData.isDark);
-    DBProvider.db.addSystemData(AppData.language,AppData.isDark);
-    print(language);
-    
-    if(language == LanguageList.English){
-      _firebaseMessaging.subscribeToTopic(language.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Tamil.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Sinhala.toString());
-    }
-    else if(language == LanguageList.Sinhala){
-      _firebaseMessaging.subscribeToTopic(language.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.English.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Tamil.toString());
-    }
-    else if(language == LanguageList.Tamil){
-      _firebaseMessaging.subscribeToTopic(language.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.English.toString());
-      _firebaseMessaging.unsubscribeFromTopic(LanguageList.Sinhala.toString());
-    }
-
-    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
-  }
 
   @override
   homePageActivityClick(HomePageActivity homePageActivity) {
     if(homePageActivity == HomePageActivity.MenuOpen){
-      _scaffoldKey.currentState.openDrawer();
+      _fancyController.toggle();
+      //_scaffoldKey.currentState.openDrawer();
     }
-    else if(homePageActivity == HomePageActivity.SavedNewsPAgeback){
+    else if(homePageActivity == HomePageActivity.SavedNewsPageBack){
       _newsPageState.currentState.loadNews();
     }
   }
@@ -161,11 +131,10 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
       AppData.isDark = isDark;
       _isDark = isDark==1?true:false;
     });
-    _languagePageState.currentState.choseLanguage();
-    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    // _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
-  _changetheme(bool value) async{
+  _changeTheme(bool value) async{
     
     if(value){
       setState(() {
@@ -178,26 +147,26 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
       });
     }
 
-    print(AppData.isDark);
-    await DBProvider.db.addSystemData(AppData.language,AppData.isDark);
+    
+    await DBProvider.db.addSystemData(AppData.isDark);
     _newsPageState.currentState.reloadNews();
-    _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
+    // _controller.animateTo(_width,duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
   _shareWithOther(){
-    Share.share('Andriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: 'Check This new News App');
+    Share.share('Android https://play.google.com/store/apps/details?id='+AppData.appIdAndroid, subject: 'Check This new News App');
   }
 
   _rateUs(){
-    LaunchReview.launch(androidAppId: AppData.appIdAndriod,iOSAppId: AppData.appIdIos);
+    LaunchReview.launch(androidAppId: AppData.appIdAndroid,iOSAppId: AppData.appIdIos);
   }
 
   _sendMail() async{
     
-    var emailaddress = 'mailto:'+AppData.email;
+    var emailAddress = 'mailto:'+AppData.email;
 
-    if(await canLaunch(emailaddress)) {
-      await launch(emailaddress);
+    if(await canLaunch(emailAddress)) {
+      await launch(emailAddress);
     }   
   
   }
@@ -206,7 +175,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
   List<Widget> _appDrawerContent(context) {
     return [
       Container(
-        color: AppData.BLACK,
+        // color: AppData.BLACK,
         height: 170,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -241,14 +210,15 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
         ),
       ),
 
-      SizedBox(
-        height:20
-      ),
+      // SizedBox(
+      //   height:20
+      // ),
 
       Container(
-        height: _height -170,
-        width: _width,
-        color: AppData.isDark == 1? AppData.BLACK: Colors.white,
+        // height: _height -170,
+        // width: _width,
+        
+        // color: AppData.isDark == 1? AppData.BLACK: Colors.white,
         child: Column(
           children: <Widget>[
 
@@ -256,40 +226,9 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  _controller.animateTo(0,duration: Duration(milliseconds: 500), curve: Curves.linear);
-                  _scaffoldKey.currentState.openEndDrawer();
-                },
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.language,
-                          color: AppData.ALLCOLOR,
-                        ),
-                        SizedBox(width:40),
-                        Text(
-                          "Change Language",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal:20.0),
-              child: GestureDetector(
-                onTap: (){
                   _rateUs();
-                  _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
+                  // _scaffoldKey.currentState.openEndDrawer();
                 },
                 child: Container(
                   child: Padding(
@@ -306,7 +245,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -320,7 +260,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
+                  // _scaffoldKey.currentState.openEndDrawer();
                   _sendMail();
                 },
                 child: Container(
@@ -338,7 +279,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -353,7 +295,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               child: GestureDetector(
                 onTap: (){
                   _shareWithOther();
-                  _scaffoldKey.currentState.openEndDrawer();
+                  // _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
                 },
                 child: Container(
                   child: Padding(
@@ -370,7 +313,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -390,7 +334,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                       builder: (context) => SavedNews(homePageActivity:this)
                     ),
                   );
-                  _scaffoldKey.currentState.openEndDrawer();
+                  // _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
                 },
                 child: Container(
                   child: Padding(
@@ -407,7 +352,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         )
                       ],
@@ -421,7 +367,86 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  _scaffoldKey.currentState.openEndDrawer();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SavedNews(homePageActivity:this)
+                    ),
+                  );
+                  // _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
+                },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.add_comment,
+                          color: AppData.ALLCOLOR,
+                        ),
+                        SizedBox(width:40),
+                        Text(
+                          "Add news",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:20.0),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SavedNews(homePageActivity:this)
+                    ),
+                  );
+                  // _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
+                },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.video_label,
+                          color: AppData.ALLCOLOR,
+                        ),
+                        SizedBox(width:40),
+                        Text(
+                          "YouTube Chanel ",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:20.0),
+              child: GestureDetector(
+                onTap: (){
+                  // _scaffoldKey.currentState.openEndDrawer();
+                  _fancyController.close();
                 },
                 child: Container(
                   child: Padding(
@@ -433,7 +458,8 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
+                            color: AppData.WHITE
+                            // color: AppData.isDark == 1? AppData.WHITE : AppData.BLACK,
                           ),
                         ),
                         SizedBox(width:40),
@@ -445,7 +471,7 @@ class _HomePageState extends State<HomePage> implements SplashStateListner, Lang
                               setState(() {
                                 _isDark = value;
                               }); 
-                              _changetheme(value);
+                              _changeTheme(value);
                             },
                             activeColor: AppData.ALLCOLOR,
                           ),

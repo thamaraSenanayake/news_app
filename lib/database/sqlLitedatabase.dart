@@ -25,7 +25,7 @@ class DBProvider {
     }
   }
 
-  databaseAvalablity() async {
+  databaseAvailability() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "news7.db");
     bool avalablity = await databaseFactory.databaseExists(path);
@@ -35,7 +35,7 @@ class DBProvider {
 
   //create the databse in app Directory
   initDB() async {
-    print("create DB");
+    
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "news7.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
@@ -100,22 +100,20 @@ class DBProvider {
   }
 
   // add system to sql lite
-  addSystemData(LanguageList language, int isDark) async {
+  addSystemData(int isDark) async {
     final db = await database;
     var res = 'done';
-    print("addSystemData");
-    print(language);
-    print(isDark);
+    
 
     try {
       await db.execute("DELETE FROM `SystemInfo`");
       await db.execute("INSERT INTO SystemInfo (langId, isDark)VALUES ('" +
-          language.toString() +
+          "LanguageList.Sinhala" +
           "','" +
           isDark.toString() +
           "')");
     } catch (e) {
-      print(e);
+      
       return e.toString();
     }
 
@@ -131,11 +129,8 @@ class DBProvider {
       var res = await db.query("SystemInfo");
       for (var item in res) {
 
-        print("SystemInfo");
-        print(item["langId"]);
-        print(item["isDark"]);
+        
         systemInfo = SystemInfo(
-          language: languageConvert(item["langId"]) ,
           isDrak:item["isDark"],
         );
       }
@@ -150,8 +145,7 @@ class DBProvider {
 
   // add news to sql lite
   addNewsData(List<News> newsList) async {
-    print("+++++++++++++++++++++++++++");
-    print(newsList.length);
+    
   
     final db = await database;
     var res = 'done';
@@ -209,7 +203,7 @@ class DBProvider {
 
     try {
       for (var item in delteList) {
-        print(item);
+        
         await db.execute("DELETE FROM `News` where id = "+item.toString());
       }
 
@@ -224,12 +218,8 @@ class DBProvider {
 
   // add hot news to sql lite
   addHotNewsData(List<News> newsList) async {
-    print("+++++++++");
-    print(newsList.length);
-    for (var item in newsList) {
-      print(item.type);
-      print(item.titleSinhala);
-    }
+    
+    
   
     final db = await database;
     var res = 'done';
@@ -284,9 +274,8 @@ class DBProvider {
   }
 
   // add Articale to sql lite
-  addAtricaleData(List<News> newsList) async {
-    print("+++++++++++++++++++++++++++");
-    print(newsList.length);
+  addArticleData(List<News> newsList) async {
+    
   
     final db = await database;
     var res = 'done';
@@ -335,7 +324,7 @@ class DBProvider {
     return res;
   }
 
-  deleteArticale(List<int> delteList) async {
+  deleteArticle(List<int> delteList) async {
     final db = await database;
     var res = 'done';
 
@@ -373,7 +362,7 @@ class DBProvider {
 
 
   // get last insert Articale
-  Future<int> getLastArticaleId() async {
+  Future<int> getLastArticleId() async {
     final db = await database;
     var reply = 0;
     try {
@@ -417,7 +406,7 @@ class DBProvider {
         //remove brackets
         imageList = item["imgUrl"].toString().replaceAll("[", "");
         imageList = imageList.replaceAll("]", "");
-        print(item["titleSinhala"]);
+        
         news = News(
           id:item["id"],
           imgUrl:imageList.split(","),
@@ -486,7 +475,7 @@ class DBProvider {
     return newsList;
   }
 
-  Future<List<News>> viewArticale() async{
+  Future<List<News>> viewArticle() async{
     final db = await database;
     List<News> newsList = [];
     News news;
@@ -522,7 +511,7 @@ class DBProvider {
 
 
   //view saved articale
-  Future<List<News>> viewSavedArticale() async{
+  Future<List<News>> viewSavedArticle() async{
     final db = await database;
     List<News> newsList = [];
     News news;
@@ -617,7 +606,7 @@ class DBProvider {
   }
 
   // add mark the news as read
-  markAsReadArticale(String id) async {
+  markAsReadArticles(String id) async {
     final db = await database;
     var res = 'done';
 
@@ -647,7 +636,7 @@ class DBProvider {
   }
 
   // save articles
-  saveUnsaveArticaleDB(String id,int save) async {
+  saveUnsavedArticlesDB(String id,int save) async {
     final db = await database;
     var res = 'done';
 

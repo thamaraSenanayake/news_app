@@ -23,46 +23,27 @@ class _FullPageArticleState extends State<FullPageArticle> {
   List<Widget> _displayArticle = [];
   String title ='';
   List<String> contentList = [];
-  String fontFamily ="Lato";
+  String fontFamily ="Abhaya";
 
 
 
   @override
   void initState() {
     super.initState();
-    if(AppData.language == LanguageList.Sinhala){
-      fontFamily = "Abhaya";
-    }
-    else if(AppData.language == LanguageList.Tamil){
-      fontFamily = "HindMadurai";
-    }
-    else{
-      fontFamily = "Lato";
-    }
     _loadArticle();
     _setArticleAsRead();
   }
 
   _setArticleAsRead(){
-    DBProvider.db.markAsReadArticale(widget.article.id.toString());
+    DBProvider.db.markAsReadArticles(widget.article.id.toString());
   }
 
   _loadArticle(){
     List<Widget> _displayArticleTemp = [];
     String content = '';
     
-    if(AppData.language == LanguageList.Sinhala){
-      content = widget.article.contentSinhala;
-      title= widget.article.titleSinhala;
-    }
-    else if(AppData.language == LanguageList.Tamil){
-      content = widget.article.contentTamil;
-      title= widget.article.titleTamil;
-    }
-    else {
-      content = widget.article.contentEnglish;
-      title= widget.article.titleEnglish;
-    }
+    content = widget.article.contentSinhala;
+    title= widget.article.titleSinhala;
 
     contentList= content.split("[PICTURE]");
 
@@ -141,7 +122,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
           Padding(
             padding: const EdgeInsets.only(bottom:15.0,left:10,right:10),
             child: Text(
-              TimeCalculater.timeDifferentCalculator(widget.article.date),
+              TimeCalculator.timeDifferentCalculator(widget.article.date),
               style: TextStyle(
                 letterSpacing:1.5,
                 wordSpacing:1,
@@ -180,7 +161,7 @@ class _FullPageArticleState extends State<FullPageArticle> {
   }
 
   _share(){
-    Share.share(contentList.toString()+'\nDownload Online පත්තරේ for more news \nAndriod https://play.google.com/store/apps/details?id='+AppData.appIdAndriod, subject: title);
+    Share.share(contentList.toString()+'\nDownload Online පත්තරේ for more news \nAndroid https://play.google.com/store/apps/details?id='+AppData.appIdAndroid, subject: title);
   }
 
 
