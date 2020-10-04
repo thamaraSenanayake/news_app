@@ -2,6 +2,7 @@ import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_app/addNews.dart';
 import 'package:news_app/homePageListner.dart';
 import 'package:news_app/Splash/splash.dart';
 import 'package:news_app/Splash/splashListner.dart';
@@ -71,29 +72,31 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
                 colors: [Color(0xffFFFFFF), Color.fromRGBO(255, 255, 255, 0.8)]
               ),
             ),
-            child:Column(
-              children: <Widget>[
-                
-                !_finishLoading? Container(
-                  height: _height,
-                  width: _width,
-                  child: Column(
-                    children: <Widget>[
-                      Splash(splashStateListener: this),
-                    ],
-                  )
-                ):
+            child:SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  
+                  !_finishLoading? Container(
+                    height: _height,
+                    width: _width,
+                    child: Column(
+                      children: <Widget>[
+                        Splash(splashStateListener: this),
+                      ],
+                    )
+                  ):
 
-                Container(
-                  height: _height,
-                  width: _width,
-                  child: NewsPage(
-                    homePageActivity: this,
-                    key: _newsPageState,
+                  Container(
+                    height: _height,
+                    width: _width,
+                    child: NewsPage(
+                      homePageActivity: this,
+                      key: _newsPageState,
+                    ),
                   ),
-                ),
 
-              ],
+                ],
+              ),
             )
            ),
         ),
@@ -367,10 +370,11 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SavedNews(homePageActivity:this)
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, _, __) =>
+                        AddNews(),
+                      opaque: false
                     ),
                   );
                   // _scaffoldKey.currentState.openEndDrawer();

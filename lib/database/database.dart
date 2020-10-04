@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:news_app/const.dart';
 import 'package:news_app/model/news.dart';
+import 'package:news_app/model/newsAdd.dart';
 import 'package:news_app/res/dataTypeConvert.dart';
 
 class Database{
@@ -8,59 +9,20 @@ class Database{
   
   //collection refreence 
   final CollectionReference newsCollection = Firestore.instance.collection('news');
+  final CollectionReference userNewsCollection = Firestore.instance.collection('userNews');
   final CollectionReference articleCollection = Firestore.instance.collection('article');
   final CollectionReference hotNewsCollection = Firestore.instance.collection('hotNews');
   final CollectionReference systemData = Firestore.instance.collection('systemData');
 
 
-  Future addNews(News news) async{
-    await newsCollection.document(news.id.toString()).setData({
-      "id":news.id,
-      "imgUrl":news.imgUrl,
-      "titleSinhala":news.titleSinhala,
-      "titleTamil":news.titleTamil,
-      "titleEnglish":news.titleEnglish,
-      "contentSinhala":news.contentSinhala,
-      "contentTamil":news.contentTamil,
-      "contentEnglish":news.contentEnglish,
-      "date":news.date,
-      "author":news.author,
-      "bigNews":news.bigNews,
-      "type":news.type.toString(),
-      "timeStamp":news.timeStamp,
-    });
-  }
-
-  Future addArticle(News news) async{
-    await articleCollection.document(news.id.toString()).setData({
-      "id":news.id,
-      "imgUrl":news.imgUrl,
-      "titleSinhala":news.titleSinhala,
-      "titleTamil":news.titleTamil,
-      "titleEnglish":news.titleEnglish,
-      "contentSinhala":news.contentSinhala,
-      "contentTamil":news.contentTamil,
-      "contentEnglish":news.contentEnglish,
-      "date":news.date,
-      "author":news.author,
-      "timeStamp":news.timeStamp,
-    });
-  }
-
-  Future addHotNews(News news, NewsType type) async{
-    await hotNewsCollection.document(type.toString()).setData({
-      "id":news.id,
-      "imgUrl":news.imgUrl,
-      "titleSinhala":news.titleSinhala,
-      "titleTamil":news.titleTamil,
-      "titleEnglish":news.titleEnglish,
-      "contentSinhala":news.contentSinhala,
-      "contentTamil":news.contentTamil,
-      "contentEnglish":news.contentEnglish,
-      "date":news.date,
-      "author":news.author,
-      "type":news.type.toString(),
-      "timeStamp":news.timeStamp,
+  Future addNews(NewNews news) async{
+    await userNewsCollection.document(DateTime.now().microsecond.toString()).setData({
+      "id":DateTime.now().microsecond.toString(),
+      "name":news.name,
+      "contactNm":news.contactNm,
+      "content":news.content,
+      "imageList":news.imageList,
+      "timeStamp":DateTime.now().microsecond.toString(),
     });
   }
 
@@ -255,6 +217,7 @@ class Database{
 
     return newsList;
   }
+
 
 
 

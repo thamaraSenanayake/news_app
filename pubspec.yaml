@@ -36,6 +36,9 @@ dependencies:
   firebase_messaging: ^6.0.16
   flutter_staggered_animations: ^0.1.2
   fancy_drawer: ^1.0.0
+  image_picker: ^0.6.7+11
+  firebase_storage: ^3.1.6
+
 
 
 
@@ -82,17 +85,6 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: HindMadurai
-      fonts:
-        - asset: assets/fonts/tamil/HindMadurai-Regular.ttf
-        - asset: assets/fonts/tamil/HindMadurai-Light.ttf
-          weight: 300
-        - asset: assets/fonts/tamil/HindMadurai-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/tamil/HindMadurai-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/tamil/HindMadurai-Bold.ttf
-          weight: 700
     - family: Lato
       fonts:
         - asset: assets/fonts/english/Lato-Regular.ttf
