@@ -15,7 +15,7 @@ class Database{
   final CollectionReference systemData = Firestore.instance.collection('systemData');
 
 
-  Future addNews(NewNews news) async{
+  Future addNewNews(NewNews news) async{
     await userNewsCollection.document(DateTime.now().microsecond.toString()).setData({
       "id":DateTime.now().microsecond.toString(),
       "name":news.name,

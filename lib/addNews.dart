@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_app/database/database.dart';
 import 'package:news_app/model/newsAdd.dart';
 import 'const.dart';
 
@@ -25,6 +26,7 @@ class _AddNewsState extends State<AddNews> {
   String _contactNumberError = "";
   String _contentError = "";
   FirebaseStorage _storage;
+  Database database;
   var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
 
   final _nameController = TextEditingController();
@@ -38,6 +40,7 @@ class _AddNewsState extends State<AddNews> {
       _addImageWidget()
     );
     _storage = FirebaseStorage.instance;
+    database = Database();
   }
 
   _addNews() async {
@@ -70,6 +73,8 @@ class _AddNewsState extends State<AddNews> {
         content: _contentController.text,
         imageList: _imagePathList,
       );
+      await database.addNewNews(newNews);
+      Navigator.pop(context);
 
     }
   }
