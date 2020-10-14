@@ -52,19 +52,19 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
     super.initState();
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+        // print("onMessage: $message");
         // _showItemDialog(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        // print("onLaunch: $message");
         // _navigateToItemDetail(message);
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        // print("onResume: $message");
         // _navigateToItemDetail(message);
       },
     );
-    print("splash page run"+_loadComplete.toString());
+    // print("splash page run"+_loadComplete.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) { 
       _startLoadData();
     });
@@ -76,7 +76,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
 
     //check internet avalablity
     internet = await Resources.checkInternetConnectivity();
-    print("internet"+internet.toString());
+    // print("internet"+internet.toString());
 
     if(!internet && !availability){
       Navigator.of(context).push(
@@ -116,7 +116,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
       });
 
       widget.splashStateListener.loadingState(true);
-      print("set height");
+      // print("set height");
 
       // if(_moveTolanguageScreen){
       //   setState(() {
@@ -168,7 +168,7 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
       
     }
 
-    print(newsList.length);
+    // print(newsList.length);
 
     if(newsList.length != 0){
       await DBProvider.db.addNewsData(newsList);
@@ -205,8 +205,8 @@ class _SplashState extends State<Splash> implements NoInterNetTryAginListen{
       // _moveTolanguageScreen = true;
     }
     else{
-      print("splash");
-      print(systemInfo.isDrak);
+      // print("splash");
+      // print(systemInfo.isDrak);
       AppData.isDark = systemInfo.isDrak;
       // _moveTolanguageScreen = false;
     }

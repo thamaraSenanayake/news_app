@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
       ..addListener(() {
         setState(() {});
       });
-    // _firebaseMessaging.subscribeToTopic(language.toString());
+    _firebaseMessaging.subscribeToTopic("LanguageList.Sinhala");
   }
 
 
@@ -170,6 +170,14 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
 
     if(await canLaunch(emailAddress)) {
       await launch(emailAddress);
+    }   
+  
+  }
+
+  _openYouTube() async{
+    
+    if(await canLaunch("https://www.youtube.com/channel/UC3ri20FAAYBen_N_HpX68tw")) {
+      await launch("https://www.youtube.com/channel/UC3ri20FAAYBen_N_HpX68tw");
     }   
   
   }
@@ -410,13 +418,7 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
               padding: const EdgeInsets.symmetric(horizontal:20.0),
               child: GestureDetector(
                 onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SavedNews(homePageActivity:this)
-                    ),
-                  );
-                  // _scaffoldKey.currentState.openEndDrawer();
+                  _openYouTube();
                   _fancyController.close();
                 },
                 child: Container(

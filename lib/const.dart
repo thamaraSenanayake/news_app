@@ -43,6 +43,7 @@ class AppData{
   static String appIdAndroid ="";
   static String appIdIos ="";
   static String email ="";
+  static String addIdAndroid ="";
 }
 
 

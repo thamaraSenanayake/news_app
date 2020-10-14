@@ -237,7 +237,7 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDo
     else{
       newsDate = today;
     }
-
+    // print(AppData.addIdAndroid);
     for (var item in newsList) {
       Widget dateWidget = Container();
 
@@ -408,14 +408,15 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDo
         );
 
         if(addShow == 1){
+          
           normalNewsWidgetLocalTemp.add(
-            // AdmobBanner(
-            //   adUnitId: addMobSerivce.getBannerAddId(),
-            //   adSize: AdmobBannerSize.FULL_BANNER
-            // )
-            Container(
-
+            AdmobBanner(
+              adUnitId:AppData.addIdAndroid,
+              adSize: AdmobBannerSize.FULL_BANNER
             )
+            // Container(
+
+            // )
           );
         }
       }      
@@ -432,13 +433,13 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDo
 
         if(addShow == 2){
           normalNewsWidgetForeignTemp.add(
-            // AdmobBanner(
-            //   adUnitId: addMobSerivce.getBannerAddId(),
-            //   adSize: AdmobBannerSize.FULL_BANNER
-            // )
-            Container(
-
+            AdmobBanner(
+              adUnitId:AppData.addIdAndroid,
+              adSize: AdmobBannerSize.FULL_BANNER
             )
+            // Container(
+
+            // )
           );
         }
       }
@@ -455,13 +456,13 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDo
         
         if(addShow == 3){
           normalNewsWidgetSportsTemp.add(
-            // AdmobBanner(
-            //   adUnitId: addMobSerivce.getBannerAddId(),
-            //   adSize: AdmobBannerSize.FULL_BANNER
-            // )
-            Container(
-
+            AdmobBanner(
+              adUnitId:AppData.addIdAndroid,
+              adSize: AdmobBannerSize.FULL_BANNER
             )
+            // Container(
+
+            // )
           );
         }
       }
@@ -477,13 +478,13 @@ class NewsPageState extends State<NewsPage>  implements NewsClickListener,DropDo
         );
         if(addShow == 4){
           normalNewsWidgetWeatherTemp.add(
-            // AdmobBanner(
-            //   adUnitId: addMobSerivce.getBannerAddId(),
-            //   adSize: AdmobBannerSize.FULL_BANNER
-            // )
-            Container(
-
+            AdmobBanner(
+              adUnitId:AppData.addIdAndroid,
+              adSize: AdmobBannerSize.FULL_BANNER
             )
+            // Container(
+
+            // )
           );
         }
       }

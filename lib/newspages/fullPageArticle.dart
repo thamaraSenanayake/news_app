@@ -194,6 +194,16 @@ class _FullPageArticleState extends State<FullPageArticle> {
 
              //app bar
              Container(
+               decoration: BoxDecoration(
+                  color: AppData.isDark != 1? AppData.WHITE: AppData.BLACK,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 5.0,
+                        offset: Offset(0.0, 0.50)
+                    )
+                  ],
+                ),
                height: 70,
                width: _width,
               //  color: Colors.amber,

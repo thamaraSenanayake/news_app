@@ -89,7 +89,7 @@ class _NormalNewsState extends State<NormalNews> {
                                 widget.news.contentSinhala.trim(),
                                 style:TextStyle(
                                   color:AppData.isDark == 1?  AppData.WHITE : AppData.BLACK,
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontFamily: fontFamily,
                                   height: 1.3,
                                   fontWeight: FontWeight.w500

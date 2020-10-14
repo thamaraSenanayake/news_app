@@ -16,13 +16,12 @@ class Database{
 
 
   Future addNewNews(NewNews news) async{
-    await userNewsCollection.document(DateTime.now().microsecond.toString()).setData({
-      "id":DateTime.now().microsecond.toString(),
+    await userNewsCollection.document(DateTime.now().millisecondsSinceEpoch.toString()).setData({
+      "id":DateTime.now().millisecondsSinceEpoch.toString(),
       "name":news.name,
       "contactNm":news.contactNm,
       "content":news.content,
       "imageList":news.imageList,
-      "timeStamp":DateTime.now().microsecond.toString(),
     });
   }
 
@@ -44,6 +43,7 @@ class Database{
       AppData.email = document['email'];
       AppData.appIdIos = document['appIdIos'];
       AppData.appIdAndroid = document['appIdAndriod'];
+      AppData.addIdAndroid = document['addId'];
       done = 1;
     });
 

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/database/database.dart';
 import 'package:news_app/model/newsAdd.dart';
@@ -27,6 +28,7 @@ class _AddNewsState extends State<AddNews> {
   String _contentError = "";
   FirebaseStorage _storage;
   Database database;
+  bool _loading = false;
   var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
 
   final _nameController = TextEditingController();
@@ -46,19 +48,19 @@ class _AddNewsState extends State<AddNews> {
   _addNews() async {
     bool _validation = true;
     NewNews newNews;
-    if(_nameController.text.isNotEmpty){
+    if(_nameController.text.isEmpty){
       setState(() {
         _nameError = "Required Felid";
       });
       _validation = false;
     }
-    if(_contactNumberController.text.isNotEmpty){
+    if(_contactNumberController.text.isEmpty){
       setState(() {
         _contactNumberError = "Required Felid";
       });
       _validation = false;
     }
-    if(_contentController.text.isNotEmpty){
+    if(_contentController.text.isEmpty){
       setState(() {
         _contentError = "Required Felid";
       });
@@ -66,6 +68,9 @@ class _AddNewsState extends State<AddNews> {
     }
 
     if(_validation){
+      setState(() {
+        _loading = true;
+      });
       await uploadPic();
       newNews = NewNews(
         name: _nameController.text,
@@ -74,6 +79,9 @@ class _AddNewsState extends State<AddNews> {
         imageList: _imagePathList,
       );
       await database.addNewNews(newNews);
+      setState(() {
+        _loading = false;
+      });
       Navigator.pop(context);
 
     }
@@ -84,7 +92,7 @@ class _AddNewsState extends State<AddNews> {
     for (var item in _image) {
       Random rnd = new Random(new DateTime.now().millisecondsSinceEpoch);
 
-      print("upload pic");
+      // print("upload pic");
       String imageName = new DateTime.now().millisecondsSinceEpoch.toString();
       
       for (var i = 0; i < 10; i++) {
@@ -309,11 +317,21 @@ class _AddNewsState extends State<AddNews> {
                 child: Column(
                   children: [
                     //top bar
-                    SizedBox(
-                      height: 20,
+                    Padding(
+                      padding: const EdgeInsets.only(left:20.0,top:10),
+                      child: SizedBox(
+                        height: 20,
+                        width: _width-40,
+                        child: Text(
+                          _nameError,
+                          style: TextStyle(
+                            color: Colors.red
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10 ),
+                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 0 ),
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -337,7 +355,9 @@ class _AddNewsState extends State<AddNews> {
                           ),
                           keyboardType: TextInputType.text,
                           onChanged: (value){
-                            // _authorErrorRemove();
+                            setState(() {
+                              _nameError = "";
+                            });
                           },
                           onSubmitted: (value){
                             
@@ -345,9 +365,21 @@ class _AddNewsState extends State<AddNews> {
                         ),
                       ),
                     ),
-
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10 ),
+                      padding: const EdgeInsets.only(left:20.0,top:10),
+                      child: SizedBox(
+                        height: 20,
+                        width: _width-40,
+                        child: Text(
+                          _contactNumberError,
+                          style: TextStyle(
+                            color: Colors.red
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 0 ),
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -371,7 +403,9 @@ class _AddNewsState extends State<AddNews> {
                           ),
                           keyboardType: TextInputType.phone,
                           onChanged: (value){
-                            // _authorErrorRemove();
+                            setState(() {
+                              _contactNumberError = "";
+                            });
                           },
                           onSubmitted: (value){
                             
@@ -381,7 +415,20 @@ class _AddNewsState extends State<AddNews> {
                     ),
 
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10 ),
+                      padding: const EdgeInsets.only(left:20.0,top:10),
+                      child: SizedBox(
+                        height: 20,
+                        width: _width-40,
+                        child: Text(
+                          _contentError,
+                          style: TextStyle(
+                            color: Colors.red
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 0 ),
                       child: Container(
                         constraints: BoxConstraints(
                           minHeight: 300
@@ -409,7 +456,9 @@ class _AddNewsState extends State<AddNews> {
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                           onChanged: (value){
-                            // _authorErrorRemove();
+                            setState(() {
+                              _contentError = "";
+                            });
                           },
                           onSubmitted: (value){
                             
@@ -445,20 +494,25 @@ class _AddNewsState extends State<AddNews> {
 
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10 ),
-                      child: Container(
-                        height:50,
-                        width: _width-20,
-                        decoration: BoxDecoration(
-                          color: AppData.ALLCOLOR,
-                          borderRadius: BorderRadius.circular(3)
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Add News",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontFamily: "lato"
+                      child: GestureDetector(
+                        onTap: (){
+                          _addNews();
+                        },
+                        child: Container(
+                          height:50,
+                          width: _width-20,
+                          decoration: BoxDecoration(
+                            color: AppData.ALLCOLOR,
+                            borderRadius: BorderRadius.circular(3)
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Add News",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: "lato"
+                              ),
                             ),
                           ),
                         ),
@@ -469,6 +523,23 @@ class _AddNewsState extends State<AddNews> {
                 ),
               ),
             ),
+
+            _loading? Container(
+              width: _width,
+              height: _height,
+              color: Colors.black.withOpacity(0.5),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  child: SpinKitSquareCircle(
+                    color: AppData.ALLCOLOR,
+                    size: 50.0,
+                  ),
+                ),
+              ),
+            ):Container(), 
           ],
         ),
       ),

@@ -237,7 +237,16 @@ class listener extends State<FullPageNews> {
              Container(
                height: 70,
                width: _width,
-              //  color: Colors.amber,
+               decoration: BoxDecoration(
+                  color: AppData.isDark != 1? AppData.WHITE: AppData.BLACK,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 5.0,
+                        offset: Offset(0.0, 0.50)
+                    )
+                  ],
+                ),
                child: Stack(
                  
                  children: <Widget>[
